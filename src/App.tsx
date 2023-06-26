@@ -18,7 +18,7 @@ export const App = () => (
             <LeftSidebar/>
             <Box flexGrow="1">
               <Routes>
-                <Route path="/getting-started" element={<GettingStarted />} />
+                <Route path="/" element={<GettingStarted />} />
                 <Route path="/configurations" element={<>Configurations</>} />
               </Routes>
             </Box>

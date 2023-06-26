@@ -14,9 +14,10 @@ export const LeftSidebar = () => {
           overflowY="auto"
           height="100vh"
           flex="0 0 20%"
+          display={{ base: "none", md: "flex" }}
       >
         <Stack spacing={4}>
-          <RoutingButton icon={<Explore />} to={'/getting-started'}>Getting started</RoutingButton>
+          <RoutingButton icon={<Explore />} to={'/'}>Getting started</RoutingButton>
           <RoutingButton icon={<RiFolderSettingsFill />} to={'/configurations'}>Configurations</RoutingButton>
           <RoutingButton icon={<Topic />} to={'/rules'}>Rules</RoutingButton>
         </Stack>

@@ -37,7 +37,7 @@ export const GettingStarted = () => {
 
   return (
       <Box
-          w={{ base: "0", md: "95%" }}
+          w={'95%'}
           p={3}
           pl={6}
           overflowY="auto"
