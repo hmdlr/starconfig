@@ -3,23 +3,34 @@ import ReactMarkdown from 'react-markdown';
 // @ts-ignore
 import gettingStartedMarkdown from '../../getting-started-markdown.md';
 import { Box, Heading } from "@chakra-ui/react";
+import { useActions } from "../../hooks/useActions";
+import env from "../../env";
 
 export const GettingStarted = () => {
+  const { setActions } = useActions();
+
   const [markdownContent, setMarkdownContent] = useState('');
 
   useEffect(() => {
-    const fetchMarkdownContent = async () => {
-      try {
-        const response = await fetch(gettingStartedMarkdown);
-        const content = await response.text();
-        setMarkdownContent(content);
-      } catch (error) {
-        console.error('Error fetching markdown content:', error);
-      }
-    };
-
-    fetchMarkdownContent();
+    getMarkdownContent();
+    setContextActions();
   }, []);
+
+  const setContextActions = () => {
+    setActions({
+      'Download': () => window.open(env.chromeStoreUrl, '_blank'),
+    })
+  }
+
+  const getMarkdownContent = async () => {
+    try {
+      const response = await fetch(gettingStartedMarkdown);
+      const content = await response.text();
+      setMarkdownContent(content);
+    } catch (error) {
+      console.error('Error fetching markdown content:', error);
+    }
+  }
 
   const components = {
     h2: ({ children }: { children: any }) => (
