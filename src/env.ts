@@ -2,10 +2,10 @@ import { Microservice, LocalPaths, DeployedPaths } from '@hmdlr/utils/dist/Micro
 
 export default {
   api: {
-    [Microservice.Authphish]: process.env.NODE_ENV === 'development'
+    [Microservice.Authphish]: process.env.REACT_APP_NODE_ENV === 'development'
         ? `${LocalPaths[Microservice.Authphish]}`
         : `${DeployedPaths[Microservice.Authphish]}`,
-    [Microservice.Scanphish]: process.env.NODE_ENV === 'development'
+    [Microservice.Scanphish]: process.env.REACT_APP_NODE_ENV === 'development'
         ? `${LocalPaths[Microservice.Scanphish]}`
         : `${DeployedPaths[Microservice.Scanphish]}`,
   },

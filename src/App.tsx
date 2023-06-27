@@ -1,30 +1,23 @@
-import { ChakraProvider, Flex, Box } from "@chakra-ui/react";
-import { Navbar } from "./components/Navbar";
-import { RightSidebar } from "./components/Sidebars/RightSidebar";
+import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./theme";
-import { LeftSidebar } from "./components/Sidebars/LeftSidebar";
 import './app.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { GettingStarted } from "./components/GettingStarted";
+import { ProvideStorage } from "./hooks/useStorage";
+import { ProvideClient } from "./hooks/useClient";
+import { ProvideAuth } from "./hooks/useAuth";
+import { ProvideLoadGuard } from "./hooks/useLoadGuard";
+import { LoadGuardRouter } from "./LoadGuardRouter";
 
 
 export const App = () => (
     <ChakraProvider theme={theme}>
-      <Router>
-        <Flex direction="column" minHeight="100vh">
-          <Navbar/>
-
-          <Flex direction="row" flexGrow="1">
-            <LeftSidebar/>
-            <Box flexGrow="1">
-              <Routes>
-                <Route path="/" element={<GettingStarted />} />
-                <Route path="/configurations" element={<>Configurations</>} />
-              </Routes>
-            </Box>
-            <RightSidebar/>
-          </Flex>
-        </Flex>
-      </Router>
+      <ProvideStorage>
+        <ProvideAuth>
+          <ProvideClient>
+            <ProvideLoadGuard>
+              <LoadGuardRouter />
+            </ProvideLoadGuard>
+          </ProvideClient>
+        </ProvideAuth>
+      </ProvideStorage>
     </ChakraProvider>
 );

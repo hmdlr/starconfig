@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { getParsedJwt } from "../utils/utils";
 import { useStorage } from "./useStorage";
 
@@ -11,6 +11,10 @@ const authContext = React.createContext<{
    * The JWT token of the currently logged in user
    */
   token: string | undefined;
+  /**
+   * Get the id of the currently logged in user
+   */
+  getId(): string | undefined;
 }>(undefined!);
 
 export const ProvideAuth = ({ children }: { children: any }) => {
@@ -36,9 +40,15 @@ function useProvideAuth() {
     }
   }, []);
 
+  const getId = useCallback((): string | undefined => {
+    if (!token) return;
+    return getParsedJwt<{ id: string }>(token)?.id;
+
+  }, [token]);
 
   return {
     username,
     token,
+    getId
   };
 }

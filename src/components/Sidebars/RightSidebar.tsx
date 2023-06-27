@@ -12,7 +12,7 @@ export const RightSidebar = () => {
           flex="0 0 20%"
           display={{ base: "none", md: "flex" }}
       >
-        {/* content of the right sidebar */}
+
       </Box>
   );
 };
