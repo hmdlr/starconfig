@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { IConfig, IConfigCreatePayload, UUID } from "@hmdlr/types";
 import { Microservice } from "@hmdlr/utils/dist/Microservice";
 import { IBrand } from "@hmdlr/types/dist/brands/IBrand";
@@ -12,17 +12,9 @@ export const configurationsContext = React.createContext<{
    */
   configs: ConfigModel[];
   /**
-   * All public configs available (system owned)
-   */
-  publicOnlyConfigs: ConfigModel[];
-  /**
    * This will load all the available configs from the server. This will populate configs.
    */
   loadAllConfigs: () => Promise<void>;
-  /**
-   * Presets are all the configs that the user currently has active
-   */
-  presets: IConfig[];
   /**
    * Action when the user sets a config as active/inactive
    * @param config
@@ -36,7 +28,12 @@ export const configurationsContext = React.createContext<{
    * This will create a new config.
    * @param config
    */
-  create: (config: IConfigCreatePayload) => Promise<void>;
+  create: (config: IConfigCreatePayload) => Promise<IConfig>;
+  /**
+   * Get a config by id
+   * @param id
+   */
+  get: (id: string) => Promise<IConfig>;
 }>(undefined!);
 
 export const ProvideConfigurations = ({ children }: { children: any }) => {
@@ -54,53 +51,8 @@ function useProvideConfigurations() {
   const { client } = useClient();
 
   const [configs, setConfigs] = React.useState<ConfigModel[]>([]);
-  const [publicOnlyConfigs, setPublicOnlyConfigs] = React.useState<ConfigModel[]>([]);
-  const [presets, setPresets] = React.useState<IConfig[]>([]);
   const [rulesets, setRulesets] = React.useState<IBrand[]>([]);
   const [currentEditConfig, setCurrentEditConfig] = React.useState<IConfig | undefined>(undefined);
-
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    const path = url.pathname.split("/").pop()!;
-    if (UUID.isValid(path) && !currentEditConfig) {
-      scanphish.getConfig(path).then(setCurrentEditConfig);
-    }
-
-    scanphish.listPresets().then((presets: React.SetStateAction<IConfig[]>) => {
-      console.log(presets);
-      setPresets(presets);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (presets.length === 0) {
-      return;
-    }
-    scanphish.listConfigs({
-          pageSize: 50
-        },
-        true,
-        true
-    ).then((configs: { items: any[]; }) => {
-          // active configs are the configs of which ids are in the presets
-          const activeConfigsIds = presets.map((preset) => preset.id);
-          const configModels = configs.items
-              .filter((config) => activeConfigsIds.includes(config.id))
-              .map((config): ConfigModel => ({
-                ...config,
-                active: true
-              }));
-          configModels.push(...configs.items
-              .filter((config) => !activeConfigsIds.includes(config.id))
-              .map((config): ConfigModel => ({
-                ...config,
-                active: false
-              }))
-          );
-          setPublicOnlyConfigs(configModels);
-        }
-    );
-  }, [presets]);
 
   const handleChangeActiveState = (config: ConfigModel) => {
     const newConfigs = configs.map((c) => {
@@ -124,7 +76,7 @@ function useProvideConfigurations() {
 
   const create = async (config: IConfigCreatePayload) => {
     const { config: createdConfig } = await createConfig(config);
-    setCurrentEditConfig(createdConfig);
+    return createdConfig;
   };
 
   const createConfig = (config: IConfigCreatePayload): Promise<{ config: IConfig }> => {
@@ -140,18 +92,29 @@ function useProvideConfigurations() {
     ).then((res: { data: any; }) => res.data);
   };
 
-  const loadAllConfigs = async () => {
+  const loadAllConfigs = useCallback(async () => {
+    const presets = await loadPresets();
+
     const { items } = await scanphish.listConfigs({
       pageSize: 50
     }, true, false);
 
-    setConfigs(items
-        .map((config: { id: string; }): ConfigModel => ({
-          ...config,
-          active: presets.some((preset) => preset.id === config.id)
-        }) as ConfigModel)
-    );
-  };
+    setConfigs(items.map((config) => ({
+      ...config,
+      active: presets.some((preset) => preset.id === config.id)
+    })));
+  }, []);
+
+  const loadPresets = useCallback(async () => {
+    const presets = await scanphish.listPresets();
+    console.log(presets);
+    return presets;
+  }, []);
+
+  const get = useCallback(async (id: string) => {
+    const config = await scanphish.getConfig(id);
+    return config;
+  }, []);
 
   return {
     configs,
@@ -160,8 +123,7 @@ function useProvideConfigurations() {
     handleChangeActiveState,
     create,
     loadAllConfigs,
-    presets,
-    publicOnlyConfigs
+    get
   };
 }
 

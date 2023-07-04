@@ -9,6 +9,11 @@ import { useLoadGuard } from "./hooks/useLoadGuard";
 import { Navbar } from "./components/Navbar";
 import { ProvideConfigurations } from "./hooks/useConfigurations";
 import { ProvideActions } from "./hooks/useActions";
+import CreateConfiguration from "./screens/Configuration/CreateConfiguration";
+import EditConfiguration from "./screens/Configuration/EditConfiguration";
+import { ProvideRules } from "./hooks/useRules";
+import { RulesScreen } from "./screens/Rules/RulesScreen";
+import { CreateRule } from "./screens/Rules/CreateRule";
 
 export const LoadGuardRouter = () => {
   const { cacheLoaded, LoadGuard } = useLoadGuard();
@@ -23,6 +28,7 @@ export const LoadGuardRouter = () => {
             <>
               {/*<AuthGuard/>*/}
               <ProvideActions>
+
                 <Router>
                   <Flex direction="column" minHeight="100vh">
                     <Navbar/>
@@ -34,6 +40,18 @@ export const LoadGuardRouter = () => {
                           <Route path="/" element={<GettingStarted/>}/>
                           <Route path="/configurations"
                                  element={<ProvideConfigurations><ConfigurationScreen/></ProvideConfigurations>}/>
+                          <Route path={"/configurations/new"}
+                                 element={<ProvideConfigurations><CreateConfiguration/></ProvideConfigurations>}/>
+                          <Route path={"/configurations/:configId"}
+                                 element={(
+                                     <ProvideConfigurations>
+                                       <ProvideRules>
+                                         <EditConfiguration/>
+                                       </ProvideRules>
+                                     </ProvideConfigurations>
+                                 )}/>
+                          <Route path={"/rules"} element={<ProvideRules><RulesScreen /></ProvideRules>}/>
+                          <Route path={"/rules/new"} element={<ProvideRules><CreateRule /></ProvideRules>}/>
                         </Routes>
                       </Box>
                       <RightSidebar/>

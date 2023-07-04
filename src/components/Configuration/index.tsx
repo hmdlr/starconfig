@@ -2,6 +2,7 @@ import { Badge, Flex, useColorModeValue, useTheme, Image, Button } from "@chakra
 import { ConfigModel } from "../../models/ConfigModel";
 import { Settings } from "@mui/icons-material";
 import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export const Configuration = (props: {
   config: ConfigModel,
@@ -10,6 +11,7 @@ export const Configuration = (props: {
   const theme = useTheme();
   const primaryColor = theme.colors.primary;
   const grayBackground = useColorModeValue("gray.300", "gray.600");
+  const navigate = useNavigate();
 
   const { config } = props;
   const userId = useAuth().getId();
@@ -55,7 +57,8 @@ export const Configuration = (props: {
                 {config.creatorId === userId ? 'PRIVATE' : 'PUBLIC'}
               </Badge>
               <Settings
-                  style={{ color: primaryColor }}
+                  style={{ color: primaryColor, cursor: 'pointer' }}
+                  onClick={() => navigate(`/configurations/${config.id}`)}
               />
             </Flex>
           </Flex>
