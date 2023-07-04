@@ -1,4 +1,4 @@
-import { IBrand } from "@hmdlr/types";
+import { IBrand, IBrandCreatePayload } from "@hmdlr/types";
 import React, { useCallback } from "react";
 import { useClient } from "./useClient";
 
@@ -17,6 +17,16 @@ export const rulesContext = React.createContext<{
    * @param configId
    */
   saveRulesToConfig: (rules: IBrand[], configId: string) => Promise<void>;
+  /**
+   * Create a new rule
+   * @param config
+   */
+  create: (config: IBrandCreatePayload) => Promise<IBrand>;
+  /**
+   * Send crawler, come back with possible logos
+   * @param config
+   */
+  enhance: (config: IBrand) => Promise<string[]>;
 }>(undefined!);
 
 export const ProvideRules = ({ children }: { children: any }) => {
@@ -42,9 +52,21 @@ function useProvideRules() {
     await scanphish.addRulesetsToConfig(configId, rules.map((r) => r.id));
   }, []);
 
+  const create = useCallback(async (config: IBrandCreatePayload) => {
+    const { brand } = await scanphish.createBrand(config);
+    return brand;
+  }, []);
+
+  const enhance = useCallback(async (config: IBrand) => {
+    const { candidates } = await scanphish.enhanceBrand(config.id);
+    return candidates;
+  }, []);
+
   return {
     loadAllRules,
     rules,
     saveRulesToConfig,
+    create,
+    enhance
   };
 }
