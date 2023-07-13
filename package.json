@@ -51,7 +51,7 @@
     "zlib": "npm:browserify-zlib@^0.2.0"
   },
   "scripts": {
-    "start": "REACT_APP_NODE_ENV=development REACT_APP_AUTHPHISH_PORT=$AUTHPHISH_PORT REACT_APP_SCANPHISH_PORT=$SCANPHISH_PORT craco start",
+    "start": "PORT=$LOCAL_STARCONFIG_PORT REACT_APP_NODE_ENV=development REACT_APP_AUTHPHISH_PORT=$AUTHPHISH_PORT REACT_APP_SCANPHISH_PORT=$SCANPHISH_PORT craco start",
     "build": "NODE_ENV=production REACT_APP_NODE_ENV=production craco build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
