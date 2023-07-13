@@ -8,7 +8,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@hmdlr/types": "^2.2.66",
-    "@hmdlr/utils": "^0.1.123",
+    "@hmdlr/utils": "^0.1.124",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.6",
     "@testing-library/jest-dom": "^5.16.5",
@@ -33,8 +33,10 @@
     "winston": "^3.9.0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@craco/craco": "^7.1.0",
     "assert": "npm:assert@^2.0.0",
+    "babel-plugin-macros": "^3.1.0",
     "buffer": "npm:buffer@^6.0.3",
     "crypto": "npm:crypto-browserify@^3.12.0",
     "fs": "npm:browserify-fs@^1.0.0",
@@ -50,7 +52,7 @@
   },
   "scripts": {
     "start": "REACT_APP_NODE_ENV=development REACT_APP_AUTHPHISH_PORT=$AUTHPHISH_PORT REACT_APP_SCANPHISH_PORT=$SCANPHISH_PORT craco start",
-    "build": "react-scripts build",
+    "build": "NODE_ENV=production REACT_APP_NODE_ENV=production craco build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
