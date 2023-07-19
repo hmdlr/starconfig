@@ -1,5 +1,4 @@
 import React from "react";
-import { useStorage } from "./useStorage";
 
 const loadGuardContext = React.createContext<{
   cacheLoaded: boolean;
@@ -21,8 +20,8 @@ export const ProvideLoadGuard = ({ children }: { children: any }) => {
 };
 
 function useProvideLoadGuard() {
-  const [cacheLoaded, setCacheLoaded] = React.useState<boolean>(false);
-  const { token } = useStorage();
+  const [cacheLoaded, setCacheLoaded] = React.useState<boolean>(true);
+  // const { token } = useStorage();
 
   const LoadGuard = () => (
       <div style={{
@@ -34,12 +33,12 @@ function useProvideLoadGuard() {
       }}>
       </div>
   );
-
-  React.useEffect(() => {
-    if (token !== undefined) {
-      setCacheLoaded(true);
-    }
-  }, [token]);
+  //
+  // React.useEffect(() => {
+  //   if (token !== undefined) {
+  //     setCacheLoaded(true);
+  //   }
+  // }, [token]);
 
   return {
     cacheLoaded,

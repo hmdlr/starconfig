@@ -14,7 +14,7 @@ export const Configuration = (props: {
   const navigate = useNavigate();
 
   const { config } = props;
-  const userId = useAuth().getId();
+  const { userId } = useAuth();
 
   // Extract the first logo of each brand
   const logos = config.brands.map(brand => brand.favicon);

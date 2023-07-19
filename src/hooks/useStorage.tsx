@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 export const storageContext = React.createContext<{
-  storeToken: (token: string) => void;
-  getStoredToken: () => string | undefined;
-  token: string | undefined;
+  getUserId: () => string | undefined;
+  getUsername: () => string | undefined;
 }>(undefined!);
 
 export const ProvideStorage = ({ children }: { children: any }) => {
@@ -16,28 +15,16 @@ export const useStorage = () => {
 };
 
 function useProvideStorage() {
-  const [token, setToken] = React.useState<string>();
-
-  const storeToken = (token: string) => {
-    localStorage.setItem("token", token);
+  const getUserId = (): string | undefined => {
+    return document.cookie.split(';').find(row => row.startsWith('user-id'))?.split('=')[1];
   };
 
-  const getStoredToken = () => {
-    return localStorage.getItem("token") || undefined;
+  const getUsername = (): string | undefined => {
+    return document.cookie.split(';').find(row => row.startsWith('username'))?.split('=')[1];
   };
-
-  useEffect(() => {
-    const token = getStoredToken();
-    if (token) {
-      setToken(token);
-    } else {
-      setToken('');
-    }
-  }, []);
 
   return {
-    storeToken,
-    getStoredToken,
-    token
+    getUserId,
+    getUsername
   };
 }

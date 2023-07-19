@@ -2,7 +2,6 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import React, { useCallback, useEffect } from "react";
 import { AxiosClient } from "@hmdlr/types";
 import { Scanphish } from "@hmdlr/utils";
-import env from "../env";
 import { DeployedPaths, Microservice } from "@hmdlr/utils/dist/Microservice";
 import { useStorage } from "./useStorage";
 
@@ -41,7 +40,6 @@ export const useClient = () => {
 };
 
 function useProvideClient() {
-  const { token } = useStorage();
   const scanphishAxios = axios.create({
     baseURL: DeployedPaths[Microservice.Scanphish],
     withCredentials: true,
@@ -52,27 +50,6 @@ function useProvideClient() {
   const post = (url: string, data: any, options?: any) => axios.post(url, data, { ...defaultOptions, ...options });
   const put = (url: string, data: any, options?: any) => axios.put(url, data, { ...defaultOptions, ...options });
   const deleteRequest = (url: string, options?: any) => axios.delete(url, { ...defaultOptions, ...options });
-
-  const axiosDynamicInterceptor = useCallback((config: AxiosRequestConfig) => {
-    if (!token) {
-      return config;
-    }
-    if (!config.headers) {
-      // @ts-ignore
-      config.headers = {};
-    }
-    config.headers.Authorization = `Bearer ${token}`;
-    return config;
-  }, [token]);
-
-  useEffect(() => {
-    axios.interceptors.request.clear();
-    scanphishAxios.interceptors.request.clear();
-    // @ts-ignore
-    axios.interceptors.request.use(axiosDynamicInterceptor);
-    // @ts-ignore
-    scanphishAxios.interceptors.request.use(axiosDynamicInterceptor);
-  }, [axiosDynamicInterceptor])
 
   const scanphish = new Scanphish({
     get: (url: string, options?: any) => scanphishAxios.get(url, { ...defaultOptions, ...options }).then((res: AxiosResponse) => res.data),
