@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect } from "react";
-import { getParsedJwt } from "../utils/utils";
+import React, { useEffect } from "react";
 import { useStorage } from "./useStorage";
 
 const authContext = React.createContext<{
@@ -8,13 +7,9 @@ const authContext = React.createContext<{
    */
   username: string | undefined;
   /**
-   * The JWT token of the currently logged in user
+   * The id of the currently logged in user
    */
-  token: string | undefined;
-  /**
-   * Get the id of the currently logged in user
-   */
-  getId(): string | undefined;
+  userId: string | undefined;
 }>(undefined!);
 
 export const ProvideAuth = ({ children }: { children: any }) => {
@@ -28,27 +23,24 @@ export const useAuth = () => {
 
 function useProvideAuth() {
   const [username, setUsername] = React.useState<string>();
-  const [token, setToken] = React.useState<string>();
-  const { getStoredToken } = useStorage();
+  const [userId, setUserId] = React.useState<string>();
+  const { getUsername, getUserId } = useStorage();
 
   /* On page startup */
   useEffect(() => {
-    const token = getStoredToken();
-    if (token) {
-      setToken(token);
-      setUsername(getParsedJwt<{ username: string }>(token)?.username);
+    const mUsername = getUsername();
+    const mUserId = getUserId();
+    if (mUsername) {
+      setUsername(mUsername);
+    }
+    if (mUserId) {
+      setUserId(mUserId);
     }
   }, []);
 
-  const getId = useCallback((): string | undefined => {
-    if (!token) return;
-    return getParsedJwt<{ id: string }>(token)?.id;
-
-  }, [token]);
 
   return {
     username,
-    token,
-    getId
+    userId
   };
 }
