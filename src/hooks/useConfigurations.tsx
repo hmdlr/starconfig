@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect } from "react";
-import { IConfig, IConfigCreatePayload, UUID } from "@hmdlr/types";
-import { Microservice } from "@hmdlr/utils/dist/Microservice";
+import React, { useCallback } from "react";
+import { IConfig, IConfigCreatePayload } from "@hmdlr/types";
+import { DeployedPaths, Microservice } from "@hmdlr/utils/dist/Microservice";
 import { IBrand } from "@hmdlr/types/dist/brands/IBrand";
-import env from "../env";
 import { ConfigModel } from "../models/ConfigModel";
 import { useClient } from "./useClient";
 
@@ -87,7 +86,7 @@ function useProvideConfigurations() {
     }
 
     return client.post<{ config: IConfig }>(
-        `${env.api[Microservice.Scanphish]}/api/config`,
+        `${DeployedPaths[Microservice.Scanphish]}/api/config`,
         formData
     ).then((res: { data: any; }) => res.data);
   };
