@@ -87,7 +87,10 @@ function useProvideConfigurations() {
 
     return client.post<{ config: IConfig }>(
         `${DeployedPaths[Microservice.Scanphish]}/api/config`,
-        formData
+        formData,
+        {
+          withCredentials: true,
+        }
     ).then((res: { data: any; }) => res.data);
   };
 
