@@ -34,8 +34,8 @@ export const Navbar = () => {
         <Flex align="center" mr={5}>
           <img
               style={{ height: '60px', width: '60px', objectFit: 'contain' }}
-              src="./logo.svg"
-              alt="You :)"
+              src="/logo.svg"
+              alt="Starphish logo"
           />
           <Box ml={{ base: 2, md: 5 }}>
             <Text fontSize={{ base: "24px", md: "35px" }} color={starphishColor} fontWeight="extrabold">
