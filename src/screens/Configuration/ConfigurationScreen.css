@@ -1,0 +1,50 @@
+.loginPopup {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loginPopupContent {
+    display: flex;
+    padding: 1.25rem;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+#loginFirstMessage {
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+#loginSecondMessage {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* on mobile screen, place the content of loginPopup to flex-end */
+@media (max-width: 768px) {
+    .loginPopup {
+        align-items: flex-end;
+    }
+
+    .loginPopupContent {
+        padding: 0;
+        width: 100%;
+        bottom: 0;
+    }
+
+    #loginFirstMessage {
+        font-size: 1.1rem;
+    }
+
+    #loginSecondMessage {
+        font-size: 1rem;
+    }
+}
