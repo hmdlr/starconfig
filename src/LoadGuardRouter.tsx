@@ -30,7 +30,7 @@ export const LoadGuardRouter = () => {
               <ProvideActions>
 
                 <Router>
-                  <Flex direction="column" minHeight="100vh">
+                  <Flex direction="column" height="100%" width="100%" position={'fixed'}>
                     <Navbar/>
 
                     <Flex direction="row" flexGrow="1">

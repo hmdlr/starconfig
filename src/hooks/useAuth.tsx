@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useStorage } from "./useStorage";
+import { FrontPaths } from "@hmdlr/utils";
 
 const authContext = React.createContext<{
   /**
@@ -10,6 +11,14 @@ const authContext = React.createContext<{
    * The id of the currently logged in user
    */
   userId: string | undefined;
+  /**
+   * The path to the login page
+   */
+  loginPath: string;
+  /**
+   * The path to the register page
+   */
+  registerPath: string;
 }>(undefined!);
 
 export const ProvideAuth = ({ children }: { children: any }) => {
@@ -26,6 +35,9 @@ function useProvideAuth() {
   const [userId, setUserId] = React.useState<string>();
   const { getUsername, getUserId } = useStorage();
 
+  const loginPath = `${FrontPaths.auth}/auth/login`;
+  const registerPath = `${FrontPaths.auth}/auth/register`;
+
   /* On page startup */
   useEffect(() => {
     const mUsername = getUsername();
@@ -38,9 +50,10 @@ function useProvideAuth() {
     }
   }, []);
 
-
   return {
     username,
-    userId
+    userId,
+    loginPath,
+    registerPath
   };
 }
