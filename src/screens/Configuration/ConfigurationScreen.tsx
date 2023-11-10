@@ -7,9 +7,12 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import './ConfigurationScreen.css';
 import { IconBorder } from "../../components/IconBorder";
+import { useColorModeImages } from "../../hooks/useColorModeImages";
 
 export const ConfigurationScreen = () => {
-
+  const {
+    loginImage
+  } = useColorModeImages();
   const {
     userId,
     loginPath
@@ -19,7 +22,6 @@ export const ConfigurationScreen = () => {
   const {configs, loadAllConfigs, handleChangeActiveState} = useConfigurations();
   const navigate = useNavigate();
 
-  const loginImageResource = useColorModeValue("/images/log-in-01.svg", "/images/log-in-01-dark.svg");
   const loginTextColor = useColorModeValue("secondary", "gray.400");
 
   useEffect(() => {
@@ -51,17 +53,19 @@ export const ConfigurationScreen = () => {
       {
         !userId && (
           <Box className={'loginPopup'}>
-            <Box
-              className={'loginPopupContent'}
-            >
-              <IconBorder node={<img src={loginImageResource} alt="Login"/>} />
+            <a href={loginPath}>
               <Box
-                id={'loginFirstMessage'}
-                color={loginTextColor}
+                className={'loginPopupContent'}
               >
-                You can see more configurations if you log in!
+                <IconBorder node={<img src={loginImage} alt="Login"/>}/>
+                <Box
+                  id={'loginFirstMessage'}
+                  color={loginTextColor}
+                >
+                  You can see more configurations if you log in!
+                </Box>
               </Box>
-            </Box>
+            </a>
           </Box>
         )
       }
