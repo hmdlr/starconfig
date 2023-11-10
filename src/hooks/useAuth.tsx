@@ -35,7 +35,7 @@ function useProvideAuth() {
   const [userId, setUserId] = React.useState<string>();
   const { getUsername, getUserId } = useStorage();
 
-  const loginPath = `${FrontPaths.auth}/auth/login`;
+  const loginPath = `${FrontPaths.auth}/auth`;
   const registerPath = `${FrontPaths.auth}/auth/register`;
 
   /* On page startup */

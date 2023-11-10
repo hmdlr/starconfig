@@ -6,27 +6,23 @@ import { IconBorder } from "../IconBorder";
 
 interface RoutingButtonProps {
   icon: ReactElement;
-  darkIcon: ReactElement;
   children: React.ReactNode;
   to: string;
 }
 
 export const RoutingButton: React.FC<RoutingButtonProps> = ({
                                                               icon,
-                                                              darkIcon,
                                                               children,
                                                               to
                                                             }) => {
-  const theme = useTheme();
   const secondaryColor = useColorModeValue("secondary", "gray.400");
-  const iconUsed = useColorModeValue(icon, darkIcon);
 
   return (
     <Link
       to={to}
     >
       <Flex align="center">
-       <IconBorder node={React.cloneElement(iconUsed)}/>
+       <IconBorder node={React.cloneElement(icon)}/>
         <Text
           color={secondaryColor}
           fontSize="1.25rem"

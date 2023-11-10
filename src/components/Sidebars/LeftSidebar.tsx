@@ -1,7 +1,15 @@
 import { Box, Stack } from "@chakra-ui/react";
 import { RoutingButton } from "../RoutingButton";
+import { useColorModeImages } from "../../hooks/useColorModeImages";
 
 export const LeftSidebar = () => {
+
+  const {
+    compass,
+    packageImage,
+    puzzlePiece
+  } = useColorModeImages();
+
   return (
       <Box
           w={{ base: "0", md: "20%" }}
@@ -15,22 +23,19 @@ export const LeftSidebar = () => {
       >
         <Stack spacing={4}>
           <RoutingButton
-            icon={<img src="/images/compass.svg" alt="start"/>}
-            darkIcon={<img src="/images/compass-dark.svg" alt="start"/>}
+            icon={<img src={compass} alt="start"/>}
             to={'/'}
           >
             Getting started
           </RoutingButton>
           <RoutingButton
-            icon={<img src="/images/package.svg" alt="configs"/>}
-            darkIcon={<img src="/images/package-dark.svg" alt="configs"/>}
+            icon={<img src={packageImage} alt="configs"/>}
             to={'/configurations'}
           >
             Configurations
           </RoutingButton>
           <RoutingButton
-            icon={<img src="/images/puzzle-piece-01.svg" alt="rules"/>}
-            darkIcon={<img src="/images/puzzle-piece-01-dark.svg" alt="rules"/>}
+            icon={<img src={puzzlePiece} alt="rules"/>}
             to={'/rules'}
           >
             Rules
