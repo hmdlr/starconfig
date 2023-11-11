@@ -5,7 +5,15 @@ export const colorModeImagesContext = React.createContext<{
   loginImage: string,
   compass: string,
   packageImage: string,
+  packageImageX: string,
+  packageImageCheck: string,
   puzzlePiece: string
+  pin02: string,
+  eyeOff: string,
+  folder: string,
+  folderPlus: string,
+  folderNone: string,
+  checkVerified01: string,
 }>(undefined!);
 
 export const ProvideColorModeImages = ({children}: {children: any}) => {
@@ -18,15 +26,32 @@ export const useColorModeImages = () => {
 };
 
 function useProvideColorModeImages() {
-  const loginImage = useColorModeValue("/images/log-in-01.svg", "/images/log-in-01-dark.svg");
-  const compass = useColorModeValue("/images/compass.svg", "/images/compass-dark.svg");
-  const packageImage = useColorModeValue("/images/package.svg", "/images/package-dark.svg");
-  const puzzlePiece = useColorModeValue("/images/puzzle-piece-01.svg", "/images/puzzle-piece-01-dark.svg");
+  const loginImage = useColorModeValue("/images/light/log-in-01.svg", "/images/dark/log-in-01.svg");
+  const compass = useColorModeValue("/images/light/compass.svg", "/images/dark/compass.svg");
+  const packageImage = useColorModeValue("/images/light/package.svg", "/images/dark/package.svg");
+  const packageImageX = useColorModeValue("/images/light/package-x.svg", "/images/dark/package-x.svg");
+  const packageImageCheck = useColorModeValue("/images/light/package-check.svg", "/images/dark/package-check.svg");
+  const puzzlePiece = useColorModeValue("/images/light/puzzle-piece-01.svg", "/images/dark/puzzle-piece-01.svg");
+  const pin02 = useColorModeValue("/images/light/pin-02.svg", "/images/dark/pin-02.svg");
+  const eyeOff = useColorModeValue("/images/light/eye-off.svg", "/images/dark/eye-off.svg");
+  const folder = useColorModeValue("/images/light/folder.svg", "/images/dark/folder.svg");
+  const folderPlus = useColorModeValue("/images/light/folder-plus.svg", "/images/dark/folder-plus.svg");
+  const folderNone = useColorModeValue("/images/folder-closed.svg", "/images/folder-closed.svg");
+  const checkVerified01 = useColorModeValue("/images/light/check-verified-01.svg", "/images/dark/check-verified-01.svg");
+
 
   return {
     loginImage,
     compass,
     packageImage,
-    puzzlePiece
+    puzzlePiece,
+    pin02,
+    eyeOff,
+    folder,
+    folderPlus,
+    folderNone,
+    packageImageX,
+    packageImageCheck,
+    checkVerified01
   };
 }
