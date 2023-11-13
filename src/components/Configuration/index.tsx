@@ -20,71 +20,74 @@ export const Configuration = (props: {
   const logos = config.brands.map(brand => brand.favicon);
 
   return (
-      <Flex
-          w={'24rem'}
-          h={'8rem'}
-          bg={grayBackground}
-          borderRadius={'0.5rem'}
-      >
-        {/* a title in the top left corner, and in the right top corner an image of a gear */}
-        <Flex
-            direction={'column'}
-            justifyContent={'space-between'}
-            w={'100%'}
-            h={'100%'}
-            p={'0.5rem'}
-        >
-          <Flex
-              direction={'row'}
-              justifyContent={'space-between'}
-              alignItems={'center'}
-          >
-            <Flex
-                fontSize={'1.25rem'}
-                fontWeight={'bold'}
-            >
-              {config.name}
-            </Flex>
-            <Flex
-                borderRadius={'0.25rem'}
-                alignItems={'center'}
-                gap={'0.5rem'}
-            >
-              <Badge
-                  colorScheme={config.creatorId === userId ? 'purple' : 'cyan'}
-                  variant="solid"
-              >
-                {config.creatorId === userId ? 'PRIVATE' : 'PUBLIC'}
-              </Badge>
-              <Settings
-                  style={{ color: primaryColor, cursor: 'pointer' }}
-                  onClick={() => navigate(`/configurations/${config.id}`)}
-              />
-            </Flex>
-          </Flex>
-          <Flex
-              direction={'row'}
-              justifyContent={'space-between'}
-              alignItems={'center'}
-          >
-            <Flex
-                direction={'row'}
-                gap={'0.5rem'}
-            >
-              {logos.slice(0, 3).map((logo, index) => (
-                  <Image src={logo} alt={`brand logo ${index + 1}`} key={index} height={'20px'} />
-              ))}
-            </Flex>
-            <Button
-                size={'xs'}
-                colorScheme={config.active ? 'red' : 'green'}
-                borderRadius={'8px'}
-                onClick={() => props.changeActiveState(config)}
-            >
-              {config.active ? 'Disable' : 'Enable'}
-            </Button>
-          </Flex>
-        </Flex>
-      </Flex>
+    <Flex>
+
+    </Flex>
+      // <Flex
+      //     w={'24rem'}
+      //     h={'8rem'}
+      //     bg={grayBackground}
+      //     borderRadius={'0.5rem'}
+      // >
+      //   {/* a title in the top left corner, and in the right top corner an image of a gear */}
+      //   <Flex
+      //       direction={'column'}
+      //       justifyContent={'space-between'}
+      //       w={'100%'}
+      //       h={'100%'}
+      //       p={'0.5rem'}
+      //   >
+      //     <Flex
+      //         direction={'row'}
+      //         justifyContent={'space-between'}
+      //         alignItems={'center'}
+      //     >
+      //       <Flex
+      //           fontSize={'1.25rem'}
+      //           fontWeight={'bold'}
+      //       >
+      //         {config.name}
+      //       </Flex>
+      //       <Flex
+      //           borderRadius={'0.25rem'}
+      //           alignItems={'center'}
+      //           gap={'0.5rem'}
+      //       >
+      //         <Badge
+      //             colorScheme={config.creatorId === userId ? 'purple' : 'cyan'}
+      //             variant="solid"
+      //         >
+      //           {config.creatorId === userId ? 'PRIVATE' : 'PUBLIC'}
+      //         </Badge>
+      //         <Settings
+      //             style={{ color: primaryColor, cursor: 'pointer' }}
+      //             onClick={() => navigate(`/configurations/${config.id}`)}
+      //         />
+      //       </Flex>
+      //     </Flex>
+      //     <Flex
+      //         direction={'row'}
+      //         justifyContent={'space-between'}
+      //         alignItems={'center'}
+      //     >
+      //       <Flex
+      //           direction={'row'}
+      //           gap={'0.5rem'}
+      //       >
+      //         {logos.slice(0, 3).map((logo, index) => (
+      //             <Image src={logo} alt={`brand logo ${index + 1}`} key={index} height={'20px'} />
+      //         ))}
+      //       </Flex>
+      //       <Button
+      //           size={'xs'}
+      //           colorScheme={config.active ? 'red' : 'green'}
+      //           borderRadius={'8px'}
+      //           onClick={() => props.changeActiveState(config)}
+      //       >
+      //         {config.active ? 'Disable' : 'Enable'}
+      //       </Button>
+      //     </Flex>
+      //   </Flex>
+      // </Flex>
   );
 };

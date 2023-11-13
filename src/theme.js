@@ -7,6 +7,9 @@ const theme = extendTheme({
         primary: "#0075F2",
         secondary: "#272727",
         tertiary: "#FED766",
+        grayActive1: "#414141",
+        grayActive2: "#A0AEC0",
+        grayInactive1: "#8C8C8C"
     },
     styles: {
         global: (props) =>  ({

@@ -1,17 +1,21 @@
 import { useConfigurations } from "../../hooks/useConfigurations";
 import { Configuration } from "../../components/Configuration";
 import React, { useCallback, useEffect } from "react";
-import { Box, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { useActions } from "../../hooks/useActions";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-import './ConfigurationScreen.css';
 import { IconBorder } from "../../components/IconBorder";
 import { useColorModeImages } from "../../hooks/useColorModeImages";
+import './ConfigurationScreen.css';
+import { Headline } from "../../components/Headline/Headline";
+import { InUseInactivePackageContainer } from "../../components/Containers/InUseInactiveContainer";
 
 export const ConfigurationScreen = () => {
   const {
-    loginImage
+    loginImage,
+    pin02,
+    eyeOff
   } = useColorModeImages();
   const {
     userId,
@@ -39,16 +43,21 @@ export const ConfigurationScreen = () => {
   }, [userId, loginPath]);
 
   return (
-    <>
-      <Box display="grid" gridTemplateColumns="repeat(auto-fill, 24rem)" gap={4} px={5} py={3}>
-        {configs.map((config) => (
-          <Configuration
-            key={config.id}
-            config={config}
-            changeActiveState={handleChangeActiveState}
-          />
-        ))}
-      </Box>
+    <Box
+      paddingY={'2rem'}
+      paddingX={'4rem'}
+    >
+      <Flex flexDirection={"column"} gap={"3rem"}>
+        <Box>
+          <Headline imgSrc={pin02} headline={"System Provided Configurations"} />
+          <InUseInactivePackageContainer inUseComponents={[]} inactiveComponents={[]} />
+        </Box>
+
+        <Box>
+          <Headline imgSrc={eyeOff} headline={"Private Configurations"} />
+          <InUseInactivePackageContainer inUseComponents={[]} inactiveComponents={[]} />
+        </Box>
+      </Flex>
       {/* If userId is undefined, display a component to let user know he can see more configs if he logs in */}
       {
         !userId && (
@@ -69,6 +78,6 @@ export const ConfigurationScreen = () => {
           </Box>
         )
       }
-    </>
+    </Box>
   );
 };
