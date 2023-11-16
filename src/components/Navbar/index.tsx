@@ -16,6 +16,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { useAuth } from "../../hooks/useAuth";
 import './Navbar.css';
+import { useColorModeImages } from "../../hooks/useColorModeImages";
 
 export const Navbar = () => {
   const {colorMode, toggleColorMode} = useColorMode();
@@ -26,6 +27,10 @@ export const Navbar = () => {
     loginPath,
     registerPath
   } = useAuth();
+
+  const {
+    starphishLogo
+  } = useColorModeImages();
 
   return (
     <Flex
@@ -40,9 +45,14 @@ export const Navbar = () => {
     >
       {/* Logo on the far left, with text immediately after */}
       <Flex align="center" mr={5}>
+
         <img
-          style={{height: '60px', width: '60px', objectFit: 'contain'}}
-          src="/logo.svg"
+          style={{
+            height: '60px',
+            width: '60px',
+            objectFit: 'contain',
+          }}
+          src={starphishLogo}
           alt="Starphish logo"
         />
         <Box ml={{base: 2, md: 5}}>
