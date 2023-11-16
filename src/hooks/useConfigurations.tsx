@@ -15,6 +15,10 @@ export const configurationsContext = React.createContext<{
    */
   loadAllConfigs: () => Promise<void>;
   /**
+   * This will load all the public configs from the server. This will populate configs.
+   */
+  loadPublicConfigs: () => Promise<void>;
+  /**
    * Action when the user sets a config as active/inactive
    * @param config
    */
@@ -107,6 +111,19 @@ function useProvideConfigurations() {
     })));
   }, []);
 
+  const loadPublicConfigs = useCallback(async () => {
+    const presets = await loadPresets();
+
+    const { items } = await scanphish.listConfigs({
+      pageSize: 50
+    }, true, true);
+
+    setConfigs(items.map((config) => ({
+      ...config,
+      active: presets.some((preset) => preset.id === config.id)
+    })));
+  }, []);
+
   const loadPresets = useCallback(async () => {
     const presets = await scanphish.listPresets();
     console.log(presets);
@@ -125,6 +142,7 @@ function useProvideConfigurations() {
     handleChangeActiveState,
     create,
     loadAllConfigs,
+    loadPublicConfigs,
     get
   };
 }

@@ -2,6 +2,7 @@ import { useColorModeValue } from "@chakra-ui/react";
 import React from "react";
 
 export const colorModeImagesContext = React.createContext<{
+  starphishLogo: string,
   loginImage: string,
   compass: string,
   packageImage: string,
@@ -26,7 +27,7 @@ export const useColorModeImages = () => {
 };
 
 function useProvideColorModeImages() {
-  const loginImage = useColorModeValue("/images/light/log-in-01.svg", "/images/dark/log-in-01.svg");
+  const loginImage = useColorModeValue("/images/light/log-in-03.svg", "/images/dark/log-in-03.svg");
   const compass = useColorModeValue("/images/light/compass.svg", "/images/dark/compass.svg");
   const packageImage = useColorModeValue("/images/light/package.svg", "/images/dark/package.svg");
   const packageImageX = useColorModeValue("/images/light/package-x.svg", "/images/dark/package-x.svg");
@@ -38,9 +39,10 @@ function useProvideColorModeImages() {
   const folderPlus = useColorModeValue("/images/light/folder-plus.svg", "/images/dark/folder-plus.svg");
   const folderNone = useColorModeValue("/images/folder-closed.svg", "/images/folder-closed.svg");
   const checkVerified01 = useColorModeValue("/images/light/check-verified-01.svg", "/images/dark/check-verified-01.svg");
-
+  const starphishLogo = useColorModeValue("/images/light/logo.svg", "/images/dark/logo.svg");
 
   return {
+    starphishLogo,
     loginImage,
     compass,
     packageImage,

@@ -1,7 +1,7 @@
 import { useConfigurations } from "../../hooks/useConfigurations";
 import { Configuration } from "../../components/Configuration";
 import React, { useCallback, useEffect } from "react";
-import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, useColorModeValue, useTheme } from "@chakra-ui/react";
 import { useActions } from "../../hooks/useActions";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
@@ -23,15 +23,28 @@ export const ConfigurationScreen = () => {
   } = useAuth();
 
   const {setActions} = useActions();
-  const {configs, loadAllConfigs, handleChangeActiveState} = useConfigurations();
+  const {
+    loadAllConfigs,
+    loadPublicConfigs
+  } = useConfigurations();
   const navigate = useNavigate();
 
   const loginTextColor = useColorModeValue("secondary", "gray.400");
+  const theme = useTheme();
+  const loginAnchorTextColor = theme.colors.primary;
 
   useEffect(() => {
-    loadAllConfigs();
+    if (userId) {
+      loadAllConfigs().then(() => {
+        // no-op
+      });
+    } else {
+      loadPublicConfigs().then(() => {
+        // no-op
+      });
+    }
     setContextActions();
-  }, [loadAllConfigs]);
+  }, [loadAllConfigs, loadPublicConfigs, userId]);
 
   const setContextActions = useCallback(() => {
     setActions(
@@ -46,35 +59,47 @@ export const ConfigurationScreen = () => {
     <Box
       paddingY={'2rem'}
       paddingX={'4rem'}
+      width={'100%'}
+      height={'100%'}
     >
       <Flex flexDirection={"column"} gap={"3rem"}>
         <Box>
-          <Headline imgSrc={pin02} headline={"System Provided Configurations"} />
-          <InUseInactivePackageContainer inUseComponents={[]} inactiveComponents={[]} />
+          <Headline imgSrc={pin02} headline={"System Provided Configurations"}/>
+          <InUseInactivePackageContainer inUseComponents={[]} inactiveComponents={[]}/>
         </Box>
 
-        <Box>
-          <Headline imgSrc={eyeOff} headline={"Private Configurations"} />
-          <InUseInactivePackageContainer inUseComponents={[]} inactiveComponents={[]} />
-        </Box>
+        {
+          userId && (
+            <Box>
+              <Headline imgSrc={eyeOff} headline={"Private Configurations"}/>
+              <InUseInactivePackageContainer inUseComponents={[]} inactiveComponents={[]}/>
+            </Box>
+          )
+        }
       </Flex>
       {/* If userId is undefined, display a component to let user know he can see more configs if he logs in */}
       {
         !userId && (
           <Box className={'loginPopup'}>
-            <a href={loginPath}>
+            <Box
+              className={'loginPopupContent'}
+            >
+              <img src={loginImage} alt="Login"/>
               <Box
-                className={'loginPopupContent'}
+                id={'loginFirstMessage'}
+                color={loginTextColor}
               >
-                <IconBorder node={<img src={loginImage} alt="Login"/>}/>
-                <Box
-                  id={'loginFirstMessage'}
-                  color={loginTextColor}
+                You can use the configurations if you&nbsp;
+                <a
+                  href={loginPath}
+                  style={{
+                    color: loginAnchorTextColor
+                  }}
                 >
-                  You can see more configurations if you log in!
-                </Box>
+                  log in!
+                </a>
               </Box>
-            </a>
+            </Box>
           </Box>
         )
       }
