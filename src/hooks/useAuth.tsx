@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useStorage } from "./useStorage";
 import { FrontPaths } from "@hmdlr/utils";
+import { IGroup } from "@hmdlr/types";
+import { useClient } from "./useClient";
 
 const authContext = React.createContext<{
   /**
@@ -19,6 +21,10 @@ const authContext = React.createContext<{
    * The path to the register page
    */
   registerPath: string;
+  /**
+   * This will list all the groups the user is a member of
+   */
+  listGroups: () => Promise<IGroup[]>
 }>(undefined!);
 
 export const ProvideAuth = ({ children }: { children: any }) => {
@@ -31,6 +37,8 @@ export const useAuth = () => {
 };
 
 function useProvideAuth() {
+  const { authphish } = useClient().sdk;
+
   const [username, setUsername] = React.useState<string>();
   const [userId, setUserId] = React.useState<string>();
   const { getUsername, getUserId } = useStorage();
@@ -50,10 +58,25 @@ function useProvideAuth() {
     }
   }, []);
 
+  const listGroups = useCallback(async (
+    pageNumber: number = 1,
+    pageSize: number = -1,
+  ) => {
+    if (!authphish) {
+      return [];
+    }
+    const { items } = await authphish.listGroups({
+      pageNumber,
+      pageSize
+    });
+    return items;
+  }, [authphish]);
+
   return {
     username,
     userId,
     loginPath,
-    registerPath
+    registerPath,
+    listGroups
   };
 }

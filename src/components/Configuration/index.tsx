@@ -1,93 +1,83 @@
-import { Badge, Flex, useColorModeValue, useTheme, Image, Button } from "@chakra-ui/react";
+import { Flex, useColorModeValue } from "@chakra-ui/react";
 import { ConfigModel } from "../../models/ConfigModel";
-import { Settings } from "@mui/icons-material";
-import { useAuth } from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useColorModeImages } from "../../hooks/useColorModeImages";
 
 export const Configuration = (props: {
   config: ConfigModel,
-  changeActiveState: (config: ConfigModel) => void
 }) => {
-  const theme = useTheme();
-  const primaryColor = theme.colors.primary;
-  const grayBackground = useColorModeValue("gray.300", "gray.600");
-  const navigate = useNavigate();
+  const {
+    folder,
+    checkVerified01
+  } = useColorModeImages()
+  const {config} = props;
 
-  const { config } = props;
-  const { userId } = useAuth();
-
-  // Extract the first logo of each brand
-  const logos = config.brands.map(brand => brand.favicon);
+  const first3LogosOfRules = config.brands.map(brand => brand.favicon);
+  const secondaryColor = useColorModeValue("secondary", "gray.400");
+  const configIconsContainerBgColor = useColorModeValue("#CBD5DF", "#4a5568");
 
   return (
-    <Flex>
-
+    <Flex
+      border={'1px solid #E3E3E3'}
+      flexDirection={'column'}
+      borderRadius={'0.5rem'}
+      paddingX={'0.8rem'}
+      paddingY={'0.8rem'}
+    >
+      <Flex
+        direction={'row'}
+        gap={'0.5rem'}
+        alignItems={'center'}
+        justifyContent={'center'}
+      >
+        <img
+          src={folder}
+          alt={'folder'}
+        />
+        <Flex
+          fontSize={'1.25rem'}
+          fontWeight={'bold'}
+          color={secondaryColor}
+        >
+          {config.name}
+        </Flex>
+        {
+          config.official && (
+            <img
+              src={checkVerified01}
+              alt={'official'}
+            />
+          )
+        }
+      </Flex>
+      {
+        config.official && (
+          // for Official configs, we also display the first 3 logos of the rules
+          <Flex
+            direction={'row'}
+            gap={'0.5rem'}
+            alignItems={'center'}
+            justifyContent={'center'}
+            backgroundColor={configIconsContainerBgColor}
+            borderRadius={'0.25rem'}
+            paddingY={'0.35rem'}
+            paddingX={'0.5rem'}
+            width={'fit-content'}
+          >
+            {
+              first3LogosOfRules.map((logo, index) => (
+                <img
+                  src={logo}
+                  alt={`${index + 1}`}
+                  key={index}
+                  style={{
+                    maxHeight: '15px',
+                  }}
+                />
+              ))
+            }
+          </Flex>
+        )
+      }
     </Flex>
-      // <Flex
-      //     w={'24rem'}
-      //     h={'8rem'}
-      //     bg={grayBackground}
-      //     borderRadius={'0.5rem'}
-      // >
-      //   {/* a title in the top left corner, and in the right top corner an image of a gear */}
-      //   <Flex
-      //       direction={'column'}
-      //       justifyContent={'space-between'}
-      //       w={'100%'}
-      //       h={'100%'}
-      //       p={'0.5rem'}
-      //   >
-      //     <Flex
-      //         direction={'row'}
-      //         justifyContent={'space-between'}
-      //         alignItems={'center'}
-      //     >
-      //       <Flex
-      //           fontSize={'1.25rem'}
-      //           fontWeight={'bold'}
-      //       >
-      //         {config.name}
-      //       </Flex>
-      //       <Flex
-      //           borderRadius={'0.25rem'}
-      //           alignItems={'center'}
-      //           gap={'0.5rem'}
-      //       >
-      //         <Badge
-      //             colorScheme={config.creatorId === userId ? 'purple' : 'cyan'}
-      //             variant="solid"
-      //         >
-      //           {config.creatorId === userId ? 'PRIVATE' : 'PUBLIC'}
-      //         </Badge>
-      //         <Settings
-      //             style={{ color: primaryColor, cursor: 'pointer' }}
-      //             onClick={() => navigate(`/configurations/${config.id}`)}
-      //         />
-      //       </Flex>
-      //     </Flex>
-      //     <Flex
-      //         direction={'row'}
-      //         justifyContent={'space-between'}
-      //         alignItems={'center'}
-      //     >
-      //       <Flex
-      //           direction={'row'}
-      //           gap={'0.5rem'}
-      //       >
-      //         {logos.slice(0, 3).map((logo, index) => (
-      //             <Image src={logo} alt={`brand logo ${index + 1}`} key={index} height={'20px'} />
-      //         ))}
-      //       </Flex>
-      //       <Button
-      //           size={'xs'}
-      //           colorScheme={config.active ? 'red' : 'green'}
-      //           borderRadius={'8px'}
-      //           onClick={() => props.changeActiveState(config)}
-      //       >
-      //         {config.active ? 'Disable' : 'Enable'}
-      //       </Button>
-      //     </Flex>
-      //   </Flex>
-      // </Flex>
   );
 };

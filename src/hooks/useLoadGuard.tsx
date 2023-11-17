@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useStorage } from "./useStorage";
 
 const loadGuardContext = React.createContext<{
   cacheLoaded: boolean;
@@ -10,35 +11,41 @@ const loadGuardContext = React.createContext<{
 
 export const useLoadGuard = () => React.useContext(loadGuardContext);
 
-export const ProvideLoadGuard = ({ children }: { children: any }) => {
-  const { cacheLoaded, LoadGuard } = useProvideLoadGuard();
+export const ProvideLoadGuard = ({children}: { children: any }) => {
+  const {cacheLoaded, LoadGuard} = useProvideLoadGuard();
   return (
-      <loadGuardContext.Provider value={{ cacheLoaded, LoadGuard }}>
-        {children}
-      </loadGuardContext.Provider>
+    <loadGuardContext.Provider value={{cacheLoaded, LoadGuard}}>
+      {children}
+    </loadGuardContext.Provider>
   );
 };
 
 function useProvideLoadGuard() {
-  const [cacheLoaded, setCacheLoaded] = React.useState<boolean>(true);
-  // const { token } = useStorage();
+  const [cacheLoaded, setCacheLoaded] = React.useState<boolean>(false);
+  const {getUsername} = useStorage()
+
+  const [username, setUsername] = React.useState<string | null | undefined>(undefined);
+
+  useEffect(() => {
+    setUsername(getUsername());
+  }, []);
+
+  useEffect(() => {
+    if (username !== undefined) {
+      setCacheLoaded(true);
+    }
+  }, [username]);
 
   const LoadGuard = () => (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100%',
-        width: '100%',
-      }}>
-      </div>
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100%',
+      width: '100%',
+    }}>
+    </div>
   );
-  //
-  // React.useEffect(() => {
-  //   if (token !== undefined) {
-  //     setCacheLoaded(true);
-  //   }
-  // }, [token]);
 
   return {
     cacheLoaded,

@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { IConfig, IConfigCreatePayload } from "@hmdlr/types";
+import { IConfig, IConfigCreatePayload, UUID } from "@hmdlr/types";
 import { DeployedPaths, Microservice } from "@hmdlr/utils/dist/Microservice";
 import { IBrand } from "@hmdlr/types/dist/brands/IBrand";
 import { ConfigModel } from "../models/ConfigModel";
@@ -7,22 +7,13 @@ import { useClient } from "./useClient";
 
 export const configurationsContext = React.createContext<{
   /**
-   * All configs available
+   * This will load all the available public configs from the server. This will populate configs.
    */
-  configs: ConfigModel[];
+  loadPublicConfigs: () => Promise<ConfigModel[]>;
   /**
-   * This will load all the available configs from the server. This will populate configs.
+   * This will load all the configs belonging to a group from the server. This will populate configs.
    */
-  loadAllConfigs: () => Promise<void>;
-  /**
-   * This will load all the public configs from the server. This will populate configs.
-   */
-  loadPublicConfigs: () => Promise<void>;
-  /**
-   * Action when the user sets a config as active/inactive
-   * @param config
-   */
-  handleChangeActiveState: (config: ConfigModel) => void;
+  loadConfigsForGroup: (groupId: string) => Promise<ConfigModel[]>;
   /**
    * The currently selected config
    */
@@ -39,7 +30,7 @@ export const configurationsContext = React.createContext<{
   get: (id: string) => Promise<IConfig>;
 }>(undefined!);
 
-export const ProvideConfigurations = ({ children }: { children: any }) => {
+export const ProvideConfigurations = ({children}: { children: any }) => {
   const configurations = useProvideConfigurations();
   return <configurationsContext.Provider value={configurations}>{children}</configurationsContext.Provider>;
 };
@@ -49,36 +40,35 @@ export const useConfigurations = () => {
 };
 
 function useProvideConfigurations() {
-  const { scanphish } = useClient().sdk;
+  const {scanphish} = useClient().sdk;
 
-  const { client } = useClient();
+  const {client} = useClient();
 
-  const [configs, setConfigs] = React.useState<ConfigModel[]>([]);
   const [rulesets, setRulesets] = React.useState<IBrand[]>([]);
   const [currentEditConfig, setCurrentEditConfig] = React.useState<IConfig | undefined>(undefined);
 
-  const handleChangeActiveState = (config: ConfigModel) => {
-    const newConfigs = configs.map((c) => {
-      if (c.id === config.id) {
-        return {
-          ...c,
-          active: !c.active
-        };
-      }
-      return c;
-    });
-    setConfigs(newConfigs);
-
-    // update on the backend as well
-    if (config.active) {
-      scanphish.deletePreset(config.id);
-    } else {
-      scanphish.savePreset(config.id);
-    }
-  };
+  // const handleChangeActiveState = (config: ConfigModel) => {
+  //   const newConfigs = configs.map((c) => {
+  //     if (c.id === config.id) {
+  //       return {
+  //         ...c,
+  //         active: !c.active
+  //       };
+  //     }
+  //     return c;
+  //   });
+  //   setConfigs(newConfigs);
+  //
+  //   // update on the backend as well
+  //   if (config.active) {
+  //     scanphish.deletePreset(config.id);
+  //   } else {
+  //     scanphish.savePreset(config.id);
+  //   }
+  // };
 
   const create = async (config: IConfigCreatePayload) => {
-    const { config: createdConfig } = await createConfig(config);
+    const {config: createdConfig} = await createConfig(config);
     return createdConfig;
   };
 
@@ -90,38 +80,40 @@ function useProvideConfigurations() {
     }
 
     return client.post<{ config: IConfig }>(
-        `${DeployedPaths[Microservice.Scanphish]}/api/config`,
-        formData,
-        {
-          withCredentials: true,
-        }
+      `${DeployedPaths[Microservice.Scanphish]}/api/config`,
+      formData,
+      {
+        withCredentials: true,
+      }
     ).then((res: { data: any; }) => res.data);
   };
 
-  const loadAllConfigs = useCallback(async () => {
+  const loadConfigsForGroup = useCallback(async (groupId: string) => {
     const presets = await loadPresets();
 
-    const { items } = await scanphish.listConfigs({
+    const {items} = await scanphish.listConfigs({
       pageSize: 50
-    }, true, false);
+    }, true, groupId);
 
-    setConfigs(items.map((config) => ({
+    return items.map((config) => ({
       ...config,
-      active: presets.some((preset) => preset.id === config.id)
-    })));
+      active: presets.some((preset) => preset.id === config.id),
+      official: groupId === UUID.NIL
+    }))
   }, []);
 
   const loadPublicConfigs = useCallback(async () => {
     const presets = await loadPresets();
 
-    const { items } = await scanphish.listConfigs({
+    const {items} = await scanphish.listConfigs({
       pageSize: 50
-    }, true, true);
+    }, true, UUID.NIL);
 
-    setConfigs(items.map((config) => ({
+    return items.map((config) => ({
       ...config,
-      active: presets.some((preset) => preset.id === config.id)
-    })));
+      active: presets.some((preset) => preset.id === config.id),
+      official: true
+    }))
   }, []);
 
   const loadPresets = useCallback(async () => {
@@ -136,12 +128,10 @@ function useProvideConfigurations() {
   }, []);
 
   return {
-    configs,
     rulesets,
     currentEditConfig,
-    handleChangeActiveState,
     create,
-    loadAllConfigs,
+    loadConfigsForGroup,
     loadPublicConfigs,
     get
   };

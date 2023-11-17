@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import React, { useCallback, useEffect } from "react";
 import { AxiosClient } from "@hmdlr/types";
-import { Scanphish } from "@hmdlr/utils";
+import { Authphish, Scanphish } from "@hmdlr/utils";
 import { DeployedPaths, Microservice } from "@hmdlr/utils/dist/Microservice";
 import { useStorage } from "./useStorage";
 
@@ -17,6 +17,7 @@ const clientContext = React.createContext<{
   client: AxiosClient;
   sdk: {
     scanphish: Scanphish;
+    authphish: Authphish;
   }
 }>({
   client: {
@@ -26,7 +27,8 @@ const clientContext = React.createContext<{
     delete: (url: string, options?: any) => axios.delete(url, { ...defaultOptions, ...options }),
   },
   sdk: {
-    scanphish: undefined!
+    scanphish: undefined!,
+    authphish: undefined!,
   }
 });
 
@@ -45,6 +47,11 @@ function useProvideClient() {
     withCredentials: true,
   })
 
+  const authphishAxios = axios.create({
+    baseURL: DeployedPaths[Microservice.Authphish],
+    withCredentials: true,
+  })
+
   // use axiosCall
   const get = (url: string, options?: any) => axios.get(url, { ...defaultOptions, ...options });
   const post = (url: string, data: any, options?: any) => axios.post(url, data, { ...defaultOptions, ...options });
@@ -58,6 +65,13 @@ function useProvideClient() {
     delete: (url: string, options?: any) => scanphishAxios.delete(url, { ...defaultOptions, ...options }).then((res: AxiosResponse) => res.data),
   });
 
+  const authphish = new Authphish({
+    get: (url: string, options?: any) => authphishAxios.get(url, { ...defaultOptions, ...options }).then((res: AxiosResponse) => res.data),
+    post: (url: string, data: any, options?: any) => authphishAxios.post(url, data, { ...defaultOptions, ...options }).then((res: AxiosResponse) => res.data),
+    put: (url: string, data: any, options?: any) => authphishAxios.put(url, data, { ...defaultOptions, ...options }).then((res: AxiosResponse) => res.data),
+    delete: (url: string, options?: any) => authphishAxios.delete(url, { ...defaultOptions, ...options }).then((res: AxiosResponse) => res.data),
+  });
+
   return {
     client: {
       get,
@@ -67,6 +81,7 @@ function useProvideClient() {
     },
     sdk: {
       scanphish,
+      authphish,
     }
   };
 }
