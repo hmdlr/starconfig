@@ -1,15 +1,16 @@
+import { Box, Flex, useColorModeValue, useTheme } from "@chakra-ui/react";
+import { UUID } from "@hmdlr/types";
+import { useNavigate } from "react-router-dom";
+import React, { ReactNode, useCallback, useEffect } from "react";
 import { useConfigurations } from "../../hooks/useConfigurations";
 import { Configuration } from "../../components/Configuration";
-import React, { useCallback, useEffect } from "react";
-import { Box, Flex, useColorModeValue, useTheme } from "@chakra-ui/react";
 import { useActions } from "../../hooks/useActions";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-import { IconBorder } from "../../components/IconBorder";
 import { useColorModeImages } from "../../hooks/useColorModeImages";
-import './ConfigurationScreen.css';
 import { Headline } from "../../components/Headline/Headline";
 import { InUseInactivePackageContainer } from "../../components/Containers/InUseInactiveContainer";
+import { ConfigModel } from "../../models/ConfigModel";
+import './ConfigurationScreen.css';
 
 export const ConfigurationScreen = () => {
   const {
@@ -19,13 +20,14 @@ export const ConfigurationScreen = () => {
   } = useColorModeImages();
   const {
     userId,
-    loginPath
+    loginPath,
+    listGroups
   } = useAuth();
 
   const {setActions} = useActions();
   const {
-    loadAllConfigs,
-    loadPublicConfigs
+    loadConfigsForGroup,
+    loadPublicConfigs,
   } = useConfigurations();
   const navigate = useNavigate();
 
@@ -33,18 +35,74 @@ export const ConfigurationScreen = () => {
   const theme = useTheme();
   const loginAnchorTextColor = theme.colors.primary;
 
+
+  const [inUseSystemComponents, setInUseSystemComponents] = React.useState<ReactNode[]>([]);
+  const [inactiveSystemComponents, setInactiveSystemComponents] = React.useState<ReactNode[]>([]);
+
+  const [inUsePrivateComponents, setInUsePrivateComponents] = React.useState<ReactNode[]>([]);
+  const [inactivePrivateComponents, setInactivePrivateComponents] = React.useState<ReactNode[]>([]);
+
   useEffect(() => {
-    if (userId) {
-      loadAllConfigs().then(() => {
-        // no-op
-      });
-    } else {
-      loadPublicConfigs().then(() => {
-        // no-op
-      });
-    }
+    (async () => {
+      const mInUseSystemComponents: ConfigModel[] = [];
+      const mInactiveSystemComponents: ConfigModel[] = [];
+      const mInUsePrivateComponents: ConfigModel[] = [];
+      const mInactivePrivateComponents: ConfigModel[] = [];
+
+      if (userId) {
+        const availableGroups = await listGroups();
+
+        for (const group of availableGroups) {
+          if (group.id === UUID.NIL) {
+            const configs = await loadPublicConfigs();
+
+            configs.forEach((config) => {
+              if (config.active) {
+                mInUseSystemComponents.push(config);
+              } else {
+                mInactiveSystemComponents.push(config);
+              }
+            });
+          } else {
+            const configs = await loadConfigsForGroup(group.id);
+
+            configs.forEach((config) => {
+              if (config.active) {
+                mInUsePrivateComponents.push(config);
+              } else {
+                mInactivePrivateComponents.push(config);
+              }
+            });
+          }
+        }
+      } else {
+        const configs = await loadPublicConfigs();
+
+        configs.forEach((config) => {
+          if (config.active) {
+            mInUseSystemComponents.push(config);
+          } else {
+            mInactiveSystemComponents.push(config);
+          }
+        });
+      }
+
+      setInUseSystemComponents(mInUseSystemComponents.map(toConfigComponent));
+      setInactiveSystemComponents(mInactiveSystemComponents.map(toConfigComponent));
+      setInUsePrivateComponents(mInUsePrivateComponents.map(toConfigComponent));
+      setInactivePrivateComponents(mInactivePrivateComponents.map(toConfigComponent));
+    })()
+
     setContextActions();
-  }, [loadAllConfigs, loadPublicConfigs, userId]);
+  }, [loadConfigsForGroup, loadPublicConfigs, userId]);
+
+  const toConfigComponent = useCallback((config: ConfigModel) => {
+    return (
+      <Configuration
+        config={config}
+      />
+    );
+  }, []);
 
   const setContextActions = useCallback(() => {
     setActions(
@@ -65,14 +123,20 @@ export const ConfigurationScreen = () => {
       <Flex flexDirection={"column"} gap={"3rem"}>
         <Box>
           <Headline imgSrc={pin02} headline={"System Provided Configurations"}/>
-          <InUseInactivePackageContainer inUseComponents={[]} inactiveComponents={[]}/>
+          <InUseInactivePackageContainer
+            inUseComponents={inUseSystemComponents}
+            inactiveComponents={inactiveSystemComponents}
+          />
         </Box>
 
         {
           userId && (
             <Box>
               <Headline imgSrc={eyeOff} headline={"Private Configurations"}/>
-              <InUseInactivePackageContainer inUseComponents={[]} inactiveComponents={[]}/>
+              <InUseInactivePackageContainer
+                inUseComponents={inUsePrivateComponents}
+                inactiveComponents={inactivePrivateComponents}
+              />
             </Box>
           )
         }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Flex, useColorModeValue } from "@chakra-ui/react";
 import { useColorModeImages } from "../../hooks/useColorModeImages";
 // css
@@ -21,6 +21,10 @@ export const InUseInactivePackageContainer = (props: InUseInactiveContainerProps
     inactiveComponents
   } = props;
 
+  useEffect(() => {
+    console.log('inUseComponents', inUseComponents)
+  }, []);
+
   const miniHeadlineColor = useColorModeValue('grayActive1', 'grayActive2')
 
   return (
@@ -40,13 +44,18 @@ export const InUseInactivePackageContainer = (props: InUseInactiveContainerProps
         </span>
         </Flex>
 
-        {/* todo: insert the inUseComponents here */}
         <Flex
           paddingX={'2rem'}
         >
           {
-            inUseComponents.length === 0 && (
+            inUseComponents.length === 0 ? (
               <NotPresentComponents inUse={true}/>
+            ) : (
+              inUseComponents.map((component, index) => (
+                <div key={index}>
+                  {component}
+                </div>
+              ))
             )
           }
         </Flex>
@@ -64,13 +73,18 @@ export const InUseInactivePackageContainer = (props: InUseInactiveContainerProps
         </span>
         </Flex>
 
-        {/* todo: insert the inactiveComponents here */}
         <Flex
           paddingX={'2rem'}
         >
         {
-          inactiveComponents.length === 0 && (
+          inactiveComponents.length === 0 ? (
             <NotPresentComponents inUse={false}/>
+          ) : (
+            inactiveComponents.map((component, index) => (
+              <div key={index}>
+                {component}
+              </div>
+            ))
           )
         }
         </Flex>

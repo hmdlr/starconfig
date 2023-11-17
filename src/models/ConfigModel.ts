@@ -7,4 +7,5 @@ export interface ConfigModel extends IConfig {
   logo: string;
   brands: IBrand[];
   active: boolean;
+  official: boolean;
 }

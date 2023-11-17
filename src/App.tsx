@@ -12,15 +12,15 @@ import { ProvideColorModeImages } from "./hooks/useColorModeImages";
 export const App = () => (
   <ChakraProvider theme={theme}>
     <ProvideStorage>
-      <ProvideAuth>
-        <ProvideClient>
+      <ProvideClient>
+        <ProvideAuth>
           <ProvideColorModeImages>
             <ProvideLoadGuard>
               <LoadGuardRouter/>
             </ProvideLoadGuard>
           </ProvideColorModeImages>
-        </ProvideClient>
-      </ProvideAuth>
+        </ProvideAuth>
+      </ProvideClient>
     </ProvideStorage>
   </ChakraProvider>
 );
