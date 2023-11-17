@@ -21,14 +21,11 @@ export const ConfigurationScreen = () => {
   const {
     userId,
     loginPath,
-    listGroups
   } = useAuth();
-
-  const {setActions} = useActions();
   const {
-    loadConfigsForGroup,
-    loadPublicConfigs,
+    retrieveSplitConfigs
   } = useConfigurations();
+  const {setActions} = useActions();
   const navigate = useNavigate();
 
   const loginTextColor = useColorModeValue("secondary", "gray.400");
@@ -44,48 +41,12 @@ export const ConfigurationScreen = () => {
 
   useEffect(() => {
     (async () => {
-      const mInUseSystemComponents: ConfigModel[] = [];
-      const mInactiveSystemComponents: ConfigModel[] = [];
-      const mInUsePrivateComponents: ConfigModel[] = [];
-      const mInactivePrivateComponents: ConfigModel[] = [];
-
-      if (userId) {
-        const availableGroups = await listGroups();
-
-        for (const group of availableGroups) {
-          if (group.id === UUID.NIL) {
-            const configs = await loadPublicConfigs();
-
-            configs.forEach((config) => {
-              if (config.active) {
-                mInUseSystemComponents.push(config);
-              } else {
-                mInactiveSystemComponents.push(config);
-              }
-            });
-          } else {
-            const configs = await loadConfigsForGroup(group.id);
-
-            configs.forEach((config) => {
-              if (config.active) {
-                mInUsePrivateComponents.push(config);
-              } else {
-                mInactivePrivateComponents.push(config);
-              }
-            });
-          }
-        }
-      } else {
-        const configs = await loadPublicConfigs();
-
-        configs.forEach((config) => {
-          if (config.active) {
-            mInUseSystemComponents.push(config);
-          } else {
-            mInactiveSystemComponents.push(config);
-          }
-        });
-      }
+      const {
+        inUseSystemComponents: mInUseSystemComponents,
+        inactiveSystemComponents: mInactiveSystemComponents,
+        inUsePrivateComponents: mInUsePrivateComponents,
+        inactivePrivateComponents: mInactivePrivateComponents
+      } = await retrieveSplitConfigs();
 
       setInUseSystemComponents(mInUseSystemComponents.map(toConfigComponent));
       setInactiveSystemComponents(mInactiveSystemComponents.map(toConfigComponent));
@@ -94,7 +55,7 @@ export const ConfigurationScreen = () => {
     })()
 
     setContextActions();
-  }, [loadConfigsForGroup, loadPublicConfigs, userId]);
+  }, []);
 
   const toConfigComponent = useCallback((config: ConfigModel) => {
     return (

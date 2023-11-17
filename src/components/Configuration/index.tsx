@@ -16,68 +16,70 @@ export const Configuration = (props: {
   const configIconsContainerBgColor = useColorModeValue("#CBD5DF", "#4a5568");
 
   return (
-    <Flex
-      border={'1px solid #E3E3E3'}
-      flexDirection={'column'}
-      borderRadius={'0.5rem'}
-      paddingX={'0.8rem'}
-      paddingY={'0.8rem'}
-    >
+    <a href={`/configurations/${config.id}`}>
       <Flex
-        direction={'row'}
-        gap={'0.5rem'}
-        alignItems={'center'}
-        justifyContent={'center'}
+        border={'1px solid #E3E3E3'}
+        flexDirection={'column'}
+        borderRadius={'0.5rem'}
+        paddingX={'1.1rem'}
+        paddingY={'0.7rem'}
       >
-        <img
-          src={folder}
-          alt={'folder'}
-        />
         <Flex
-          fontSize={'1.25rem'}
-          fontWeight={'bold'}
-          color={secondaryColor}
+          direction={'row'}
+          gap={'0.5rem'}
+          alignItems={'center'}
+          justifyContent={'center'}
         >
-          {config.name}
+          <img
+            src={folder}
+            alt={'folder'}
+          />
+          <Flex
+            fontSize={'1.25rem'}
+            fontWeight={'bold'}
+            color={secondaryColor}
+          >
+            {config.name}
+          </Flex>
+          {
+            config.official && (
+              <img
+                src={checkVerified01}
+                alt={'official'}
+              />
+            )
+          }
         </Flex>
         {
           config.official && (
-            <img
-              src={checkVerified01}
-              alt={'official'}
-            />
+            // for Official configs, we also display the first 3 logos of the rules
+            <Flex
+              direction={'row'}
+              gap={'0.5rem'}
+              alignItems={'center'}
+              justifyContent={'center'}
+              backgroundColor={configIconsContainerBgColor}
+              borderRadius={'0.25rem'}
+              paddingY={'0.35rem'}
+              paddingX={'0.5rem'}
+              width={'fit-content'}
+            >
+              {
+                first3LogosOfRules.map((logo, index) => (
+                  <img
+                    src={logo}
+                    alt={`${index + 1}`}
+                    key={index}
+                    style={{
+                      maxHeight: '15px',
+                    }}
+                  />
+                ))
+              }
+            </Flex>
           )
         }
       </Flex>
-      {
-        config.official && (
-          // for Official configs, we also display the first 3 logos of the rules
-          <Flex
-            direction={'row'}
-            gap={'0.5rem'}
-            alignItems={'center'}
-            justifyContent={'center'}
-            backgroundColor={configIconsContainerBgColor}
-            borderRadius={'0.25rem'}
-            paddingY={'0.35rem'}
-            paddingX={'0.5rem'}
-            width={'fit-content'}
-          >
-            {
-              first3LogosOfRules.map((logo, index) => (
-                <img
-                  src={logo}
-                  alt={`${index + 1}`}
-                  key={index}
-                  style={{
-                    maxHeight: '15px',
-                  }}
-                />
-              ))
-            }
-          </Flex>
-        )
-      }
-    </Flex>
+    </a>
   );
 };

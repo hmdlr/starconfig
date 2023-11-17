@@ -4,6 +4,7 @@ import { DeployedPaths, Microservice } from "@hmdlr/utils/dist/Microservice";
 import { IBrand } from "@hmdlr/types/dist/brands/IBrand";
 import { ConfigModel } from "../models/ConfigModel";
 import { useClient } from "./useClient";
+import { useAuth } from "./useAuth";
 
 export const configurationsContext = React.createContext<{
   /**
@@ -28,6 +29,15 @@ export const configurationsContext = React.createContext<{
    * @param id
    */
   get: (id: string) => Promise<IConfig>;
+  /**
+   * This will load all available configs, private and public, and split them into inUse and inactive.
+   */
+  retrieveSplitConfigs: () => Promise<{
+    inUseSystemComponents: ConfigModel[];
+    inactiveSystemComponents: ConfigModel[];
+    inUsePrivateComponents: ConfigModel[];
+    inactivePrivateComponents: ConfigModel[];
+  }>;
 }>(undefined!);
 
 export const ProvideConfigurations = ({children}: { children: any }) => {
@@ -41,7 +51,10 @@ export const useConfigurations = () => {
 
 function useProvideConfigurations() {
   const {scanphish} = useClient().sdk;
-
+  const {
+    userId,
+    listGroups
+  } = useAuth();
   const {client} = useClient();
 
   const [rulesets, setRulesets] = React.useState<IBrand[]>([]);
@@ -118,7 +131,6 @@ function useProvideConfigurations() {
 
   const loadPresets = useCallback(async () => {
     const presets = await scanphish.listPresets();
-    console.log(presets);
     return presets;
   }, []);
 
@@ -127,13 +139,66 @@ function useProvideConfigurations() {
     return config;
   }, []);
 
+  const retrieveSplitConfigs = useCallback(async () => {
+    const mInUseSystemComponents: ConfigModel[] = [];
+    const mInactiveSystemComponents: ConfigModel[] = [];
+    const mInUsePrivateComponents: ConfigModel[] = [];
+    const mInactivePrivateComponents: ConfigModel[] = [];
+
+    if (userId) {
+      const availableGroups = await listGroups();
+
+      for (const group of availableGroups) {
+        if (group.id === UUID.NIL) {
+          const configs = await loadPublicConfigs();
+
+          configs.forEach((config) => {
+            if (config.active) {
+              mInUseSystemComponents.push(config);
+            } else {
+              mInactiveSystemComponents.push(config);
+            }
+          });
+        } else {
+          const configs = await loadConfigsForGroup(group.id);
+
+          configs.forEach((config) => {
+            if (config.active) {
+              mInUsePrivateComponents.push(config);
+            } else {
+              mInactivePrivateComponents.push(config);
+            }
+          });
+        }
+      }
+    } else {
+      const configs = await loadPublicConfigs();
+
+      configs.forEach((config) => {
+        if (config.active) {
+          mInUseSystemComponents.push(config);
+        } else {
+          mInactiveSystemComponents.push(config);
+        }
+      });
+    }
+
+    return {
+      inUseSystemComponents: mInUseSystemComponents,
+      inactiveSystemComponents: mInactiveSystemComponents,
+      inUsePrivateComponents: mInUsePrivateComponents,
+      inactivePrivateComponents: mInactivePrivateComponents
+    };
+  }, []);
+
   return {
     rulesets,
     currentEditConfig,
     create,
     loadConfigsForGroup,
     loadPublicConfigs,
-    get
+    get,
+    retrieveSplitConfigs
   };
 }
 
