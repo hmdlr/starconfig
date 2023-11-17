@@ -21,10 +21,6 @@ export const InUseInactivePackageContainer = (props: InUseInactiveContainerProps
     inactiveComponents
   } = props;
 
-  useEffect(() => {
-    console.log('inUseComponents', inUseComponents)
-  }, []);
-
   const miniHeadlineColor = useColorModeValue('grayActive1', 'grayActive2')
 
   return (
