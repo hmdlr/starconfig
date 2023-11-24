@@ -8,4 +8,5 @@ export interface ConfigModel extends IConfig {
   brands: IBrand[];
   active: boolean;
   official: boolean;
+  belongingGroupId: string;
 }

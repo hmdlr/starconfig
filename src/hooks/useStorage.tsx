@@ -16,12 +16,14 @@ export const useStorage = () => {
 
 function useProvideStorage() {
   const getUserId = (): string | undefined => {
-    return document.cookie.split(';').find(row => row.startsWith('user-id'))?.split('=')[1];
+    return splitDocument().find(row => row.startsWith('user-id'))?.split('=')[1];
   };
 
   const getUsername = (): string | null => {
-    return document.cookie.split(';').find(row => row.startsWith('username'))?.split('=')[1] || null;
+    return splitDocument().find(row => row.startsWith('username'))?.split('=')[1] || null;
   };
+
+  const splitDocument = () => document.cookie.split(';').map(c => c.trim());
 
   return {
     getUserId,

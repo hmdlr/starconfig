@@ -7,19 +7,22 @@ import { ProvideAuth } from "./hooks/useAuth";
 import { ProvideLoadGuard } from "./hooks/useLoadGuard";
 import { LoadGuardRouter } from "./LoadGuardRouter";
 import { ProvideColorModeImages } from "./hooks/useColorModeImages";
+import { ProvideModal } from "./hooks/useModal";
 
 
 export const App = () => (
   <ChakraProvider theme={theme}>
     <ProvideStorage>
       <ProvideClient>
-        <ProvideAuth>
-          <ProvideColorModeImages>
-            <ProvideLoadGuard>
-              <LoadGuardRouter/>
-            </ProvideLoadGuard>
-          </ProvideColorModeImages>
-        </ProvideAuth>
+        <ProvideModal>
+          <ProvideAuth>
+            <ProvideColorModeImages>
+              <ProvideLoadGuard>
+                <LoadGuardRouter/>
+              </ProvideLoadGuard>
+            </ProvideColorModeImages>
+          </ProvideAuth>
+        </ProvideModal>
       </ProvideClient>
     </ProvideStorage>
   </ChakraProvider>
