@@ -111,7 +111,8 @@ function useProvideConfigurations() {
     return items.map((config) => ({
       ...config,
       active: presets.some((preset) => preset.id === config.id),
-      official: groupId === UUID.NIL
+      official: groupId === UUID.NIL,
+      belongingGroupId: groupId
     }))
   }, []);
 
@@ -125,7 +126,8 @@ function useProvideConfigurations() {
     return items.map((config) => ({
       ...config,
       active: presets.some((preset) => preset.id === config.id),
-      official: true
+      official: true,
+      belongingGroupId: UUID.NIL
     }))
   }, []);
 

@@ -8,10 +8,6 @@ export const rulesContext = React.createContext<{
    */
   loadAllRules: () => Promise<void>;
   /**
-   * All available rules
-   */
-  rules: IBrand[];
-  /**
    * Will replace the rules of a config with the given rules
    * @param rules
    * @param configId
@@ -64,7 +60,6 @@ function useProvideRules() {
 
   return {
     loadAllRules,
-    rules,
     saveRulesToConfig,
     create,
     enhance

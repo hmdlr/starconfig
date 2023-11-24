@@ -13,7 +13,7 @@ export const Configuration = (props: {
 
   const first3LogosOfRules = config.brands.map(brand => brand.favicon);
   const secondaryColor = useColorModeValue("secondary", "gray.400");
-  const configIconsContainerBgColor = useColorModeValue("#CBD5DF", "#4a5568");
+  const configIconsContainerBgColor = useColorModeValue("gray.300", "gray.600")
 
   return (
     <a href={`/configurations/${config.id}`}>
