@@ -23,7 +23,7 @@ export const ConfigurationScreen = () => {
     loginPath,
   } = useAuth();
   const {
-    retrieveSplitConfigs
+    list
   } = useConfigurations();
   const {setActions} = useActions();
   const navigate = useNavigate();
@@ -46,7 +46,7 @@ export const ConfigurationScreen = () => {
         inactiveSystemComponents: mInactiveSystemComponents,
         inUsePrivateComponents: mInUsePrivateComponents,
         inactivePrivateComponents: mInactivePrivateComponents
-      } = await retrieveSplitConfigs();
+      } = await list();
 
       setInUseSystemComponents(mInUseSystemComponents.map(toConfigComponent));
       setInactiveSystemComponents(mInactiveSystemComponents.map(toConfigComponent));
