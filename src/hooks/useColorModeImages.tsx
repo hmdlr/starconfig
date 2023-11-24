@@ -15,6 +15,7 @@ export const colorModeImagesContext = React.createContext<{
   folderPlus: string,
   folderNone: string,
   checkVerified01: string,
+  chevronRight: string
 }>(undefined!);
 
 export const ProvideColorModeImages = ({children}: {children: any}) => {
@@ -40,6 +41,7 @@ function useProvideColorModeImages() {
   const folderNone = useColorModeValue("/images/folder-closed.svg", "/images/folder-closed.svg");
   const checkVerified01 = useColorModeValue("/images/light/check-verified-01.svg", "/images/dark/check-verified-01.svg");
   const starphishLogo = useColorModeValue("/images/light/logo.svg", "/images/dark/logo.svg");
+  const chevronRight = useColorModeValue("/images/light/chevron-right.svg", "/images/dark/chevron-right.svg");
 
   return {
     starphishLogo,
@@ -54,6 +56,7 @@ function useProvideColorModeImages() {
     folderNone,
     packageImageX,
     packageImageCheck,
-    checkVerified01
+    checkVerified01,
+    chevronRight
   };
 }

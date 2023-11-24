@@ -16,6 +16,7 @@ import { RulesScreen } from "./screens/Rules/RulesScreen";
 import { CreateRule } from "./screens/Rules/CreateRule";
 import { useModal } from "./hooks/useModal";
 import { useAuth } from "./hooks/useAuth";
+import { ViewConfiguration } from "./screens/Configuration/ViewConfiguration";
 
 export const LoadGuardRouter = () => {
   const {cacheLoaded, LoadGuard} = useLoadGuard();
@@ -39,7 +40,7 @@ export const LoadGuardRouter = () => {
         <>
           {/*<AuthGuard/>*/}
           <ProvideActions>
-
+            <ProvideConfigurations>
             <Router>
               <Modal/>
               <Flex direction="column" height="100%" width="100%" position={'fixed'}>
@@ -51,16 +52,14 @@ export const LoadGuardRouter = () => {
                     <Routes>
                       <Route path="/" element={<GettingStarted/>}/>
                       <Route path="/configurations"
-                             element={<ProvideConfigurations><ConfigurationScreen/></ProvideConfigurations>}/>
+                             element={<ConfigurationScreen/>}/>
                       <Route path={"/configurations/new"}
-                             element={<ProvideConfigurations><CreateConfiguration/></ProvideConfigurations>}/>
+                             element={<CreateConfiguration/>}/>
                       <Route path={"/configurations/:configId"}
                              element={(
-                               <ProvideConfigurations>
                                  <ProvideRules>
-                                   <EditConfiguration/>
+                                   <ViewConfiguration/>
                                  </ProvideRules>
-                               </ProvideConfigurations>
                              )}/>
                       <Route path={"/rules"} element={<ProvideRules><RulesScreen/></ProvideRules>}/>
                       <Route path={"/rules/new"} element={<ProvideRules><CreateRule/></ProvideRules>}/>
@@ -70,6 +69,7 @@ export const LoadGuardRouter = () => {
                 </Flex>
               </Flex>
             </Router>
+            </ProvideConfigurations>
           </ProvideActions>
         </>
       )}
