@@ -3,7 +3,8 @@ import { useColorModeImages } from "../../hooks/useColorModeImages";
 import { useConfigurations } from "../../hooks/useConfigurations";
 import { useEffect, useState } from "react";
 import { ConfigModel } from "../../models/ConfigModel";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useModal } from "../../hooks/useModal";
 
 export const ViewConfiguration = () => {
   const {
@@ -14,10 +15,15 @@ export const ViewConfiguration = () => {
     get
   } = useConfigurations();
 
-  // get the part after the last '/'
+  const {
+    callModal
+  } = useModal();
+
   const {
     pathname
   } = useLocation();
+
+  const navigate = useNavigate();
 
   const [config, setConfig] = useState<ConfigModel | undefined>(undefined);
 
@@ -27,8 +33,15 @@ export const ViewConfiguration = () => {
       if (!configId) {
         return;
       }
-      const config = await get(configId);
-      setConfig(config);
+      try {
+        const config = await get(configId);
+        setConfig(config);
+      } catch (e) {
+        if (e.response.status === 401) {
+          callModal('Unauthorized 🚫', 'You are either not logged in or you do not have the required permissions to view this page.');
+          return navigate('/configurations');
+        }
+      }
     })()
   }, [pathname])
 
@@ -41,7 +54,7 @@ export const ViewConfiguration = () => {
     >
       <Breadcrumb spacing={'8px'} separator={<img src={chevronRight} alt=">"/>}>
         <BreadcrumbItem>
-
+          {config?.name}
         </BreadcrumbItem>
       </Breadcrumb>
     </Box>
