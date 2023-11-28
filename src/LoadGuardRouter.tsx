@@ -10,7 +10,6 @@ import { Navbar } from "./components/Navbar";
 import { ProvideConfigurations } from "./hooks/useConfigurations";
 import { ProvideActions } from "./hooks/useActions";
 import CreateConfiguration from "./screens/Configuration/CreateConfiguration";
-import EditConfiguration from "./screens/Configuration/EditConfiguration";
 import { ProvideRules } from "./hooks/useRules";
 import { RulesScreen } from "./screens/Rules/RulesScreen";
 import { CreateRule } from "./screens/Rules/CreateRule";
@@ -19,10 +18,10 @@ import { useAuth } from "./hooks/useAuth";
 import { ViewConfiguration } from "./screens/Configuration/ViewConfiguration";
 
 export const LoadGuardRouter = () => {
-  const {cacheLoaded, LoadGuard} = useLoadGuard();
+  const { cacheLoaded, LoadGuard } = useLoadGuard();
   // const { AuthGuard } = useAuthGuard();
-  const {Modal} = useModal();
-  const {greetFreshlySignedInUser} = useAuth();
+  const { Modal } = useModal();
+  const { greetFreshlySignedInUser } = useAuth();
 
   useEffect(() => {
     if (!cacheLoaded) {
@@ -32,48 +31,63 @@ export const LoadGuardRouter = () => {
   }, [cacheLoaded]);
 
   return (
-    <div style={{zIndex: 2, width: '100%', flexDirection: 'column'}}>
-      {!cacheLoaded && (
-        <LoadGuard/>
-      )}
+    <div style={{ zIndex: 2, width: "100%", flexDirection: "column" }}>
+      {!cacheLoaded && <LoadGuard />}
       {cacheLoaded && (
         <>
           {/*<AuthGuard/>*/}
           <ProvideActions>
             <ProvideConfigurations>
-            <Router>
-              <Modal/>
-              <Flex direction="column" height="100%" width="100%" position={'fixed'}>
-                <Navbar/>
+              <Router>
+                <Modal />
+                <Flex
+                  direction="column"
+                  height="100%"
+                  width="100%"
+                  position={"fixed"}
+                >
+                  <Navbar />
 
-                <Flex direction="row" flexGrow="1">
-                  <LeftSidebar/>
-                  <Box flexGrow="1">
-                    <Routes>
-                      <Route path="/" element={<GettingStarted/>}/>
-                      <Route path="/configurations"
-                             element={<ConfigurationScreen/>}/>
-                      <Route path={"/configurations/new"}
-                             element={<CreateConfiguration/>}/>
-                      <Route path={"/configurations/:configId"}
-                             element={(
-                                 <ProvideRules>
-                                   <ViewConfiguration/>
-                                 </ProvideRules>
-                             )}/>
-                      <Route path={"/rules"} element={<ProvideRules><RulesScreen/></ProvideRules>}/>
-                      <Route path={"/rules/new"} element={<ProvideRules><CreateRule/></ProvideRules>}/>
-                    </Routes>
-                  </Box>
-                  <RightSidebar/>
+                  <Flex direction="row" flexGrow="1">
+                    <LeftSidebar />
+                    <Box flexGrow="1">
+                      <Routes>
+                        <Route path="/" element={<GettingStarted />} />
+                        <Route
+                          path="/configurations"
+                          element={<ConfigurationScreen />}
+                        />
+                        <Route
+                          path={"/configurations/new"}
+                          element={<CreateConfiguration />}
+                        />
+                        <Route
+                          path={"/configurations/:configId"}
+                          element={
+                            <ProvideRules>
+                              <ViewConfiguration />
+                            </ProvideRules>
+                          }
+                        />
+                        <Route path={"/rules"} element={<RulesScreen />} />
+                        <Route
+                          path={"/rules/new"}
+                          element={
+                            <ProvideRules>
+                              <CreateRule />
+                            </ProvideRules>
+                          }
+                        />
+                      </Routes>
+                    </Box>
+                    <RightSidebar />
+                  </Flex>
                 </Flex>
-              </Flex>
-            </Router>
+              </Router>
             </ProvideConfigurations>
           </ProvideActions>
         </>
       )}
     </div>
-
   );
 };

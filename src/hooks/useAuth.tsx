@@ -25,14 +25,14 @@ const authContext = React.createContext<{
   /**
    * This will list all the groups the user is a member of
    */
-  listGroups: () => Promise<IGroup[]>
+  listGroups: () => Promise<IGroup[]>;
   /**
    * This will greet the freshly signed in user
    */
   greetFreshlySignedInUser: () => void;
 }>(undefined!);
 
-export const ProvideAuth = ({children}: { children: any }) => {
+export const ProvideAuth = ({ children }: { children: any }) => {
   const auth = useProvideAuth();
   return <authContext.Provider value={auth}>{children}</authContext.Provider>;
 };
@@ -42,29 +42,29 @@ export const useAuth = () => {
 };
 
 function useProvideAuth() {
-  const {authphish} = useClient().sdk;
-  const {callModal} = useModal();
+  const { authphish } = useClient().sdk;
+  const { callModal } = useModal();
 
   const [username, setUsername] = React.useState<string>();
   const [userId, setUserId] = React.useState<string>();
-  const {getUsername, getUserId} = useStorage();
+  const { getUsername, getUserId } = useStorage();
 
   const loginPath = `${FrontPaths.auth}/auth?redirect=${document.location.href}?signin=completed`;
   const registerPath = `${FrontPaths.auth}/auth/register`;
 
-  const listGroups = useCallback(async (
-    pageNumber: number = 1,
-    pageSize: number = -1,
-  ) => {
-    if (!authphish) {
-      return [];
-    }
-    const {items} = await authphish.listGroups({
-      pageNumber,
-      pageSize
-    });
-    return items;
-  }, [authphish]);
+  const listGroups = useCallback(
+    async (pageNumber: number = 1, pageSize: number = -1) => {
+      if (!authphish) {
+        return [];
+      }
+      const { items } = await authphish.listGroups({
+        pageNumber,
+        pageSize,
+      });
+      return items;
+    },
+    [authphish],
+  );
 
   /* On page startup */
   useEffect(() => {
@@ -81,7 +81,7 @@ function useProvideAuth() {
   const greetFreshlySignedInUser = useCallback(() => {
     // get if the url has query param "signin=completed"
     const urlParams = new URLSearchParams(window.location.search);
-    const signinCompleted = urlParams.get('signin') === 'completed';
+    const signinCompleted = urlParams.get("signin") === "completed";
 
     if (signinCompleted) {
       // todo: store this inside a markdown and display MD in modal
@@ -90,7 +90,7 @@ function useProvideAuth() {
         `Great news! 
 You've logged in successfully to Starphish. Your shield against phishing is now armed with powerful configurations. Defend confidently as you browse various brands with personalized protection. Explore and stay secure!
 
-🌐 Starphish - Your Ultimate Phishing Guardian!`
+🌐 Starphish - Your Ultimate Phishing Guardian!`,
       );
     }
   }, []);
@@ -101,6 +101,6 @@ You've logged in successfully to Starphish. Your shield against phishing is now 
     loginPath,
     registerPath,
     listGroups,
-    greetFreshlySignedInUser
+    greetFreshlySignedInUser,
   };
 }
