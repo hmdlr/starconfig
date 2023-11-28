@@ -1,45 +1,32 @@
-import { Box, Button, Center, Container, Grid, Input } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useActions } from "../../hooks/useActions";
-import { useNavigate } from "react-router-dom";
-import { useRules } from "../../hooks/useRules";
-import { RuleBlock } from "../../components/Rule";
-
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useCallback, useEffect } from "react";
+import { fetchBrandsAction } from "../../store/Brands/actions";
+import { selectAllBrands } from "../../store/Brands/selectors";
+import { Box } from "@chakra-ui/react";
+import { IBrand } from "@hmdlr/types";
+import BrandCard from "../../components/Brands/BrandCard";
 
 export const RulesScreen = () => {
-  return <></>
-  // const { setActions } = useActions();
-  // const { loadAllRules, rules} = useRules();
-  //
-  // const navigate = useNavigate();
-  //
-  // const [searchTerm, setSearchTerm] = useState('');
-  //
-  // const [shownRules, setShownRules] = useState(rules);
-  //
-  // const handleSearch = () => {
-  //   // Perform search logic here
-  //   const filteredRules = rules.filter((rule) => {
-  //     return rule.name.toLowerCase().includes(searchTerm.toLowerCase());
-  //   });
-  //   setShownRules(filteredRules);
-  // };
-  //
-  // useEffect(() => {
-  //   setContextActions();
-  //   loadAllRules();
-  // }, []);
-  //
-  // useEffect(() => {
-  //   setShownRules(rules)
-  // }, [rules])
-  //
-  // const setContextActions = () => {
-  //   setActions({
-  //     'Create': () => navigate(`/rules/new`),
-  //   })
-  // }
-  //
+  const dispatch = useAppDispatch();
+
+  const brands = useAppSelector(selectAllBrands);
+
+  useEffect(() => {
+    dispatch(fetchBrandsAction());
+  }, [dispatch]);
+
+  const renderBrand = useCallback((brand: IBrand) => {
+    return <BrandCard brand={brand} key={brand.id} />;
+  }, []);
+
+  return (
+    <Box padding={"2rem"}>
+      <Box display={"flex"} flexWrap={"wrap"} gap={"1rem"}>
+        {brands.map(renderBrand)}
+      </Box>
+    </Box>
+  );
+
   // return (
   //     <Container maxW="container.xxl">
   //       <Box mt={8}>
@@ -79,4 +66,4 @@ export const RulesScreen = () => {
   //
   //     </Container>
   // )
-}
+};
