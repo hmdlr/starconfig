@@ -42,6 +42,7 @@ export const InUseInactivePackageContainer = (props: InUseInactiveContainerProps
 
         <Flex
           paddingX={'2rem'}
+          gap={'1rem'}
         >
           {
             inUseComponents.length === 0 ? (
@@ -71,6 +72,7 @@ export const InUseInactivePackageContainer = (props: InUseInactiveContainerProps
 
         <Flex
           paddingX={'2rem'}
+          gap={'1rem'}
         >
         {
           inactiveComponents.length === 0 ? (

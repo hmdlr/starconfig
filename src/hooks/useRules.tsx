@@ -23,6 +23,10 @@ export const rulesContext = React.createContext<{
    * @param config
    */
   enhance: (config: IBrand) => Promise<string[]>;
+  /**
+   * All available rules
+   */
+  rules: IBrand[];
 }>(undefined!);
 
 export const ProvideRules = ({ children }: { children: any }) => {
@@ -62,6 +66,7 @@ function useProvideRules() {
     loadAllRules,
     saveRulesToConfig,
     create,
-    enhance
+    enhance,
+    rules
   };
 }
