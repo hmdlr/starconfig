@@ -72,44 +72,4 @@ export const BrandsScreen = () => {
       <BrandEditor brand={selectedBrand} onClose={closeBrandDetailModal} />
     </Box>
   );
-
-  // return (
-  //     <Container maxW="container.xxl">
-  //       <Box mt={8}>
-  //         <Center>
-  //           <Box w="50%">
-  //             <Input
-  //                 placeholder="Enter your search term"
-  //                 value={searchTerm}
-  //                 onChange={(e) => setSearchTerm(e.target.value)}
-  //             />
-  //           </Box>
-  //           <Box ml={4}>
-  //             <Button colorScheme="blue" onClick={handleSearch}>
-  //               Search
-  //             </Button>
-  //           </Box>
-  //         </Center>
-  //       </Box>
-  //
-  //       <Grid
-  //           mt={5}
-  //           width={'100%'}
-  //           templateColumns="repeat(auto-fill, 12rem)"
-  //           gap={4}
-  //           px={5}
-  //           py={3}
-  //       >
-  //         {shownRules.map((rule, idx) => (
-  //             <RuleBlock
-  //                 rule={{ ...rule, active: true }}
-  //                 handleRuleClick={() => void 0}
-  //                 showActionButton={false}
-  //                 key={idx}
-  //             />
-  //         ))}
-  //       </Grid>
-  //
-  //     </Container>
-  // )
 };
