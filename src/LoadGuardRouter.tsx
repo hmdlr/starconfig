@@ -11,8 +11,8 @@ import { ProvideConfigurations } from "./hooks/useConfigurations";
 import { ProvideActions } from "./hooks/useActions";
 import CreateConfiguration from "./screens/Configuration/CreateConfiguration";
 import { ProvideRules } from "./hooks/useRules";
-import { RulesScreen } from "./screens/Rules/RulesScreen";
-import { CreateRule } from "./screens/Rules/CreateRule";
+import { BrandsScreen } from "./screens/Rules/BrandsScreen";
+import { NewBrandScreen } from "./screens/Rules/NewBrandScreen";
 import { useModal } from "./hooks/useModal";
 import { useAuth } from "./hooks/useAuth";
 import { ViewConfiguration } from "./screens/Configuration/ViewConfiguration";
@@ -69,14 +69,10 @@ export const LoadGuardRouter = () => {
                             </ProvideRules>
                           }
                         />
-                        <Route path={"/rules"} element={<RulesScreen />} />
+                        <Route path={"/rules"} element={<BrandsScreen />} />
                         <Route
                           path={"/rules/new"}
-                          element={
-                            <ProvideRules>
-                              <CreateRule />
-                            </ProvideRules>
-                          }
+                          element={<NewBrandScreen />}
                         />
                       </Routes>
                     </Box>
