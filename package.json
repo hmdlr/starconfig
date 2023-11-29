@@ -22,6 +22,7 @@
     "@types/react-dom": "^18.2.6",
     "axios": "^1.4.0",
     "framer-motion": "^6.5.1",
+    "fuse.js": "^7.0.0",
     "jsonwebtoken": "^9.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -48,12 +49,12 @@
     "https": "npm:https-browserify@^1.0.0",
     "os": "npm:os-browserify@^0.3.0",
     "path": "npm:path-browserify@^1.0.1",
+    "prettier": "^3.1.0",
     "process": "^0.11.10",
     "stream": "npm:stream-browserify@^3.0.0",
     "url": "npm:url@^0.11.0",
     "util": "npm:util@^0.12.5",
-    "zlib": "npm:browserify-zlib@^0.2.0",
-    "prettier": "^3.1.0"
+    "zlib": "npm:browserify-zlib@^0.2.0"
   },
   "scripts": {
     "start": "PORT=$LOCAL_STARCONFIG_PORT REACT_APP_NODE_ENV=development REACT_APP_AUTHPHISH_PORT=$AUTHPHISH_PORT REACT_APP_SCANPHISH_PORT=$SCANPHISH_PORT craco start",
