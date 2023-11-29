@@ -25,6 +25,10 @@ export const BrandsScreen = () => {
   }, [brands]);
 
   const filteredBrands = useMemo(() => {
+    if (!searchTerm) {
+      return brands;
+    }
+
     return brandsFuse.search(searchTerm).map(({ item }) => item);
   }, [brandsFuse, searchTerm]);
 
