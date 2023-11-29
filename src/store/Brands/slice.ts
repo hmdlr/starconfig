@@ -28,6 +28,7 @@ export const brandsSlice = createSlice({
         (brand) => brand.id === action.payload.id,
       );
 
+      // Update the brand in the list if it exists
       if (index !== -1) {
         state.brands[index] = { ...state.brands[index], ...action.payload };
       }
