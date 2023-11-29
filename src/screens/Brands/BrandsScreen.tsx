@@ -30,7 +30,7 @@ export const BrandsScreen = () => {
     }
 
     return brandsFuse.search(searchTerm).map(({ item }) => item);
-  }, [brandsFuse, searchTerm]);
+  }, [brands, brandsFuse, searchTerm]);
 
   const onBrandClick = useCallback((brand: IBrand) => {
     setSelectedBrand(brand);
