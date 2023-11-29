@@ -5,9 +5,13 @@ import { selectAllBrands } from "../../store/Brands/selectors";
 import { Box } from "@chakra-ui/react";
 import { IBrand } from "@hmdlr/types";
 import BrandCard from "../../components/Brands/BrandCard";
+import { useActions } from "../../hooks/useActions";
+import { useNavigate } from "react-router-dom";
 
-export const RulesScreen = () => {
+export const BrandsScreen = () => {
   const dispatch = useAppDispatch();
+  const { setActions } = useActions();
+  const navigate = useNavigate();
 
   const brands = useAppSelector(selectAllBrands);
 
@@ -18,6 +22,12 @@ export const RulesScreen = () => {
   const renderBrand = useCallback((brand: IBrand) => {
     return <BrandCard brand={brand} key={brand.id} />;
   }, []);
+
+  useEffect(() => {
+    setActions({
+      "Add brand": () => navigate("/rules/new"),
+    });
+  }, [navigate, setActions]);
 
   return (
     <Box padding={"2rem"}>
