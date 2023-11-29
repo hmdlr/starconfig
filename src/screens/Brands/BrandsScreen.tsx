@@ -1,12 +1,13 @@
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { fetchBrandsAction } from "../../store/Brands/actions";
 import { selectAllBrands } from "../../store/Brands/selectors";
-import { Box } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { IBrand } from "@hmdlr/types";
 import BrandCard from "../../components/Brands/BrandCard";
 import { useActions } from "../../hooks/useActions";
 import { useNavigate } from "react-router-dom";
+import BrandEditor from "../../components/Brands/BrandEditor";
 
 export const BrandsScreen = () => {
   const dispatch = useAppDispatch();
@@ -15,13 +16,26 @@ export const BrandsScreen = () => {
 
   const brands = useAppSelector(selectAllBrands);
 
+  const [selectedBrand, setSelectedBrand] = useState<IBrand>();
+
+  const onBrandClick = useCallback((brand: IBrand) => {
+    setSelectedBrand(brand);
+  }, []);
+
+  const renderBrand = useCallback(
+    (brand: IBrand) => {
+      return <BrandCard brand={brand} key={brand.id} onClick={onBrandClick} />;
+    },
+    [onBrandClick],
+  );
+
+  const closeBrandDetailModal = useCallback(() => {
+    setSelectedBrand(undefined);
+  }, []);
+
   useEffect(() => {
     dispatch(fetchBrandsAction());
   }, [dispatch]);
-
-  const renderBrand = useCallback((brand: IBrand) => {
-    return <BrandCard brand={brand} key={brand.id} />;
-  }, []);
 
   useEffect(() => {
     setActions({
@@ -31,9 +45,11 @@ export const BrandsScreen = () => {
 
   return (
     <Box padding={"2rem"}>
+      <Text marginY={"1rem"}>Private brands</Text>
       <Box display={"flex"} flexWrap={"wrap"} gap={"1rem"}>
         {brands.map(renderBrand)}
       </Box>
+      <BrandEditor brand={selectedBrand} onClose={closeBrandDetailModal} />
     </Box>
   );
 
