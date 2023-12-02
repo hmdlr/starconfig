@@ -19,26 +19,27 @@ const BrandCard: FC<BrandCardProps> = ({ brand, onClick }) => {
   }, [brand, onClick]);
 
   return (
-      <Box
-        display={"flex"}
-        flexDirection={"column"}
-        alignItems={"center"}
-        maxW={'6rem'}
-        cursor={'pointer'}
-        onClick={_onClick}
+    <Box
+      display={"flex"}
+      flexDirection={"column"}
+      alignItems={"center"}
+      width={"6rem"}
+      height={"5rem"}
+      cursor={"pointer"}
+      onClick={_onClick}
+    >
+      <img src={file} alt={brand.name} />
+      <Text
+        fontSize={"14px"}
+        fontWeight={"800"}
+        color={brandTitleColor}
+        noOfLines={2}
+        textAlign={"center"}
+        marginTop={"0.25rem"}
       >
-        <img src={file} alt={brand.name} />
-        <Text
-          fontSize={"14px"}
-          fontWeight={'800'}
-          color={brandTitleColor}
-          noOfLines={2}
-          textAlign={"center"}
-          marginTop={"0.25rem"}
-        >
-          {brand.name}
-        </Text>
-      </Box>
+        {brand.name}
+      </Text>
+    </Box>
   );
 };
 
