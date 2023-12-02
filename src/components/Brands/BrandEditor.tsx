@@ -2,6 +2,7 @@ import { IBrand } from "@hmdlr/types";
 import {
   Button,
   Flex,
+  IconButton,
   Modal,
   ModalBody,
   ModalContent,
@@ -11,9 +12,10 @@ import {
 import BrandCard from "./BrandCard";
 import ControlledInput from "../Utils/ControlledInput";
 import { useForm } from "react-hook-form";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import BrandEditorRow from "./BrandEditorRow";
 import { useUpdateBrand } from "../../hooks/Brands/useUpdateBrand";
+import { useColorModeImages } from "../../hooks/useColorModeImages";
 
 interface BrandEditorProps {
   brand?: IBrand;
@@ -21,7 +23,11 @@ interface BrandEditorProps {
 }
 
 const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
-  const { control, setValue, getValues, handleSubmit } = useForm({
+  const { edit: editIcon, eye: eyeIcon } = useColorModeImages();
+
+  const [editing, setEditing] = useState<boolean>(false);
+
+  const { control, setValue, getValues, handleSubmit, setFocus } = useForm({
     defaultValues: {
       id: "",
       name: "",
@@ -35,10 +41,19 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
   const { updateBrand, status } = useUpdateBrand();
 
   const onSubmit = useCallback(() => {
-    const { id, name } = getValues();
+    const { id, name, authUrl } = getValues();
 
-    updateBrand(id, name);
+    updateBrand(id, name, authUrl);
   }, [getValues, updateBrand]);
+
+  const toggleEditing = useCallback(() => {
+    setEditing((prev) => {
+      if (!prev) {
+        setFocus("name");
+      }
+      return !prev;
+    });
+  }, [setFocus]);
 
   useEffect(() => {
     if (brand) {
@@ -47,6 +62,7 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
       setValue("domain", brand.domain);
       setValue("authUrl", brand.authUrl);
       setValue("title", brand.title);
+      setEditing(false);
     }
   }, [brand, setValue]);
 
@@ -55,67 +71,89 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
   }, [onClose, status]);
 
   return (
-      <Modal isOpen={!!brand} onClose={onClose} isCentered={true} size={"xl"}>
-        <ModalOverlay/>
-        <ModalContent>
-          <Flex justifyContent={"center"} marginTop={"1rem"}>
-            <BrandCard brand={brand!} />
+    <Modal isOpen={!!brand} onClose={onClose} isCentered={true} size={"xl"}>
+      <ModalOverlay />
+      <ModalContent>
+        <IconButton
+          position={"absolute"}
+          right={"0.5rem"}
+          top={"0.5rem"}
+          aria-label={"Edit"}
+          variant="outline"
+          onClick={toggleEditing}
+          icon={<img alt={"Edit"} src={editing ? eyeIcon : editIcon} />}
+        />
+        <Flex justifyContent={"center"} marginTop={"1rem"}>
+          <BrandCard brand={brand!} />
+        </Flex>
+        <ModalBody>
+          <Flex direction={"column"} rowGap={"1rem"}>
+            <BrandEditorRow title={"Name"}>
+              <ControlledInput
+                name={"name"}
+                control={control}
+                placeholder={"Name"}
+                className={"monospaced"}
+                isReadOnly={!editing}
+                focusBorderColor={editing ? undefined : "brand.500"}
+              />
+            </BrandEditorRow>
+            <BrandEditorRow title={"Auth URL"}>
+              <ControlledInput
+                name={"authUrl"}
+                control={control}
+                placeholder={"Auth URL"}
+                className={"monospaced"}
+                isReadOnly={!editing}
+                focusBorderColor={editing ? undefined : "brand.500"}
+              />
+            </BrandEditorRow>
+            <BrandEditorRow title={"Domain"}>
+              <ControlledInput
+                name={"domain"}
+                control={control}
+                placeholder={"Domain"}
+                className={"monospaced"}
+                isReadOnly={true}
+                isDisabled={editing}
+                focusBorderColor={editing ? undefined : "brand.500"}
+              />
+            </BrandEditorRow>
+            <BrandEditorRow title={"Page title"}>
+              <ControlledInput
+                name={"title"}
+                control={control}
+                placeholder={"Page title"}
+                className={"monospaced"}
+                isReadOnly={true}
+                isDisabled={editing}
+                focusBorderColor={editing ? undefined : "brand.500"}
+              />
+            </BrandEditorRow>
+            <BrandEditorRow title={"Id"}>
+              <ControlledInput
+                name={"id"}
+                control={control}
+                placeholder={"Id"}
+                className={"monospaced"}
+                isReadOnly={true}
+                isDisabled={editing}
+                focusBorderColor={editing ? undefined : "brand.500"}
+              />
+            </BrandEditorRow>
           </Flex>
-          <ModalBody>
-            <Flex direction={"column"} rowGap={"1rem"}>
-              <BrandEditorRow title={"Name"}>
-                <ControlledInput
-                  name={"name"}
-                  control={control}
-                  placeholder={"Name"}
-                  className={'monospaced'}
-                />
-              </BrandEditorRow>
-              <BrandEditorRow title={"Domain"}>
-                <ControlledInput
-                  name={"domain"}
-                  control={control}
-                  placeholder={"Domain"}
-                  className={'monospaced'}
-                />
-              </BrandEditorRow>
-              <BrandEditorRow title={"Auth URL"}>
-                <ControlledInput
-                  name={"authUrl"}
-                  control={control}
-                  placeholder={"Auth URL"}
-                  className={'monospaced'}
-                />
-              </BrandEditorRow>
-              <BrandEditorRow title={"Page title"}>
-                <ControlledInput
-                  name={"title"}
-                  control={control}
-                  placeholder={"Page title"}
-                  className={'monospaced'}
-                />
-              </BrandEditorRow>
-              <BrandEditorRow title={"Id"}>
-                <ControlledInput
-                  name={"id"}
-                  control={control}
-                  placeholder={"Id"}
-                  isDisabled={true}
-                  className={'monospaced'}
-                />
-              </BrandEditorRow>
-            </Flex>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              disabled={status === "pending"}
-              onClick={handleSubmit(onSubmit)}
-            >
-              Update
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            disabled={status === "pending"}
+            isLoading={status === "pending"}
+            onClick={handleSubmit(onSubmit)}
+          >
+            Update
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 };
 

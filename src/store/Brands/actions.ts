@@ -28,13 +28,32 @@ export const createBrandAction = createAsyncThunk(
   },
 );
 
+export const enhanceBrandAction = createAsyncThunk(
+  "brands/enhanceBrand",
+  async (arg: IBrand["id"], thunkAPI) => {
+    try {
+      const response = await scanphishApiClient.enhanceBrand(arg);
+
+      return response.candidates;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    }
+  },
+);
+
 export const updateBrandAction = createAsyncThunk(
   "brands/updateBrand",
   async (arg: IBrandUpdatePayload & { id: IBrand["id"] }, thunkAPI) => {
     try {
-      const response = await scanphishApiClient.updateBrand(arg.id, arg);
+      const updateResponse = await scanphishApiClient.updateBrand(arg.id, arg);
 
-      return response.brand;
+      const enhanceResponse = await scanphishApiClient.enhanceBrand(arg.id);
+
+      return {
+        ...updateResponse.brand,
+        // @ts-ignore TODO: remove this after hmdlr/types is updated
+        ...enhanceResponse.brand,
+      };
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     }

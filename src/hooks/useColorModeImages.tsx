@@ -17,6 +17,8 @@ export const colorModeImagesContext = React.createContext<{
   checkVerified01: string;
   chevronRight: string;
   file: string;
+  edit: string;
+  eye: string;
 }>(undefined!);
 
 export const ProvideColorModeImages = ({ children }: { children: any }) => {
@@ -94,6 +96,16 @@ function useProvideColorModeImages() {
     "/images/dark/file.svg",
   );
 
+  const edit = useColorModeValue(
+    "/images/light/edit.svg",
+    "/images/dark/edit.svg",
+  );
+
+  const eye = useColorModeValue(
+    "/images/light/eye.svg",
+    "/images/dark/eye.svg",
+  );
+
   return {
     starphishLogo,
     loginImage,
@@ -110,5 +122,7 @@ function useProvideColorModeImages() {
     checkVerified01,
     chevronRight,
     file,
+    edit,
+    eye,
   };
 }

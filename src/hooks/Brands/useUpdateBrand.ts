@@ -19,12 +19,13 @@ export const useUpdateBrand = () => {
   }, []);
 
   const updateBrand = useCallback(
-    (id: IBrand["id"], name: IBrand["name"]) => {
+    (id: IBrand["id"], name: IBrand["name"], authUrl: IBrand["authUrl"]) => {
       setStatus("pending");
       dispatch(
         updateBrandAction({
           id,
           name,
+          authUrl,
         }),
       )
         .unwrap()
