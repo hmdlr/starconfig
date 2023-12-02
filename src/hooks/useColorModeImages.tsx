@@ -1,25 +1,9 @@
 import { useColorModeValue } from "@chakra-ui/react";
 import React from "react";
 
-export const colorModeImagesContext = React.createContext<{
-  starphishLogo: string;
-  loginImage: string;
-  compass: string;
-  packageImage: string;
-  packageImageX: string;
-  packageImageCheck: string;
-  puzzlePiece: string;
-  pin02: string;
-  eyeOff: string;
-  folder: string;
-  folderPlus: string;
-  folderNone: string;
-  checkVerified01: string;
-  chevronRight: string;
-  file: string;
-  edit: string;
-  eye: string;
-}>(undefined!);
+export const colorModeImagesContext = React.createContext<
+  ReturnType<typeof useProvideColorModeImages>
+>(undefined!);
 
 export const ProvideColorModeImages = ({ children }: { children: any }) => {
   const colorModeImages = useProvideColorModeImages();
@@ -106,6 +90,36 @@ function useProvideColorModeImages() {
     "/images/dark/eye.svg",
   );
 
+  const annotationInfo = useColorModeValue(
+    "/images/light/annotation-info.svg",
+    "/images/dark/annotation-info.svg",
+  );
+
+  const fingerprint = useColorModeValue(
+    "/images/light/fingerprint.svg",
+    "/images/dark/fingerprint.svg",
+  );
+
+  const homeLine = useColorModeValue(
+    "/images/light/home-line.svg",
+    "/images/dark/home-line.svg",
+  );
+
+  const image = useColorModeValue(
+    "/images/light/image.svg",
+    "/images/dark/image.svg",
+  );
+
+  const link = useColorModeValue(
+    "/images/light/link.svg",
+    "/images/dark/link.svg",
+  );
+
+  const stickerCircle = useColorModeValue(
+    "/images/light/sticker-circle.svg",
+    "/images/dark/sticker-circle.svg",
+  );
+
   return {
     starphishLogo,
     loginImage,
@@ -124,5 +138,11 @@ function useProvideColorModeImages() {
     file,
     edit,
     eye,
+    annotationInfo,
+    fingerprint,
+    homeLine,
+    image,
+    link,
+    stickerCircle,
   };
 }
