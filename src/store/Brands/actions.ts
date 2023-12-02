@@ -19,9 +19,17 @@ export const createBrandAction = createAsyncThunk(
   "brands/createBrand",
   async (arg: IBrandCreatePayload, thunkAPI) => {
     try {
-      const response = await scanphishApiClient.createBrand(arg);
+      const createResponse = await scanphishApiClient.createBrand(arg);
 
-      return response.brand;
+      const enhanceResponse = await scanphishApiClient.enhanceBrand(
+        createResponse.brand.id,
+      );
+
+      return {
+        ...createResponse.brand,
+        // @ts-ignore TODO: remove this after hmdlr/types is updated
+        ...enhanceResponse.brand,
+      };
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     }
