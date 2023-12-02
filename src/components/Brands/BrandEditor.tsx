@@ -55,62 +55,67 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
   }, [onClose, status]);
 
   return (
-    <Modal isOpen={!!brand} onClose={onClose} isCentered={true}>
-      <ModalOverlay />
-      <ModalContent>
-        <Flex justifyContent={"center"} marginTop={"1rem"}>
-          <BrandCard brand={brand!} />
-        </Flex>
-        <ModalBody>
-          <Flex direction={"column"} rowGap={"1rem"}>
-            <BrandEditorRow title={"Name"}>
-              <ControlledInput
-                name={"name"}
-                control={control}
-                placeholder={"Name"}
-              />
-            </BrandEditorRow>
-            <BrandEditorRow title={"Domain"}>
-              <ControlledInput
-                name={"domain"}
-                control={control}
-                placeholder={"Domain"}
-              />
-            </BrandEditorRow>
-            <BrandEditorRow title={"Auth URL"}>
-              <ControlledInput
-                name={"authUrl"}
-                control={control}
-                placeholder={"Auth URL"}
-              />
-            </BrandEditorRow>
-            <BrandEditorRow title={"Page title"}>
-              <ControlledInput
-                name={"title"}
-                control={control}
-                placeholder={"Page title"}
-              />
-            </BrandEditorRow>
-            <BrandEditorRow title={"Id"}>
-              <ControlledInput
-                name={"id"}
-                control={control}
-                placeholder={"Id"}
-                isDisabled={true}
-              />
-            </BrandEditorRow>
+      <Modal isOpen={!!brand} onClose={onClose} isCentered={true} size={"xl"}>
+        <ModalOverlay/>
+        <ModalContent>
+          <Flex justifyContent={"center"} marginTop={"1rem"}>
+            <BrandCard brand={brand!} />
           </Flex>
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            disabled={status === "pending"}
-            onClick={handleSubmit(onSubmit)}
-          >
-            Update
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+          <ModalBody>
+            <Flex direction={"column"} rowGap={"1rem"}>
+              <BrandEditorRow title={"Name"}>
+                <ControlledInput
+                  name={"name"}
+                  control={control}
+                  placeholder={"Name"}
+                  className={'monospaced'}
+                />
+              </BrandEditorRow>
+              <BrandEditorRow title={"Domain"}>
+                <ControlledInput
+                  name={"domain"}
+                  control={control}
+                  placeholder={"Domain"}
+                  className={'monospaced'}
+                />
+              </BrandEditorRow>
+              <BrandEditorRow title={"Auth URL"}>
+                <ControlledInput
+                  name={"authUrl"}
+                  control={control}
+                  placeholder={"Auth URL"}
+                  className={'monospaced'}
+                />
+              </BrandEditorRow>
+              <BrandEditorRow title={"Page title"}>
+                <ControlledInput
+                  name={"title"}
+                  control={control}
+                  placeholder={"Page title"}
+                  className={'monospaced'}
+                />
+              </BrandEditorRow>
+              <BrandEditorRow title={"Id"}>
+                <ControlledInput
+                  name={"id"}
+                  control={control}
+                  placeholder={"Id"}
+                  isDisabled={true}
+                  className={'monospaced'}
+                />
+              </BrandEditorRow>
+            </Flex>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              disabled={status === "pending"}
+              onClick={handleSubmit(onSubmit)}
+            >
+              Update
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
   );
 };
 

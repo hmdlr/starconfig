@@ -1,6 +1,6 @@
 import { IBrand } from "@hmdlr/types";
 import React, { FC, useCallback } from "react";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, useColorModeValue } from "@chakra-ui/react";
 import { useColorModeImages } from "../../hooks/useColorModeImages";
 
 interface BrandCardProps {
@@ -12,29 +12,33 @@ interface BrandCardProps {
 const BrandCard: FC<BrandCardProps> = ({ brand, onClick }) => {
   const { file } = useColorModeImages();
 
+  const brandTitleColor = useColorModeValue("grayActive1", "grayActive2");
+
   const _onClick = useCallback(() => {
     onClick?.(brand);
   }, [brand, onClick]);
 
   return (
-    <Box
-      display={"flex"}
-      flexDirection={"column"}
-      height={"6rem"}
-      width={"5rem"}
-      alignItems={"center"}
-      onClick={_onClick}
-    >
-      <img src={file} alt={brand.name} />
-      <Text
-        fontSize={"md"}
-        noOfLines={2}
-        textAlign={"center"}
-        marginTop={"0.25rem"}
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        alignItems={"center"}
+        maxW={'6rem'}
+        cursor={'pointer'}
+        onClick={_onClick}
       >
-        {brand.name}
-      </Text>
-    </Box>
+        <img src={file} alt={brand.name} />
+        <Text
+          fontSize={"14px"}
+          fontWeight={'800'}
+          color={brandTitleColor}
+          noOfLines={2}
+          textAlign={"center"}
+          marginTop={"0.25rem"}
+        >
+          {brand.name}
+        </Text>
+      </Box>
   );
 };
 
