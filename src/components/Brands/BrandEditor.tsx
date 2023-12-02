@@ -154,7 +154,7 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
         </ModalBody>
         <ModalFooter>
           <Button
-            disabled={status === "pending"}
+            isDisabled={status === "pending" || !editing}
             isLoading={status === "pending"}
             onClick={handleSubmit(onSubmit)}
           >
