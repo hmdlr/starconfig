@@ -23,7 +23,7 @@ interface BrandEditorProps {
 }
 
 const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
-  const { edit: editIcon, eye: eyeIcon } = useColorModeImages();
+  const icons = useColorModeImages();
 
   const [editing, setEditing] = useState<boolean>(false);
 
@@ -71,7 +71,7 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
   }, [onClose, status]);
 
   return (
-    <Modal isOpen={!!brand} onClose={onClose} isCentered={true} size={"xl"}>
+    <Modal isOpen={!!brand} onClose={onClose} isCentered={true} size={"3xl"}>
       <ModalOverlay />
       <ModalContent>
         <IconButton
@@ -81,14 +81,23 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
           aria-label={"Edit"}
           variant="outline"
           onClick={toggleEditing}
-          icon={<img alt={"Edit"} src={editing ? eyeIcon : editIcon} />}
+          icon={<img alt={"Edit"} src={editing ? icons.eye : icons.edit} />}
         />
         <Flex justifyContent={"center"} marginTop={"1rem"}>
           <BrandCard brand={brand!} />
         </Flex>
         <ModalBody>
           <Flex direction={"column"} rowGap={"1rem"}>
-            <BrandEditorRow title={"Name"}>
+            <BrandEditorRow title={"Favicon"} icon={icons.image}>
+              <Flex>
+                <img
+                  src={brand?.favicon}
+                  alt={brand?.favicon}
+                  height={"2rem"}
+                />
+              </Flex>
+            </BrandEditorRow>
+            <BrandEditorRow title={"Name"} icon={icons.stickerCircle}>
               <ControlledInput
                 name={"name"}
                 control={control}
@@ -98,7 +107,7 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
                 focusBorderColor={editing ? undefined : "brand.500"}
               />
             </BrandEditorRow>
-            <BrandEditorRow title={"Auth URL"}>
+            <BrandEditorRow title={"Auth URL"} icon={icons.link}>
               <ControlledInput
                 name={"authUrl"}
                 control={control}
@@ -108,7 +117,7 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
                 focusBorderColor={editing ? undefined : "brand.500"}
               />
             </BrandEditorRow>
-            <BrandEditorRow title={"Domain"}>
+            <BrandEditorRow title={"Domain"} icon={icons.homeLine}>
               <ControlledInput
                 name={"domain"}
                 control={control}
@@ -119,7 +128,7 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
                 focusBorderColor={editing ? undefined : "brand.500"}
               />
             </BrandEditorRow>
-            <BrandEditorRow title={"Page title"}>
+            <BrandEditorRow title={"Page title"} icon={icons.annotationInfo}>
               <ControlledInput
                 name={"title"}
                 control={control}
@@ -130,7 +139,7 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
                 focusBorderColor={editing ? undefined : "brand.500"}
               />
             </BrandEditorRow>
-            <BrandEditorRow title={"Id"}>
+            <BrandEditorRow title={"Id"} icon={icons.fingerprint}>
               <ControlledInput
                 name={"id"}
                 control={control}
