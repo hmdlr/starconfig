@@ -67,3 +67,16 @@ export const updateBrandAction = createAsyncThunk(
     }
   },
 );
+
+export const deleteBrandAction = createAsyncThunk(
+  "brands/deleteBrand",
+  async (arg: IBrand["id"], thunkAPI) => {
+    try {
+      await scanphishApiClient.deleteBrand(arg);
+
+      return arg;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    }
+  },
+);

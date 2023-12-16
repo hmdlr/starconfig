@@ -2,6 +2,7 @@ import { IBrand } from "@hmdlr/types";
 import {
   Button,
   Flex,
+  HStack,
   IconButton,
   Modal,
   ModalBody,
@@ -16,6 +17,8 @@ import { useCallback, useEffect, useState } from "react";
 import BrandEditorRow from "./BrandEditorRow";
 import { useUpdateBrand } from "../../hooks/Brands/useUpdateBrand";
 import { useColorModeImages } from "../../hooks/useColorModeImages";
+import { authphishApiClient } from "../../hooks/useClient";
+import { useDeleteBrand } from "../../hooks/Brands/useDeleteBrand";
 
 interface BrandEditorProps {
   brand?: IBrand;
@@ -25,6 +28,7 @@ interface BrandEditorProps {
 const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
   const icons = useColorModeImages();
 
+  const [editPermission, setEditPermission] = useState<boolean>(false);
   const [editing, setEditing] = useState<boolean>(false);
 
   const { control, setValue, getValues, handleSubmit, setFocus } = useForm({
@@ -38,13 +42,21 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
     },
   });
 
-  const { updateBrand, status } = useUpdateBrand();
+  const { updateBrand, status: updateBrandStatus } = useUpdateBrand();
+  const { requestDeleteBrand, status: deleteBrandStatus } = useDeleteBrand();
 
   const onSubmit = useCallback(() => {
     const { id, name, authUrl } = getValues();
 
     updateBrand(id, name, authUrl);
   }, [getValues, updateBrand]);
+
+  const checkEditPermission = useCallback((brandId: string) => {
+    authphishApiClient
+      .hasEditAccess(brandId)
+      .then(setEditPermission)
+      .catch(console.error);
+  }, []);
 
   const toggleEditing = useCallback(() => {
     setEditing((prev) => {
@@ -55,6 +67,12 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
     });
   }, [setFocus]);
 
+  const onDelete = useCallback(() => {
+    if (brand) {
+      requestDeleteBrand(brand.id);
+    }
+  }, [brand, requestDeleteBrand]);
+
   useEffect(() => {
     if (brand) {
       setValue("id", brand.id);
@@ -63,26 +81,30 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
       setValue("authUrl", brand.authUrl);
       setValue("title", brand.title);
       setEditing(false);
+      setEditPermission(false);
+      checkEditPermission(brand.id);
     }
-  }, [brand, setValue]);
+  }, [brand, checkEditPermission, setValue]);
 
   useEffect(() => {
-    status === "success" && onClose();
-  }, [onClose, status]);
+    updateBrandStatus === "success" && onClose();
+  }, [onClose, updateBrandStatus]);
 
   return (
     <Modal isOpen={!!brand} onClose={onClose} isCentered={true} size={"3xl"}>
       <ModalOverlay />
       <ModalContent>
-        <IconButton
-          position={"absolute"}
-          right={"0.5rem"}
-          top={"0.5rem"}
-          aria-label={"Edit"}
-          variant="outline"
-          onClick={toggleEditing}
-          icon={<img alt={"Edit"} src={editing ? icons.eye : icons.edit} />}
-        />
+        {editPermission && (
+          <IconButton
+            position={"absolute"}
+            right={"0.5rem"}
+            top={"0.5rem"}
+            aria-label={"Edit"}
+            variant="outline"
+            onClick={toggleEditing}
+            icon={<img alt={"Edit"} src={editing ? icons.eye : icons.edit} />}
+          />
+        )}
         <Flex justifyContent={"center"} marginTop={"1rem"}>
           <BrandCard brand={brand!} />
         </Flex>
@@ -153,13 +175,28 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
           </Flex>
         </ModalBody>
         <ModalFooter>
-          <Button
-            isDisabled={status === "pending" || !editing}
-            isLoading={status === "pending"}
-            onClick={handleSubmit(onSubmit)}
+          <HStack
+            justifyContent={editPermission ? "space-between" : "flex-end"}
+            width={"100%"}
           >
-            Update
-          </Button>
+            {editPermission && (
+              <Button
+                isDisabled={deleteBrandStatus === "pending"}
+                isLoading={deleteBrandStatus === "pending"}
+                onClick={onDelete}
+                colorScheme={"red"}
+              >
+                Delete
+              </Button>
+            )}
+            <Button
+              isDisabled={updateBrandStatus === "pending" || !editing}
+              isLoading={updateBrandStatus === "pending"}
+              onClick={handleSubmit(onSubmit)}
+            >
+              Update
+            </Button>
+          </HStack>
         </ModalFooter>
       </ModalContent>
     </Modal>
