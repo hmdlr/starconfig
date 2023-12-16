@@ -1,11 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { scanphishApiClient } from "../../hooks/useClient";
+import { authphishApiClient, scanphishApiClient } from "../../hooks/useClient";
 import {
   IBrand,
   IBrandCreatePayload,
   IBrandUpdatePayload,
   UUID,
 } from "@hmdlr/types";
+
+const PAGE_SIZE = 5;
 
 export const fetchPublicBrandsAction = createAsyncThunk(
   "brands/fetchPublicBrands",
@@ -14,6 +16,39 @@ export const fetchPublicBrandsAction = createAsyncThunk(
       const response = await scanphishApiClient.listBrands({}, UUID.NIL);
 
       return response.items;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    }
+  },
+);
+
+export const fetchPrivateBrandsAction = createAsyncThunk(
+  "brands/fetchPrivateBrands",
+  async ({ loadMore = false }: { loadMore?: boolean }, thunkAPI) => {
+    try {
+      const groupsResponse = await authphishApiClient.listGroups({});
+
+      const privateGroupsIds = groupsResponse.items
+        .map((group) => group.id)
+        .filter((id) => id !== UUID.NIL);
+
+      // @ts-ignore
+      const privateBrands = thunkAPI.getState().brands.privateBrands;
+
+      const page = loadMore
+        ? Math.ceil(privateBrands.length / PAGE_SIZE + 1)
+        : 1;
+
+      const result = await Promise.all(
+        privateGroupsIds.map(async (privateGroupId) => {
+          return scanphishApiClient.listBrands(
+            { pageSize: PAGE_SIZE, pageNumber: page },
+            privateGroupId,
+          );
+        }),
+      );
+
+      return result.map((response) => response.items).flat();
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     }
