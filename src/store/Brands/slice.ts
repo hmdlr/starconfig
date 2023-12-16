@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { BrandsState } from "./types";
 import {
   createBrandAction,
+  deleteBrandAction,
   fetchBrandsAction,
   updateBrandAction,
 } from "./actions";
@@ -31,6 +32,17 @@ export const brandsSlice = createSlice({
       // Update the brand in the list if it exists
       if (index !== -1) {
         state.brands[index] = { ...state.brands[index], ...action.payload };
+      }
+    });
+
+    builder.addCase(deleteBrandAction.fulfilled, (state, action) => {
+      const index = state.brands.findIndex(
+        (brand) => brand.id === action.payload,
+      );
+
+      // Delete the brand from the list if it exists
+      if (index !== -1) {
+        state.brands.splice(index, 1);
       }
     });
   },

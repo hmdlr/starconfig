@@ -119,7 +119,7 @@ function useProvideClient() {
   };
 }
 
-// TODO: hack for the moment, need to fix this
+// TODO: hack for the moment, need to fix this 1
 const scanphishAxios = axios.create({
   baseURL: DeployedPaths[Microservice.Scanphish],
   withCredentials: true,
@@ -140,6 +140,32 @@ export const scanphishApiClient = new Scanphish({
       .then((res: AxiosResponse) => res.data),
   delete: (url: string, options?: any) =>
     scanphishAxios
+      .delete(url, { ...defaultOptions, ...options })
+      .then((res: AxiosResponse) => res.data),
+});
+
+// TODO: hack for the moment, need to fix this 2
+
+const authphishAxios = axios.create({
+  baseURL: DeployedPaths[Microservice.Authphish],
+  withCredentials: true,
+});
+
+export const authphishApiClient = new Authphish({
+  get: (url: string, options?: any) =>
+    authphishAxios
+      .get(url, { ...defaultOptions, ...options })
+      .then((res: AxiosResponse) => res.data),
+  post: (url: string, data: any, options?: any) =>
+    authphishAxios
+      .post(url, data, { ...defaultOptions, ...options })
+      .then((res: AxiosResponse) => res.data),
+  put: (url: string, data: any, options?: any) =>
+    authphishAxios
+      .put(url, data, { ...defaultOptions, ...options })
+      .then((res: AxiosResponse) => res.data),
+  delete: (url: string, options?: any) =>
+    authphishAxios
       .delete(url, { ...defaultOptions, ...options })
       .then((res: AxiosResponse) => res.data),
 });
