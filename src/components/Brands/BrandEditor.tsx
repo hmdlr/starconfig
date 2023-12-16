@@ -90,6 +90,10 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
     updateBrandStatus === "success" && onClose();
   }, [onClose, updateBrandStatus]);
 
+  useEffect(() => {
+    deleteBrandStatus === "success" && onClose();
+  }, [deleteBrandStatus, onClose]);
+
   return (
     <Modal isOpen={!!brand} onClose={onClose} isCentered={true} size={"3xl"}>
       <ModalOverlay />
