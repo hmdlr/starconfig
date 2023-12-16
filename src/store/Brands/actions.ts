@@ -1,12 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { scanphishApiClient } from "../../hooks/useClient";
-import { IBrand, IBrandCreatePayload, IBrandUpdatePayload } from "@hmdlr/types";
+import {
+  IBrand,
+  IBrandCreatePayload,
+  IBrandUpdatePayload,
+  UUID,
+} from "@hmdlr/types";
 
-export const fetchBrandsAction = createAsyncThunk(
-  "brands/fetchBrands",
-  async (arg, thunkAPI) => {
+export const fetchPublicBrandsAction = createAsyncThunk(
+  "brands/fetchPublicBrands",
+  async (arg: undefined, thunkAPI) => {
     try {
-      const response = await scanphishApiClient.listBrands({});
+      const response = await scanphishApiClient.listBrands({}, UUID.NIL);
 
       return response.items;
     } catch (err) {
