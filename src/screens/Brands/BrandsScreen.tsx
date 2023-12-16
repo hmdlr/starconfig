@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { fetchBrandsAction } from "../../store/Brands/actions";
+import { fetchPublicBrandsAction } from "../../store/Brands/actions";
 import { selectAllBrands } from "../../store/Brands/selectors";
 import { Box, Input, Text } from "@chakra-ui/react";
 import { IBrand } from "@hmdlr/types";
@@ -48,7 +48,7 @@ export const BrandsScreen = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchBrandsAction());
+    dispatch(fetchPublicBrandsAction());
   }, [dispatch]);
 
   useEffect(() => {

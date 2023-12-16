@@ -115,13 +115,11 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
         <ModalBody>
           <Flex direction={"column"} rowGap={"1rem"}>
             <BrandEditorRow title={"Favicon"} icon={icons.image}>
-              <Flex>
-                <img
-                  src={brand?.favicon}
-                  alt={brand?.favicon}
-                  height={"2rem"}
-                />
-              </Flex>
+              <img
+                src={brand?.favicon}
+                alt={brand?.favicon}
+                style={{ height: "4rem", maxWidth: "100%" }}
+              />
             </BrandEditorRow>
             <BrandEditorRow title={"Name"} icon={icons.stickerCircle}>
               <ControlledInput

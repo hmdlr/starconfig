@@ -3,7 +3,7 @@ import { BrandsState } from "./types";
 import {
   createBrandAction,
   deleteBrandAction,
-  fetchBrandsAction,
+  fetchPublicBrandsAction,
   updateBrandAction,
 } from "./actions";
 
@@ -16,7 +16,7 @@ export const brandsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchBrandsAction.fulfilled, (state, action) => {
+    builder.addCase(fetchPublicBrandsAction.fulfilled, (state, action) => {
       state.brands = action.payload;
     });
 
