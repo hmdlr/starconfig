@@ -1,8 +1,14 @@
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { fetchPublicBrandsAction } from "../../store/Brands/actions";
-import { selectAllBrands } from "../../store/Brands/selectors";
-import { Box, Input, Text } from "@chakra-ui/react";
+import {
+  fetchPrivateBrandsAction,
+  fetchPublicBrandsAction,
+} from "../../store/Brands/actions";
+import {
+  selectPrivateBrands,
+  selectPublicBrands,
+} from "../../store/Brands/selectors";
+import { Box, Button, HStack, Input, Text } from "@chakra-ui/react";
 import { IBrand } from "@hmdlr/types";
 import BrandCard from "../../components/Brands/BrandCard";
 import { useActions } from "../../hooks/useActions";
@@ -15,22 +21,23 @@ export const BrandsScreen = () => {
   const { setActions } = useActions();
   const navigate = useNavigate();
 
-  const brands = useAppSelector(selectAllBrands);
+  const publicBrands = useAppSelector(selectPublicBrands);
+  const privateBrands = useAppSelector(selectPrivateBrands);
 
   const [selectedBrand, setSelectedBrand] = useState<IBrand>();
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const brandsFuse = useMemo(() => {
-    return new Fuse(brands, { keys: ["name", "title"] });
-  }, [brands]);
+  const publicBrandsFuse = useMemo(() => {
+    return new Fuse(publicBrands, { keys: ["name", "title"] });
+  }, [publicBrands]);
 
-  const filteredBrands = useMemo(() => {
+  const filteredPublicBrands = useMemo(() => {
     if (!searchTerm) {
-      return brands;
+      return publicBrands;
     }
 
-    return brandsFuse.search(searchTerm).map(({ item }) => item);
-  }, [brands, brandsFuse, searchTerm]);
+    return publicBrandsFuse.search(searchTerm).map(({ item }) => item);
+  }, [publicBrands, publicBrandsFuse, searchTerm]);
 
   const onBrandClick = useCallback((brand: IBrand) => {
     setSelectedBrand(brand);
@@ -47,8 +54,13 @@ export const BrandsScreen = () => {
     setSelectedBrand(undefined);
   }, []);
 
+  const loadMorePrivateBrands = useCallback(() => {
+    dispatch(fetchPrivateBrandsAction({ loadMore: true }));
+  }, [dispatch]);
+
   useEffect(() => {
     dispatch(fetchPublicBrandsAction());
+    dispatch(fetchPrivateBrandsAction({}));
   }, [dispatch]);
 
   useEffect(() => {
@@ -65,10 +77,19 @@ export const BrandsScreen = () => {
         // TODO: debounce this
         onChange={(e) => setSearchTerm(e.target.value)}
       />
+      <Text marginY={"1rem"}>Public brands</Text>
+      <Box display={"flex"} flexWrap={"wrap"} gap={"1rem"}>
+        {filteredPublicBrands.map(renderBrand)}
+      </Box>
       <Text marginY={"1rem"}>Private brands</Text>
       <Box display={"flex"} flexWrap={"wrap"} gap={"1rem"}>
-        {filteredBrands.map(renderBrand)}
+        {privateBrands.map(renderBrand)}
       </Box>
+      <HStack justifyContent={"center"}>
+        <Button onClick={loadMorePrivateBrands} variant={"text"}>
+          Load more
+        </Button>
+      </HStack>
       <BrandEditor brand={selectedBrand} onClose={closeBrandDetailModal} />
     </Box>
   );
