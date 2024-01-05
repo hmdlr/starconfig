@@ -16,6 +16,7 @@ import { NewBrandScreen } from "./screens/Brands/NewBrandScreen";
 import { useModal } from "./hooks/useModal";
 import { useAuth } from "./hooks/useAuth";
 import { ViewConfiguration } from "./screens/Configuration/ViewConfiguration";
+import EditConfiguration from "./screens/Configuration/EditConfiguration";
 
 export const LoadGuardRouter = () => {
   const { cacheLoaded, LoadGuard } = useLoadGuard();
@@ -68,6 +69,10 @@ export const LoadGuardRouter = () => {
                               <ViewConfiguration />
                             </ProvideRules>
                           }
+                        />
+                        <Route
+                          path={"/configurations/:configId/edit"}
+                          element={<EditConfiguration />}
                         />
                         <Route path={"/rules"} element={<BrandsScreen />} />
                         <Route

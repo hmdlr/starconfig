@@ -11,6 +11,9 @@ import {
 const initialState: BrandsState = {
   publicBrands: [],
   privateBrands: [],
+  privateBrandsPagination: {
+    total: 0,
+  },
 };
 
 export const brandsSlice = createSlice({
@@ -23,11 +26,13 @@ export const brandsSlice = createSlice({
     });
 
     builder.addCase(fetchPrivateBrandsAction.fulfilled, (state, action) => {
+      state.privateBrandsPagination.total = action.payload.count;
+
       if (action.meta.arg.loadMore) {
-        state.privateBrands.push(...action.payload);
+        state.privateBrands.push(...action.payload.items);
         return;
       }
-      state.privateBrands = action.payload;
+      state.privateBrands = action.payload.items;
     });
 
     builder.addCase(createBrandAction.fulfilled, (state, action) => {

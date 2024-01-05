@@ -19,6 +19,13 @@ export const selectPrivateBrands = createSelector(
   (state) => state.privateBrands,
 );
 
+export const selectCanLoadMorePrivateBrands = createSelector(
+  selectBrandSlice,
+  (state) => {
+    return state.privateBrands.length < state.privateBrandsPagination.total;
+  },
+);
+
 export const selectPrivateBrandById = (id: IBrand["id"]) =>
   createSelector(selectPrivateBrands, (brands) =>
     brands.find((brand) => brand.id === id),

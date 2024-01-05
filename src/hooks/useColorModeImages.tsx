@@ -120,6 +120,26 @@ function useProvideColorModeImages() {
     "/images/dark/sticker-circle.svg",
   );
 
+  const chevronDownDouble = useColorModeValue(
+    "/images/light/chevron-down-double.svg",
+    "/images/dark/chevron-down-double.svg",
+  );
+
+  const searchBrand = useColorModeValue(
+    "/images/light/search-brand.svg",
+    "/images/dark/search-brand.svg",
+  );
+
+  const plusSquare = useColorModeValue(
+    "/images/light/plus-square.svg",
+    "/images/dark/plus-square.svg",
+  );
+
+  const minusSquare = useColorModeValue(
+    "/images/light/minus-square.svg",
+    "/images/dark/minus-square.svg",
+  );
+
   return {
     starphishLogo,
     loginImage,
@@ -144,5 +164,9 @@ function useProvideColorModeImages() {
     image,
     link,
     stickerCircle,
+    chevronDownDouble,
+    searchBrand,
+    plusSquare,
+    minusSquare,
   };
 }

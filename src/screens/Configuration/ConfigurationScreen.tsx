@@ -10,6 +10,8 @@ import { Headline } from "../../components/Headline/Headline";
 import { InUseInactivePackageContainer } from "../../components/Containers/InUseInactiveContainer";
 import { ConfigModel } from "../../models/ConfigModel";
 import "./ConfigurationScreen.css";
+import { useAppDispatch } from "../../store/hooks";
+import { configurationsSlice } from "../../store/Configurations/slice";
 
 export const ConfigurationScreen = () => {
   const { loginImage, pin02, eyeOff } = useColorModeImages();
@@ -34,6 +36,8 @@ export const ConfigurationScreen = () => {
   const [inactivePrivateComponents, setInactivePrivateComponents] =
     React.useState<ReactNode[]>([]);
 
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     (async () => {
       const {
@@ -42,6 +46,16 @@ export const ConfigurationScreen = () => {
         inUsePrivateComponents: mInUsePrivateComponents,
         inactivePrivateComponents: mInactivePrivateComponents,
       } = await list();
+
+      // TODO: Refactor this to use the store instead of state, and remove the hacky dispatch
+      dispatch(
+        configurationsSlice.actions.setConfigurations([
+          ...mInUseSystemComponents,
+          ...mInactiveSystemComponents,
+          ...mInUsePrivateComponents,
+          ...mInactivePrivateComponents,
+        ]),
+      );
 
       setInUseSystemComponents(mInUseSystemComponents.map(toConfigComponent));
       setInactiveSystemComponents(
@@ -70,7 +84,7 @@ export const ConfigurationScreen = () => {
             Login: () => window.open(loginPath, "_self"),
           },
     );
-  }, [userId, loginPath]);
+  }, [setActions, userId, navigate, loginPath]);
 
   return (
     <Box paddingY={"2rem"} paddingX={"4rem"} width={"100%"} height={"100%"}>
