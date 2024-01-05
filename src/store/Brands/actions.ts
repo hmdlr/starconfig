@@ -35,20 +35,28 @@ export const fetchPrivateBrandsAction = createAsyncThunk(
       // @ts-ignore
       const privateBrands = thunkAPI.getState().brands.privateBrands;
 
-      const page = loadMore
+      const pageNumber = loadMore
         ? Math.ceil(privateBrands.length / PAGE_SIZE + 1)
         : 1;
 
       const result = await Promise.all(
         privateGroupsIds.map(async (privateGroupId) => {
           return scanphishApiClient.listBrands(
-            { pageSize: PAGE_SIZE, pageNumber: page },
+            { pageSize: PAGE_SIZE, pageNumber },
             privateGroupId,
           );
         }),
       );
 
-      return result.map((response) => response.items).flat();
+      const items = result.map((response) => response.itemsAll).flat();
+      const count = result
+        .map((response) => response.count ?? 0)
+        .reduce((a, b) => a + b, 0);
+
+      return {
+        items,
+        count,
+      };
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     }

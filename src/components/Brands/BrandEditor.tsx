@@ -118,7 +118,7 @@ const BrandEditor = ({ brand, onClose }: BrandEditorProps) => {
               <img
                 src={brand?.favicon}
                 alt={brand?.favicon}
-                style={{ height: "4rem", maxWidth: "100%" }}
+                style={{ maxHeight: "4rem", maxWidth: "100%" }}
               />
             </BrandEditorRow>
             <BrandEditorRow title={"Name"} icon={icons.stickerCircle}>
