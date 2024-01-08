@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect } from "react";
 import { IConfig, IConfigCreatePayload, UUID } from "@hmdlr/types";
 import { DeployedPaths, Microservice } from "@hmdlr/utils/dist/Microservice";
-import { ConfigModel, isDiffBetweenIConfigAndConfigModel, toConfigModel } from "../models/ConfigModel";
+import {
+  ConfigModel,
+  isDiffBetweenIConfigAndConfigModel,
+  toConfigModel,
+} from "../models/ConfigModel";
 import { useClient } from "./useClient";
 import { useAuth } from "./useAuth";
-import {
-  SplitSystemPrivateComponents,
-} from "../models/SplitSystemPrivateComponents";
+import { SplitSystemPrivateComponents } from "../models/SplitSystemPrivateComponents";
 
 export const configurationsContext = React.createContext<{
   /**
@@ -18,7 +20,9 @@ export const configurationsContext = React.createContext<{
    * This will load all available configs, private and public, and split them into inUse and inactive.
    * @param ignoreCache
    */
-  list: (ignoreCache?: boolean) => Promise<SplitSystemPrivateComponents<ConfigModel>>;
+  list: (
+    ignoreCache?: boolean,
+  ) => Promise<SplitSystemPrivateComponents<ConfigModel>>;
   /**
    * This will create a new config.
    * @param config
@@ -34,9 +38,13 @@ export const configurationsContext = React.createContext<{
   loadConfigsForGroup: (groupId: string) => Promise<ConfigModel[]>;
 }>(undefined!);
 
-export const ProvideConfigurations = ({children}: { children: any }) => {
+export const ProvideConfigurations = ({ children }: { children: any }) => {
   const configurations = useProvideConfigurations();
-  return <configurationsContext.Provider value={configurations}>{children}</configurationsContext.Provider>;
+  return (
+    <configurationsContext.Provider value={configurations}>
+      {children}
+    </configurationsContext.Provider>
+  );
 };
 
 export const useConfigurations = () => {
@@ -44,45 +52,49 @@ export const useConfigurations = () => {
 };
 
 function useProvideConfigurations() {
-  const {client} = useClient();
-  const {scanphish} = useClient().sdk;
-  const {
-    userId,
-    listGroups
-  } = useAuth();
+  const { client } = useClient();
+  const { scanphish } = useClient().sdk;
+  const { userId, listGroups } = useAuth();
 
   /**
    * This will hold all the configs that are available on the server.
    * The first action any client will do is to load all the configs.
    */
-  const [
-    cachedConfigs,
-    setCachedConfigs
-  ] = React.useState(new SplitSystemPrivateComponents<ConfigModel>());
+  const [cachedConfigs, setCachedConfigs] = React.useState(
+    new SplitSystemPrivateComponents<ConfigModel>(),
+  );
 
   const create = async (config: IConfigCreatePayload) => {
-    const {config: createdConfig} = await createConfig(config);
+    const { config: createdConfig } = await createConfig(config);
     return createdConfig;
   };
 
   const loadConfigsForGroup = useCallback(async (groupId: string) => {
     const presets = await loadPresets();
 
-    const {items} = await scanphish.listConfigs({
-      pageSize: 50
-    }, true, groupId);
+    const { items } = await scanphish.listConfigs(
+      {
+        pageSize: 50,
+      },
+      true,
+      groupId,
+    );
 
-    return items.map((config) => toConfigModel(config, presets, groupId))
+    return items.map((config) => toConfigModel(config, presets, groupId));
   }, []);
 
   const loadPublicConfigs = useCallback(async () => {
     const presets = await loadPresets();
 
-    const {items} = await scanphish.listConfigs({
-      pageSize: 50
-    }, true, UUID.NIL);
+    const { items } = await scanphish.listConfigs(
+      {
+        pageSize: 50,
+      },
+      true,
+      UUID.NIL,
+    );
 
-    return items.map((config) => toConfigModel(config, presets, UUID.NIL))
+    return items.map((config) => toConfigModel(config, presets, UUID.NIL));
   }, []);
 
   const loadPresets = useCallback(async () => {
@@ -101,7 +113,11 @@ function useProvideConfigurations() {
     // check if there are any differences between the cached config and the one we just loaded
     if (isDiffBetweenIConfigAndConfigModel(config, cached)) {
       const presets = await loadPresets(); // todo also check if there are any differences between the presets
-      const newConfig = toConfigModel(config, presets, cached?.belongingGroupId);
+      const newConfig = toConfigModel(
+        config,
+        presets,
+        cached?.belongingGroupId,
+      );
       cachedConfigs.patch(newConfig);
       return newConfig;
     }
@@ -160,7 +176,7 @@ function useProvideConfigurations() {
       mInUseSystemComponents,
       mInactiveSystemComponents,
       mInUsePrivateComponents,
-      mInactivePrivateComponents
+      mInactivePrivateComponents,
     );
 
     // cache the configs
@@ -169,20 +185,26 @@ function useProvideConfigurations() {
     return splitSystemPrivateComponents;
   };
 
-  const createConfig = (config: IConfigCreatePayload): Promise<{ config: IConfig }> => {
+  const createConfig = (
+    config: IConfigCreatePayload,
+  ): Promise<{ config: IConfig }> => {
     const formData = new FormData();
-    formData.append('name', config.name);
+    formData.append("name", config.name);
     if (config.logo) {
-      formData.append('logo', config.logo.buffer, 'logo');
+      formData.append("logo", config.logo.buffer, "logo");
     }
 
-    return client.post<{ config: IConfig }>(
-      `${DeployedPaths[Microservice.Scanphish]}/api/config`,
-      formData,
-      {
-        withCredentials: true,
-      }
-    ).then((res: { data: any; }) => res.data);
+    return client
+      .post<{ config: IConfig }>(
+        `${DeployedPaths[Microservice.Scanphish]
+          .replace("http://", "https://")
+          .replace(".localhost", "")}/api/config`,
+        formData,
+        {
+          withCredentials: true,
+        },
+      )
+      .then((res: { data: any }) => res.data);
   };
 
   return {
@@ -190,8 +212,6 @@ function useProvideConfigurations() {
     list,
     create,
     loadConfigsForGroup,
-    loadPublicConfigs
+    loadPublicConfigs,
   };
 }
-
-

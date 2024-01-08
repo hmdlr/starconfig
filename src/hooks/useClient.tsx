@@ -2,7 +2,19 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import React from "react";
 import { AxiosClient } from "@hmdlr/types";
 import { Authphish, Scanphish } from "@hmdlr/utils";
-import { DeployedPaths, Microservice } from "@hmdlr/utils/dist/Microservice";
+import {
+  DeployedPaths as d,
+  Microservice,
+} from "@hmdlr/utils/dist/Microservice";
+
+const DeployedPaths = {
+  [Microservice.Scanphish]: d[Microservice.Scanphish]
+    .replace("http://", "https://")
+    .replace(".localhost", ""),
+  [Microservice.Authphish]: d[Microservice.Authphish]
+    .replace("http://", "https://")
+    .replace(".localhost", ""),
+};
 
 const defaultOptions: AxiosRequestConfig = {
   method: "GET",
