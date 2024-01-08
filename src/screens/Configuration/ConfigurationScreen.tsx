@@ -12,6 +12,10 @@ import { ConfigModel } from "../../models/ConfigModel";
 import "./ConfigurationScreen.css";
 import { useAppDispatch } from "../../store/hooks";
 import { configurationsSlice } from "../../store/Configurations/slice";
+import {
+  fetchPrivateBrandsAction,
+  fetchPublicBrandsAction,
+} from "../../store/Brands/actions";
 
 export const ConfigurationScreen = () => {
   const { loginImage, pin02, eyeOff } = useColorModeImages();
@@ -69,6 +73,12 @@ export const ConfigurationScreen = () => {
 
     setContextActions();
   }, []);
+
+  useEffect(() => {
+    // TODO: temporary hack until complete redux refactor
+    dispatch(fetchPrivateBrandsAction({ loadMore: false }));
+    dispatch(fetchPublicBrandsAction);
+  }, [dispatch]);
 
   const toConfigComponent = useCallback((config: ConfigModel) => {
     return <Configuration config={config} />;

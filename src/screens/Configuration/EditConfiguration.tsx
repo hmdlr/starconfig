@@ -1,14 +1,24 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useActions } from "../../hooks/useActions";
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { IBrand } from "@hmdlr/types";
-import { useAppSelector } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { selectConfigurationById } from "../../store/Configurations/selectors";
 import BrandCard from "../../components/Brands/BrandCard";
-import { selectPublicBrands } from "../../store/Brands/selectors";
+import {
+  selectPrivateBrands,
+  selectPublicBrands,
+} from "../../store/Brands/selectors";
 import { Headline } from "../../components/Headline/Headline";
 import { useColorModeImages } from "../../hooks/useColorModeImages";
+import ControlledInput from "../../components/Utils/ControlledInput";
+import { useForm } from "react-hook-form";
+import ConfigurationBreadcrumb from "../../components/Configuration/ConfigurationBreadcrumb";
+import {
+  addBrandToConfigurationAction,
+  updateConfigurationNameAction,
+} from "../../store/Configurations/actions";
 
 const EditConfiguration = () => {
   const navigate = useNavigate();
@@ -16,6 +26,10 @@ const EditConfiguration = () => {
 
   const icons = useColorModeImages();
   const { setActions } = useActions();
+  const dispatch = useAppDispatch();
+
+  const [updateConfigurationNameFetching, setUpdateConfigurationNameFetching] =
+    useState(false);
 
   const configId = useMemo(
     () => pathname.split("/").splice(pathname.split("/").length - 2, 1)[0],
@@ -25,19 +39,101 @@ const EditConfiguration = () => {
   const config = useAppSelector(selectConfigurationById(configId));
 
   const publicBrands = useAppSelector(selectPublicBrands);
+  const privateBrands = useAppSelector(selectPrivateBrands);
+
+  const { control, getValues, handleSubmit } = useForm({
+    defaultValues: {
+      name: config?.name ?? "",
+    },
+  });
+
+  const onUpdateConfigurationNameError = useCallback((err: any) => {
+    console.log(err);
+  }, []);
+
+  const updateConfigurationName = useCallback(() => {
+    if (!config) {
+      return;
+    }
+
+    setUpdateConfigurationNameFetching(true);
+    dispatch(
+      updateConfigurationNameAction({
+        id: config.id,
+        name: getValues().name.trim(),
+      }),
+    )
+      .unwrap()
+      .catch(onUpdateConfigurationNameError)
+      .finally(() => {
+        setUpdateConfigurationNameFetching(false);
+      });
+  }, [config, dispatch, getValues, onUpdateConfigurationNameError]);
+
+  const activeBrands = useMemo(() => {
+    return [...publicBrands, ...privateBrands].filter((brand) => {
+      return config?.brands.find((b) => b.id === brand.id);
+    });
+  }, [config?.brands, privateBrands, publicBrands]);
 
   const availableBrands = useMemo(() => {
-    return publicBrands.filter((brand) => {
+    return [...publicBrands, ...privateBrands].filter((brand) => {
       return !config?.brands.find((b) => b.id === brand.id);
     });
-  }, [config?.brands, publicBrands]);
+  }, [config?.brands, privateBrands, publicBrands]);
+
+  const addBrandToConfiguration = useCallback(
+    (brand: IBrand) => {
+      if (!brand) {
+        return;
+      }
+
+      dispatch(
+        addBrandToConfigurationAction({
+          configId: configId,
+          brand,
+        }),
+      );
+    },
+    [configId, dispatch],
+  );
+
+  const removeBrandFromConfiguration = useCallback(
+    (brand: IBrand) => {
+      if (!brand) {
+        return;
+      }
+
+      dispatch(
+        addBrandToConfigurationAction({
+          configId: configId,
+          brand,
+        }),
+      );
+    },
+    [configId, dispatch],
+  );
 
   const renderActiveBrand = useCallback((brand: IBrand) => {
-    return <BrandCard brand={brand} key={brand.id} active={true} />;
+    return (
+      <BrandCard
+        brand={brand}
+        key={brand.id}
+        active={true}
+        onClick={removeBrandFromConfiguration}
+      />
+    );
   }, []);
 
   const renderAvailableBrand = useCallback((brand: IBrand) => {
-    return <BrandCard brand={brand} key={brand.id} active={false} />;
+    return (
+      <BrandCard
+        brand={brand}
+        key={brand.id}
+        active={false}
+        onClick={addBrandToConfiguration}
+      />
+    );
   }, []);
 
   useEffect(() => {
@@ -48,6 +144,24 @@ const EditConfiguration = () => {
 
   return (
     <Box paddingY={"2rem"} paddingX={"4rem"} width={"100%"} height={"100%"}>
+      <ConfigurationBreadcrumb config={config} edit={true} />
+      <ControlledInput
+        name={"name"}
+        control={control}
+        rules={{
+          required: { value: true, message: "Numele nu poate fi gol." },
+        }}
+        marginTop={"2rem"}
+      />
+      <Button
+        marginTop={"1rem"}
+        marginBottom={"2rem"}
+        onClick={handleSubmit(updateConfigurationName)}
+        isDisabled={updateConfigurationNameFetching}
+        isLoading={updateConfigurationNameFetching}
+      >
+        Update Name
+      </Button>
       <Headline
         imgSrc={icons.folder}
         headline={"Manage rules of the configuration"}
@@ -56,7 +170,7 @@ const EditConfiguration = () => {
         <Headline imgSrc={icons.file} headline={"Actively Protected Brands"} />
       </Box>
       <Box display={"flex"} flexWrap={"wrap"} gap={"1rem"}>
-        {availableBrands.map(renderActiveBrand)}
+        {activeBrands.map(renderActiveBrand)}
       </Box>
       <Box marginTop={"1rem"}>
         <Headline imgSrc={icons.file} headline={"Available Brands"} />
@@ -67,5 +181,4 @@ const EditConfiguration = () => {
     </Box>
   );
 };
-
 export default EditConfiguration;
