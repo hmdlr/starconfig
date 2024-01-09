@@ -22,7 +22,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: StarConfigBuild
-          path: out
+          path: build
   Deploy:
     runs-on: production
     needs: Build
