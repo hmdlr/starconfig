@@ -11,7 +11,9 @@ jobs:
         with:
             node-version: '16.x'
       - name: Setup .npmrc
-        run: echo "export HMDLR_TOKEN=${{ secrets.HMDLR_TOKEN }}" > .npmrc
+        run: |
+          echo "@hmdlr:registry=https://npm.pkg.github.com" > .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.HMDLR_TOKEN }}" >> .npmrc
       - name: Install dependencies
         run: npm install
       - name: Build
