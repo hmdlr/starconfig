@@ -24,7 +24,7 @@ jobs:
           name: StarConfigBuild
           path: build
   Deploy:
-    runs-on: production
+    runs-on: self-hosted
     needs: Build
     steps:
        - name: Download artifacts
