@@ -5,23 +5,21 @@ import { IConfig } from "@hmdlr/types";
 export const selectConfigurationsState = (state: RootState) =>
   state.configurations;
 
-export const selectPrivateConfigurations = createSelector(
-  selectConfigurationsState,
-  (state) => state.privateConfigurations,
-);
-
-export const selectPublicConfigurations = createSelector(
-  selectConfigurationsState,
-  (state) => state.publicConfigurations,
-);
-
 export const selectConfigurations = createSelector(
   selectConfigurationsState,
   (state) => state.configurations,
 );
 
+export const selectConfigurationsList = createSelector(
+  selectConfigurations,
+  (configurations) =>
+    Object.values(configurations)
+      .map((configuration) => configuration.items)
+      .flat(1),
+);
+
 export const selectConfigurationById = (id?: IConfig["id"]) =>
-  createSelector(selectConfigurations, (configurations) => {
+  createSelector(selectConfigurationsList, (configurations) => {
     if (!id) {
       return undefined;
     }

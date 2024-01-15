@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { scanphishApiClient } from "../../hooks/useClient";
-import { IBrand, IConfig, IConfigUpdatePayload } from "@hmdlr/types";
+import { authphishApiClient, scanphishApiClient } from "../../hooks/useClient";
+import { IBrand, IConfig, IConfigUpdatePayload, UUID } from "@hmdlr/types";
+import { toConfigModel } from "../../models/ConfigModel";
 
 export const fetchConfigurationByIdAction = createAsyncThunk(
   "configurations/fetchConfigurationById",
@@ -13,11 +14,45 @@ export const fetchConfigurationByIdAction = createAsyncThunk(
   },
 );
 
-export const fetchAllConfigurationsAction = createAsyncThunk(
+export const fetchPrivateConfigurationsAction = createAsyncThunk(
   "configurations/fetchConfigurations",
   async (_, thunkAPI) => {
     try {
-      return await scanphishApiClient.listConfigs({});
+      const groups = await authphishApiClient.listGroups({});
+
+      return await Promise.all(
+        groups.items.map(async (group) => {
+          const result = await scanphishApiClient.listConfigs(
+            {},
+            true,
+            group.id,
+          );
+          return {
+            items: result.itemsAll.map((item) => toConfigModel(item)),
+            count: result.count ?? 0,
+            groupId: group.id,
+          };
+        }),
+      );
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data);
+    }
+  },
+);
+
+export const fetchPublicConfigurationsAction = createAsyncThunk(
+  "configurations/fetchConfigurations",
+  async (_, thunkAPI) => {
+    try {
+      const response = await scanphishApiClient.listConfigs({}, true, UUID.NIL);
+
+      const items = response.itemsAll.map((item) => toConfigModel(item));
+      const count = response.count ?? 0;
+
+      return {
+        items,
+        count,
+      };
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data);
     }

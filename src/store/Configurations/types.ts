@@ -1,16 +1,13 @@
 import { ConfigModel } from "../../models/ConfigModel";
 
 export type ConfigurationsState = {
-  configurations: ConfigModel[];
+  configurations: {
+    [key: string]: {
+      items: ConfigModel[];
+      count: number;
+    };
+  };
   pagination: {
     total: number;
-  };
-  privateConfigurations: {
-    items: ConfigModel[];
-    count: number;
-  };
-  publicConfigurations: {
-    items: ConfigModel[];
-    count: number;
   };
 };
