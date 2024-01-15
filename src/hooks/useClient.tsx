@@ -1,11 +1,8 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import React from "react";
 import { AxiosClient } from "@hmdlr/types";
-import { Authphish, Scanphish } from "@hmdlr/utils";
-import {
-  DeployedPaths as d,
-  Microservice,
-} from "@hmdlr/utils/dist/Microservice";
+import { DeployedPaths as d, Microservice } from "@hmdlr/sdk/dist/Microservice";
+import { Authphish, Scanphish } from "@hmdlr/sdk";
 
 const DeployedPaths = {
   [Microservice.Scanphish]: d[Microservice.Scanphish]

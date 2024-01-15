@@ -17,9 +17,12 @@ import { useForm } from "react-hook-form";
 import ConfigurationBreadcrumb from "../../components/Configuration/ConfigurationBreadcrumb";
 import {
   addBrandToConfigurationAction,
+  fetchConfigurationByIdAction,
+  removeBrandFromConfigurationAction,
   updateConfigurationNameAction,
 } from "../../store/Configurations/actions";
 import { PageContent } from "../../components/Utils/PageContent";
+import BrandsContainer from "../../components/Brands/BrandsContainer";
 
 const EditConfiguration = () => {
   const navigate = useNavigate();
@@ -72,10 +75,8 @@ const EditConfiguration = () => {
   }, [config, dispatch, getValues, onUpdateConfigurationNameError]);
 
   const activeBrands = useMemo(() => {
-    return [...publicBrands, ...privateBrands].filter((brand) => {
-      return config?.brands.find((b) => b.id === brand.id);
-    });
-  }, [config?.brands, privateBrands, publicBrands]);
+    return config?.brands ?? [];
+  }, [config?.brands]);
 
   const availableBrands = useMemo(() => {
     return [...publicBrands, ...privateBrands].filter((brand) => {
@@ -106,27 +107,13 @@ const EditConfiguration = () => {
       }
 
       dispatch(
-        addBrandToConfigurationAction({
-          configId: configId,
+        removeBrandFromConfigurationAction({
           brand,
+          configId,
         }),
       );
     },
     [configId, dispatch],
-  );
-
-  const renderActiveBrand = useCallback(
-    (brand: IBrand) => {
-      return (
-        <BrandCard
-          brand={brand}
-          key={brand.id}
-          active={true}
-          onClick={removeBrandFromConfiguration}
-        />
-      );
-    },
-    [removeBrandFromConfiguration],
   );
 
   const renderAvailableBrand = useCallback(
@@ -148,6 +135,12 @@ const EditConfiguration = () => {
       Cancel: () => navigate(`/configurations/${configId}`),
     });
   }, [configId, navigate, setActions]);
+
+  useEffect(() => {
+    dispatch(fetchConfigurationByIdAction(configId)).catch((err) => {
+      console.log(err);
+    });
+  }, [configId, dispatch]);
 
   return (
     <PageContent>
@@ -176,9 +169,11 @@ const EditConfiguration = () => {
       <Box marginTop={"2rem"}>
         <Headline imgSrc={icons.file} headline={"Actively Protected Brands"} />
       </Box>
-      <Box display={"flex"} flexWrap={"wrap"} gap={"1rem"}>
-        {activeBrands.map(renderActiveBrand)}
-      </Box>
+      <BrandsContainer
+        brands={activeBrands}
+        onClick={removeBrandFromConfiguration}
+        brandAreActive={true}
+      />
       <Box marginTop={"1rem"}>
         <Headline imgSrc={icons.file} headline={"Available Brands"} />
       </Box>

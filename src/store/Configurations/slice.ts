@@ -1,6 +1,6 @@
 import { ConfigurationsState } from "./types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ConfigModel } from "../../models/ConfigModel";
+import { ConfigModel, toConfigModel } from "../../models/ConfigModel";
 import {
   addBrandToConfigurationAction,
   fetchConfigurationByIdAction,
@@ -25,13 +25,15 @@ export const configurationsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchConfigurationByIdAction.fulfilled, (state, action) => {
-      const configAlreadyExists = state.configurations.find(
+      const configIndex = state.configurations.findIndex(
         (config) => config.id === action.payload.id,
       );
 
-      if (!configAlreadyExists) {
+      if (configIndex !== -1) {
         // TODO: map the response to a ConfigModel
-        // state.configurations.push(action.payload);
+        state.configurations.push(toConfigModel(action.payload));
+      } else {
+        state.configurations.push(toConfigModel(action.payload));
       }
     });
 
