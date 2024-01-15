@@ -5,4 +5,12 @@ export type ConfigurationsState = {
   pagination: {
     total: number;
   };
+  privateConfigurations: {
+    items: ConfigModel[];
+    count: number;
+  };
+  publicConfigurations: {
+    items: ConfigModel[];
+    count: number;
+  };
 };

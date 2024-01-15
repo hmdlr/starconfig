@@ -1,19 +1,24 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { scanphishApiClient } from "../../hooks/useClient";
-import { IBrand, IConfig } from "@hmdlr/types";
+import { IBrand, IConfig, IConfigUpdatePayload } from "@hmdlr/types";
+import { toConfigModel } from "../../models/ConfigModel";
 
 export const fetchConfigurationByIdAction = createAsyncThunk(
   "configurations/fetchConfigurationById",
   async (id: string, thunkAPI) => {
     try {
-      return await scanphishApiClient.getConfig(id);
+      const config = await scanphishApiClient.getConfig(id);
+
+      const presets = await scanphishApiClient.listPresets();
+
+      return toConfigModel(config, presets);
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data);
     }
   },
 );
 
-export const fetchConfigurationsAction = createAsyncThunk(
+export const fetchAllConfigurationsAction = createAsyncThunk(
   "configurations/fetchConfigurations",
   async (_, thunkAPI) => {
     try {
@@ -26,10 +31,8 @@ export const fetchConfigurationsAction = createAsyncThunk(
 
 export const updateConfigurationNameAction = createAsyncThunk(
   "configurations/updateConfigurationName",
-  async (args: { id: IConfig["id"]; name: IConfig["name"] }, thunkAPI) => {
+  async (args: IConfigUpdatePayload, thunkAPI) => {
     try {
-      // TODO: implement updateConfig
-      // @ts-ignore
       return await scanphishApiClient.updateConfig(args);
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data);
@@ -55,12 +58,25 @@ export const removeBrandFromConfigurationAction = createAsyncThunk(
   "configurations/removeBrandFromConfiguration",
   async (args: { configId: IConfig["id"]; brand: IBrand }, thunkAPI) => {
     try {
-      // TODO: implement removeRulesetsFromConfig
-      // @ts-ignore
-      await scanphishApiClient.removeRulesetsFromConfig(args.configId, [
+      await scanphishApiClient.removeBrandsFromConfig(args.configId, [
         args.brand.id,
       ]);
       return { configId: args.configId, brandId: args.brand.id };
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data);
+    }
+  },
+);
+
+export const setConfigurationActiveAction = createAsyncThunk(
+  "configurations/setActiveConfiguration",
+  async (arg: { id: string; active: boolean }, thunkAPI) => {
+    try {
+      if (arg.active) {
+        await scanphishApiClient.savePreset(arg.id);
+      } else {
+        await scanphishApiClient.deletePreset(arg.id);
+      }
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data);
     }

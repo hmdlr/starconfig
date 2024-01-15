@@ -6,7 +6,6 @@ import {
   FormLabel,
   Heading,
   Input,
-  useTheme,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -15,13 +14,13 @@ import { useActions } from "../../hooks/useActions";
 import { useEffect } from "react";
 import { Headline } from "../../components/Headline/Headline";
 import { useColorModeImages } from "../../hooks/useColorModeImages";
+import { PageContent } from "../../components/Utils/PageContent";
 
 type CreateConfigurationFormData = {
   configurationName: string;
 };
 
 const CreateConfiguration = () => {
-  const theme = useTheme();
   const icons = useColorModeImages();
 
   const navigate = useNavigate();
@@ -45,17 +44,13 @@ const CreateConfiguration = () => {
   };
 
   useEffect(() => {
-    setContextActions();
-  }, []);
-
-  const setContextActions = () => {
     setActions({
       Cancel: () => navigate(`/configurations`),
     });
-  };
+  }, [setActions, navigate]);
 
   return (
-    <Box paddingY={"2rem"} paddingX={"4rem"} width={"100%"} height={"100%"}>
+    <PageContent>
       <Heading as="h1" size="lg" mb={4}>
         Create configuration
       </Heading>
@@ -87,7 +82,7 @@ const CreateConfiguration = () => {
           headline={"A configuration bundles together a set of more rules "}
         />
       </Box>
-    </Box>
+    </PageContent>
   );
 };
 

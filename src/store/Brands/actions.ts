@@ -69,9 +69,14 @@ export const createBrandAction = createAsyncThunk(
     try {
       const createResponse = await scanphishApiClient.createBrand(arg);
 
-      const enhanceResponse = await scanphishApiClient.enhanceBrand(
-        createResponse.brand.id,
-      );
+      // Wait for the brand to be created before enhancing it
+      const enhanceResponse = await new Promise((resolve) => {
+        setTimeout(async () => {
+          resolve(
+            await scanphishApiClient.enhanceBrand(createResponse.brand.id),
+          );
+        }, 1000);
+      });
 
       return {
         ...createResponse.brand,

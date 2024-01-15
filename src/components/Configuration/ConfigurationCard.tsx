@@ -1,28 +1,28 @@
-import { IBrand } from "@hmdlr/types";
 import React, { FC, useCallback, useMemo } from "react";
 import { Box, Text, useColorModeValue } from "@chakra-ui/react";
 import { useColorModeImages } from "../../hooks/useColorModeImages";
+import { ConfigModel } from "../../models/ConfigModel";
 
-interface BrandCardProps {
-  brand: IBrand;
+interface ConfigurationCardProps {
+  configuration: ConfigModel;
   active?: boolean;
-  onClick?: (brand: IBrand) => void;
+  onClick?: (brand: ConfigModel) => void;
   disabled?: boolean;
 }
 
-const BrandCard: FC<BrandCardProps> = ({
-  brand,
+const ConfigurationCard: FC<ConfigurationCardProps> = ({
+  configuration,
   onClick,
   active,
   disabled,
 }) => {
-  const { file, plusSquare, minusSquare } = useColorModeImages();
+  const { folder, plusSquare, minusSquare } = useColorModeImages();
 
   const brandTitleColor = useColorModeValue("grayActive1", "grayActive2");
 
   const _onClick = useCallback(() => {
-    onClick?.(brand);
-  }, [brand, onClick]);
+    onClick?.(configuration);
+  }, [configuration, onClick]);
 
   const bottomIcon = useMemo(() => {
     if (active === undefined) {
@@ -43,7 +43,7 @@ const BrandCard: FC<BrandCardProps> = ({
       onClick={_onClick}
       opacity={disabled ? 0.5 : 1}
     >
-      <img src={file} alt={brand.name} />
+      <img src={folder} alt={configuration.name} />
       <Text
         fontSize={"14px"}
         fontWeight={"800"}
@@ -52,7 +52,7 @@ const BrandCard: FC<BrandCardProps> = ({
         textAlign={"center"}
         marginTop={"0.25rem"}
       >
-        {brand.name}
+        {configuration.name}
       </Text>
       {bottomIcon && (
         <Box marginTop={"0.5rem"} cursor={"pointer"}>
@@ -63,4 +63,4 @@ const BrandCard: FC<BrandCardProps> = ({
   );
 };
 
-export default BrandCard;
+export default ConfigurationCard;

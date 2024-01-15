@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import {
   Box,
   Button,
-  Container,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -15,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useCreateBrand } from "../../hooks/Brands/useCreateBrand";
 import BrandCard from "../../components/Brands/BrandCard";
+import { PageContent } from "../../components/Utils/PageContent";
 
 type FormData = {
   ruleName: string;
@@ -47,7 +47,7 @@ export const NewBrandScreen = () => {
 
   return (
     <LoadingOverlay>
-      <Container maxW="container.sm">
+      <PageContent>
         <Box mt={8}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <VStack spacing={4} align="start">
@@ -103,7 +103,7 @@ export const NewBrandScreen = () => {
             </Button>
           </Box>
         )}
-      </Container>
+      </PageContent>
     </LoadingOverlay>
   );
 };
