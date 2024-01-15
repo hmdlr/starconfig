@@ -69,9 +69,19 @@ export const configurationsSlice = createSlice({
           (config) => config.id === action.payload.configId,
         );
 
-        if (configIndex !== -1) {
-          state.configurations[configIndex].brands.push(action.payload.brand);
+        if (configIndex === -1) {
+          return;
         }
+
+        const brandAlreadyInConfig = state.configurations[
+          configIndex
+        ].brands.find((brand) => brand.id === action.payload.brand.id);
+
+        if (brandAlreadyInConfig) {
+          return;
+        }
+
+        state.configurations[configIndex].brands.push(action.payload.brand);
       },
     );
 

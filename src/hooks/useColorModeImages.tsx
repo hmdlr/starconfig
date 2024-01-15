@@ -140,6 +140,16 @@ function useProvideColorModeImages() {
     "/images/dark/minus-square.svg",
   );
 
+  const filePLus = useColorModeValue(
+    "/images/light/file-plus.svg",
+    "/images/dark/file-plus.svg",
+  );
+
+  const fileMinus = useColorModeValue(
+    "/images/light/file-minus.svg",
+    "/images/dark/file-minus.svg",
+  );
+
   return {
     starphishLogo,
     loginImage,
@@ -168,5 +178,7 @@ function useProvideColorModeImages() {
     searchBrand,
     plusSquare,
     minusSquare,
+    filePLus,
+    fileMinus,
   };
 }

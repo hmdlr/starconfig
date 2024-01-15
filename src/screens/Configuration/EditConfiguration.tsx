@@ -1,4 +1,4 @@
-import { Box, Button } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useActions } from "../../hooks/useActions";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -10,7 +10,6 @@ import {
   selectPrivateBrands,
   selectPublicBrands,
 } from "../../store/Brands/selectors";
-import { Headline } from "../../components/Headline/Headline";
 import { useColorModeImages } from "../../hooks/useColorModeImages";
 import ControlledInput from "../../components/Utils/ControlledInput";
 import { useForm } from "react-hook-form";
@@ -100,7 +99,9 @@ const EditConfiguration = () => {
           configId: configId,
           brand,
         }),
-      );
+      ).catch((err) => {
+        // Do nothing
+      });
     },
     [configId, dispatch],
   );
@@ -180,20 +181,16 @@ const EditConfiguration = () => {
       >
         Update Name
       </Button>
-      <Headline
-        imgSrc={icons.folder}
-        headline={"Manage rules of the configuration"}
-      />
       <BrandsContainer
         title={"Actively Protected Brands"}
-        icon={icons.file}
+        icon={icons.filePLus}
         brands={activeBrands}
         onClick={removeBrandFromConfiguration}
         brandAreActive={true}
       />
       <BrandsContainer
         title={"Available Brands"}
-        icon={icons.file}
+        icon={icons.fileMinus}
         brands={availableBrands}
         onClick={addBrandToConfiguration}
         brandAreActive={false}
