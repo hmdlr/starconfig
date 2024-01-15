@@ -5,6 +5,16 @@ import { IConfig } from "@hmdlr/types";
 export const selectConfigurationsState = (state: RootState) =>
   state.configurations;
 
+export const selectPrivateConfigurations = createSelector(
+  selectConfigurationsState,
+  (state) => state.privateConfigurations,
+);
+
+export const selectPublicConfigurations = createSelector(
+  selectConfigurationsState,
+  (state) => state.publicConfigurations,
+);
+
 export const selectConfigurations = createSelector(
   selectConfigurationsState,
   (state) => state.configurations,

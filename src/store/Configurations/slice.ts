@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ConfigModel, toConfigModel } from "../../models/ConfigModel";
 import {
   addBrandToConfigurationAction,
+  fetchAllConfigurationsAction,
   fetchConfigurationByIdAction,
   removeBrandFromConfigurationAction,
   updateConfigurationNameAction,
@@ -12,6 +13,14 @@ const initialState: ConfigurationsState = {
   configurations: [],
   pagination: {
     total: 0,
+  },
+  privateConfigurations: {
+    items: [],
+    count: 0,
+  },
+  publicConfigurations: {
+    items: [],
+    count: 0,
   },
 };
 
@@ -24,13 +33,16 @@ export const configurationsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // builder.addCase(fetchAllConfigurationsAction.fulfilled, (state, action) => {
+    //   const mappedConfigurations = action.payload.items.map((config) => toConfigModel(config));
+    // });
+    //
     builder.addCase(fetchConfigurationByIdAction.fulfilled, (state, action) => {
       const configIndex = state.configurations.findIndex(
         (config) => config.id === action.payload.id,
       );
 
       if (configIndex !== -1) {
-        // TODO: map the response to a ConfigModel
         state.configurations.push(toConfigModel(action.payload));
       } else {
         state.configurations.push(toConfigModel(action.payload));

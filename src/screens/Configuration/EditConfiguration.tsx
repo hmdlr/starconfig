@@ -45,7 +45,7 @@ const EditConfiguration = () => {
   const publicBrands = useAppSelector(selectPublicBrands);
   const privateBrands = useAppSelector(selectPrivateBrands);
 
-  const { control, getValues, handleSubmit } = useForm({
+  const { control, getValues, handleSubmit, setValue } = useForm({
     defaultValues: {
       name: config?.name ?? "",
     },
@@ -141,6 +141,14 @@ const EditConfiguration = () => {
       console.log(err);
     });
   }, [configId, dispatch]);
+
+  useEffect(() => {
+    if (!config) {
+      return;
+    }
+
+    setValue("name", config.name);
+  }, [config]);
 
   return (
     <PageContent>

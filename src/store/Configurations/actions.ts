@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { scanphishApiClient } from "../../hooks/useClient";
-import { IBrand, IConfig } from "@hmdlr/types";
+import { IBrand, IConfig, IConfigUpdatePayload } from "@hmdlr/types";
 
 export const fetchConfigurationByIdAction = createAsyncThunk(
   "configurations/fetchConfigurationById",
@@ -13,7 +13,7 @@ export const fetchConfigurationByIdAction = createAsyncThunk(
   },
 );
 
-export const fetchConfigurationsAction = createAsyncThunk(
+export const fetchAllConfigurationsAction = createAsyncThunk(
   "configurations/fetchConfigurations",
   async (_, thunkAPI) => {
     try {
@@ -26,10 +26,8 @@ export const fetchConfigurationsAction = createAsyncThunk(
 
 export const updateConfigurationNameAction = createAsyncThunk(
   "configurations/updateConfigurationName",
-  async (args: { id: IConfig["id"]; name: IConfig["name"] }, thunkAPI) => {
+  async (args: IConfigUpdatePayload, thunkAPI) => {
     try {
-      // TODO: implement updateConfig
-      // @ts-ignore
       return await scanphishApiClient.updateConfig(args);
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data);
