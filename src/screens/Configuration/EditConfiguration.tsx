@@ -19,6 +19,7 @@ import {
   addBrandToConfigurationAction,
   updateConfigurationNameAction,
 } from "../../store/Configurations/actions";
+import { PageContent } from "../../components/Utils/PageContent";
 
 const EditConfiguration = () => {
   const navigate = useNavigate();
@@ -114,27 +115,33 @@ const EditConfiguration = () => {
     [configId, dispatch],
   );
 
-  const renderActiveBrand = useCallback((brand: IBrand) => {
-    return (
-      <BrandCard
-        brand={brand}
-        key={brand.id}
-        active={true}
-        onClick={removeBrandFromConfiguration}
-      />
-    );
-  }, []);
+  const renderActiveBrand = useCallback(
+    (brand: IBrand) => {
+      return (
+        <BrandCard
+          brand={brand}
+          key={brand.id}
+          active={true}
+          onClick={removeBrandFromConfiguration}
+        />
+      );
+    },
+    [removeBrandFromConfiguration],
+  );
 
-  const renderAvailableBrand = useCallback((brand: IBrand) => {
-    return (
-      <BrandCard
-        brand={brand}
-        key={brand.id}
-        active={false}
-        onClick={addBrandToConfiguration}
-      />
-    );
-  }, []);
+  const renderAvailableBrand = useCallback(
+    (brand: IBrand) => {
+      return (
+        <BrandCard
+          brand={brand}
+          key={brand.id}
+          active={false}
+          onClick={addBrandToConfiguration}
+        />
+      );
+    },
+    [addBrandToConfiguration],
+  );
 
   useEffect(() => {
     setActions({
@@ -143,7 +150,7 @@ const EditConfiguration = () => {
   }, [configId, navigate, setActions]);
 
   return (
-    <Box paddingY={"2rem"} paddingX={"4rem"} width={"100%"} height={"100%"}>
+    <PageContent>
       <ConfigurationBreadcrumb config={config} edit={true} />
       <ControlledInput
         name={"name"}
@@ -178,7 +185,7 @@ const EditConfiguration = () => {
       <Box display={"flex"} flexWrap={"wrap"} gap={"1rem"}>
         {availableBrands.map(renderAvailableBrand)}
       </Box>
-    </Box>
+    </PageContent>
   );
 };
 export default EditConfiguration;

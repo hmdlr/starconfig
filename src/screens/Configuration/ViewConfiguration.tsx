@@ -8,6 +8,7 @@ import BrandCard from "../../components/Brands/BrandCard";
 import { useActions } from "../../hooks/useActions";
 import ConfigurationBreadcrumb from "../../components/Configuration/ConfigurationBreadcrumb";
 import { fetchConfigurationByIdAction } from "../../store/Configurations/actions";
+import { PageContent } from "../../components/Utils/PageContent";
 
 export const ViewConfiguration = () => {
   const navigate = useNavigate();
@@ -37,11 +38,11 @@ export const ViewConfiguration = () => {
   }, [configId, dispatch]);
 
   return (
-    <Box paddingY={"2rem"} paddingX={"4rem"} width={"100%"} height={"100%"}>
+    <PageContent>
       <ConfigurationBreadcrumb config={config} />
-      <Box display={"flex"} flexWrap={"wrap"} gap={"1rem"}>
+      <Box display={"flex"} flexWrap={"wrap"} gap={"1rem"} marginTop={"2rem"}>
         {config?.brands.map(renderBrand)}
       </Box>
-    </Box>
+    </PageContent>
   );
 };

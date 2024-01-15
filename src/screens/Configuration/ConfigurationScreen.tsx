@@ -16,6 +16,7 @@ import {
   fetchPrivateBrandsAction,
   fetchPublicBrandsAction,
 } from "../../store/Brands/actions";
+import { PageContent } from "../../components/Utils/PageContent";
 
 export const ConfigurationScreen = () => {
   const { loginImage, pin02, eyeOff } = useColorModeImages();
@@ -72,6 +73,7 @@ export const ConfigurationScreen = () => {
     })();
 
     setContextActions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -97,7 +99,7 @@ export const ConfigurationScreen = () => {
   }, [setActions, userId, navigate, loginPath]);
 
   return (
-    <Box paddingY={"2rem"} paddingX={"4rem"} width={"100%"} height={"100%"}>
+    <PageContent>
       <Flex flexDirection={"column"} gap={"3rem"}>
         <Box>
           <Headline
@@ -139,6 +141,6 @@ export const ConfigurationScreen = () => {
           </Box>
         </Box>
       )}
-    </Box>
+    </PageContent>
   );
 };

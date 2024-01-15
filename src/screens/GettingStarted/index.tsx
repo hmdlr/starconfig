@@ -2,10 +2,11 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 // @ts-ignore
 import gettingStartedMarkdown from "../../getting-started-markdown.md";
-import { Box, Button, Heading, Tag, useColorModeValue } from "@chakra-ui/react";
+import { Button, Heading, Tag, useColorModeValue } from "@chakra-ui/react";
 import { useActions } from "../../hooks/useActions";
 import env from "../../env";
 import { Link } from "react-router-dom";
+import { PageContent } from "../../components/Utils/PageContent";
 
 export const GettingStarted = () => {
   const { setActions } = useActions();
@@ -94,13 +95,13 @@ export const GettingStarted = () => {
   }, [getMarkdownContent]);
 
   return (
-    <Box w={"95%"} p={3} pl={6} overflowY="auto" height="100vh" flex="0 0 100%">
+    <PageContent>
       <ReactMarkdown children={markdownContent} components={components} />
       <Link to={"/configurations"}>
         <Button colorScheme="teal" variant="link">
           Get started
         </Button>
       </Link>
-    </Box>
+    </PageContent>
   );
 };
