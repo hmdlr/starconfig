@@ -7,9 +7,15 @@ interface BrandCardProps {
   brand: IBrand;
   active?: boolean;
   onClick?: (brand: IBrand) => void;
+  disabled?: boolean;
 }
 
-const BrandCard: FC<BrandCardProps> = ({ brand, onClick, active }) => {
+const BrandCard: FC<BrandCardProps> = ({
+  brand,
+  onClick,
+  active,
+  disabled,
+}) => {
   const { file, plusSquare, minusSquare } = useColorModeImages();
 
   const brandTitleColor = useColorModeValue("grayActive1", "grayActive2");
@@ -35,6 +41,7 @@ const BrandCard: FC<BrandCardProps> = ({ brand, onClick, active }) => {
       height={active === undefined ? "5rem" : "7rem"}
       cursor={active === undefined ? "pointer" : "default"}
       onClick={_onClick}
+      opacity={disabled ? 0.5 : 1}
     >
       <img src={file} alt={brand.name} />
       <Text

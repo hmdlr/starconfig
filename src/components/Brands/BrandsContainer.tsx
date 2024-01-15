@@ -6,19 +6,25 @@ import { useColorModeImages } from "../../hooks/useColorModeImages";
 import { Headline } from "../Headline/Headline";
 
 interface BrandsContainerProps {
+  title: string;
+  icon: string;
   brands: IBrand[];
   brandAreActive?: boolean;
   onClick?: (brand: IBrand) => void;
   canLoadMore?: boolean;
   onLoadMore?: () => void;
+  disabled?: (brand: IBrand) => boolean;
 }
 
 const BrandsContainer: FC<BrandsContainerProps> = ({
+  title,
+  icon,
   brands,
   onClick,
   brandAreActive,
   canLoadMore,
   onLoadMore,
+  disabled,
 }) => {
   const icons = useColorModeImages();
 
@@ -30,15 +36,16 @@ const BrandsContainer: FC<BrandsContainerProps> = ({
           key={brand.id}
           onClick={onClick}
           active={brandAreActive}
+          disabled={disabled?.(brand)}
         />
       );
     },
-    [brandAreActive, onClick],
+    [brandAreActive, disabled, onClick],
   );
 
   return (
     <Box>
-      <Headline imgSrc={icons.eyeOff} headline={"Private Brands"} />
+      <Headline imgSrc={icon} headline={title} />
       <Box display={"flex"} flexWrap={"wrap"} gap={"1rem"}>
         {brands.map(renderBrand)}
       </Box>

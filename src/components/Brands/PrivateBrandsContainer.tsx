@@ -7,6 +7,7 @@ import {
 } from "../../store/Brands/selectors";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchPrivateBrandsAction } from "../../store/Brands/actions";
+import { useColorModeImages } from "../../hooks/useColorModeImages";
 
 interface PrivateBrandsContainerProps {
   onClick?: (brand: IBrand) => void;
@@ -16,6 +17,8 @@ const PrivateBrandsContainer: FC<PrivateBrandsContainerProps> = ({
   onClick,
 }) => {
   const dispatch = useAppDispatch();
+
+  const icons = useColorModeImages();
 
   const privateBrands = useAppSelector(selectPrivateBrands);
   const canLoadMorePrivateBrands = useAppSelector(
@@ -35,6 +38,8 @@ const PrivateBrandsContainer: FC<PrivateBrandsContainerProps> = ({
 
   return (
     <BrandsContainer
+      title={"Private Brands"}
+      icon={icons.eyeOff}
       brands={privateBrands}
       onClick={onClick}
       canLoadMore={canLoadMorePrivateBrands}

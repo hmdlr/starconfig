@@ -4,6 +4,7 @@ import { FC, useEffect } from "react";
 import { selectPublicBrands } from "../../store/Brands/selectors";
 import BrandsContainer from "./BrandsContainer";
 import { fetchPublicBrandsAction } from "../../store/Brands/actions";
+import { useColorModeImages } from "../../hooks/useColorModeImages";
 
 interface PublicBrandsContainerProps {
   onClick?: (brand: IBrand) => void;
@@ -11,6 +12,8 @@ interface PublicBrandsContainerProps {
 
 const PublicBrandsContainer: FC<PublicBrandsContainerProps> = ({ onClick }) => {
   const dispatch = useAppDispatch();
+
+  const icons = useColorModeImages();
 
   const publicBrands = useAppSelector(selectPublicBrands);
 
@@ -21,7 +24,14 @@ const PublicBrandsContainer: FC<PublicBrandsContainerProps> = ({ onClick }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
-  return <BrandsContainer brands={publicBrands} onClick={onClick} />;
+  return (
+    <BrandsContainer
+      title={"Bublic Brands"}
+      icon={icons.pin02}
+      brands={publicBrands}
+      onClick={onClick}
+    />
+  );
 };
 
 export default PublicBrandsContainer;

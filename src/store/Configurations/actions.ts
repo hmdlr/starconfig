@@ -53,9 +53,7 @@ export const removeBrandFromConfigurationAction = createAsyncThunk(
   "configurations/removeBrandFromConfiguration",
   async (args: { configId: IConfig["id"]; brand: IBrand }, thunkAPI) => {
     try {
-      // TODO: implement removeRulesetsFromConfig
-      // @ts-ignore
-      await scanphishApiClient.removeRulesetsFromConfig(args.configId, [
+      await scanphishApiClient.removeBrandsFromConfig(args.configId, [
         args.brand.id,
       ]);
       return { configId: args.configId, brandId: args.brand.id };

@@ -53,11 +53,11 @@ export const configurationsSlice = createSlice({
       updateConfigurationNameAction.fulfilled,
       (state, action) => {
         const configIndex = state.configurations.findIndex(
-          (config) => config.id === action.payload.id,
+          (config) => config.id === action.meta.arg.id,
         );
 
         if (configIndex !== -1) {
-          state.configurations[configIndex].name = action.payload.name;
+          state.configurations[configIndex].name = action.meta.arg.name;
         }
       },
     );

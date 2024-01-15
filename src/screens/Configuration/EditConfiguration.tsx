@@ -5,8 +5,8 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { IBrand } from "@hmdlr/types";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { selectConfigurationById } from "../../store/Configurations/selectors";
-import BrandCard from "../../components/Brands/BrandCard";
 import {
+  selectCanLoadMorePrivateBrands,
   selectPrivateBrands,
   selectPublicBrands,
 } from "../../store/Brands/selectors";
@@ -23,6 +23,10 @@ import {
 } from "../../store/Configurations/actions";
 import { PageContent } from "../../components/Utils/PageContent";
 import BrandsContainer from "../../components/Brands/BrandsContainer";
+import {
+  fetchPrivateBrandsAction,
+  fetchPublicBrandsAction,
+} from "../../store/Brands/actions";
 
 const EditConfiguration = () => {
   const navigate = useNavigate();
@@ -44,6 +48,9 @@ const EditConfiguration = () => {
 
   const publicBrands = useAppSelector(selectPublicBrands);
   const privateBrands = useAppSelector(selectPrivateBrands);
+  const canLoadMorePrivateBrands = useAppSelector(
+    selectCanLoadMorePrivateBrands,
+  );
 
   const { control, getValues, handleSubmit, setValue } = useForm({
     defaultValues: {
@@ -79,10 +86,8 @@ const EditConfiguration = () => {
   }, [config?.brands]);
 
   const availableBrands = useMemo(() => {
-    return [...publicBrands, ...privateBrands].filter((brand) => {
-      return !config?.brands.find((b) => b.id === brand.id);
-    });
-  }, [config?.brands, privateBrands, publicBrands]);
+    return [...publicBrands, ...privateBrands];
+  }, [privateBrands, publicBrands]);
 
   const addBrandToConfiguration = useCallback(
     (brand: IBrand) => {
@@ -116,18 +121,15 @@ const EditConfiguration = () => {
     [configId, dispatch],
   );
 
-  const renderAvailableBrand = useCallback(
+  const loadMorePrivateBrands = useCallback(() => {
+    dispatch(fetchPrivateBrandsAction({ loadMore: true }));
+  }, [dispatch]);
+
+  const isItemDisabled = useCallback(
     (brand: IBrand) => {
-      return (
-        <BrandCard
-          brand={brand}
-          key={brand.id}
-          active={false}
-          onClick={addBrandToConfiguration}
-        />
-      );
+      return activeBrands.some((activeBrand) => activeBrand.id === brand.id);
     },
-    [addBrandToConfiguration],
+    [activeBrands],
   );
 
   useEffect(() => {
@@ -143,12 +145,20 @@ const EditConfiguration = () => {
   }, [configId, dispatch]);
 
   useEffect(() => {
+    if (!availableBrands.length) {
+      console.log("fetching");
+      dispatch(fetchPublicBrandsAction());
+      dispatch(fetchPrivateBrandsAction({}));
+    }
+  }, []);
+
+  useEffect(() => {
     if (!config) {
       return;
     }
 
     setValue("name", config.name);
-  }, [config]);
+  }, [config, setValue]);
 
   return (
     <PageContent>
@@ -174,20 +184,23 @@ const EditConfiguration = () => {
         imgSrc={icons.folder}
         headline={"Manage rules of the configuration"}
       />
-      <Box marginTop={"2rem"}>
-        <Headline imgSrc={icons.file} headline={"Actively Protected Brands"} />
-      </Box>
       <BrandsContainer
+        title={"Actively Protected Brands"}
+        icon={icons.file}
         brands={activeBrands}
         onClick={removeBrandFromConfiguration}
         brandAreActive={true}
       />
-      <Box marginTop={"1rem"}>
-        <Headline imgSrc={icons.file} headline={"Available Brands"} />
-      </Box>
-      <Box display={"flex"} flexWrap={"wrap"} gap={"1rem"}>
-        {availableBrands.map(renderAvailableBrand)}
-      </Box>
+      <BrandsContainer
+        title={"Available Brands"}
+        icon={icons.file}
+        brands={availableBrands}
+        onClick={addBrandToConfiguration}
+        brandAreActive={false}
+        canLoadMore={canLoadMorePrivateBrands}
+        onLoadMore={loadMorePrivateBrands}
+        disabled={isItemDisabled}
+      />
     </PageContent>
   );
 };
