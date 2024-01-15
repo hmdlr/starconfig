@@ -1,11 +1,11 @@
 import { ConfigurationsState } from "./types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ConfigModel, toConfigModel } from "../../models/ConfigModel";
+import { ConfigModel } from "../../models/ConfigModel";
 import {
   addBrandToConfigurationAction,
-  fetchAllConfigurationsAction,
   fetchConfigurationByIdAction,
   removeBrandFromConfigurationAction,
+  setConfigurationActiveAction,
   updateConfigurationNameAction,
 } from "./actions";
 
@@ -43,9 +43,9 @@ export const configurationsSlice = createSlice({
       );
 
       if (configIndex !== -1) {
-        state.configurations.push(toConfigModel(action.payload));
+        state.configurations[configIndex] = action.payload;
       } else {
-        state.configurations.push(toConfigModel(action.payload));
+        state.configurations.push(action.payload);
       }
     });
 
@@ -89,5 +89,15 @@ export const configurationsSlice = createSlice({
         }
       },
     );
+
+    builder.addCase(setConfigurationActiveAction.fulfilled, (state, action) => {
+      const configIndex = state.configurations.findIndex(
+        (config) => config.id === action.meta.arg.id,
+      );
+
+      if (configIndex !== -1) {
+        state.configurations[configIndex].active = action.meta.arg.active;
+      }
+    });
   },
 });
