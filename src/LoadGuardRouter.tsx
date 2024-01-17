@@ -1,10 +1,9 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import React, { useEffect } from "react";
-import { Box, Flex } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { LeftSidebar } from "./components/Sidebars/LeftSidebar";
 import { GettingStarted } from "./screens/GettingStarted";
 import { ConfigurationScreen } from "./screens/Configuration/ConfigurationScreen";
-import { RightSidebar } from "./components/Sidebars/RightSidebar";
 import { useLoadGuard } from "./hooks/useLoadGuard";
 import { Navbar } from "./components/Navbar";
 import { ProvideConfigurations } from "./hooks/useConfigurations";
@@ -17,6 +16,7 @@ import { useModal } from "./hooks/useModal";
 import { useAuth } from "./hooks/useAuth";
 import { ViewConfiguration } from "./screens/Configuration/ViewConfiguration";
 import EditConfiguration from "./screens/Configuration/EditConfiguration";
+import theme from "./theme";
 
 export const LoadGuardRouter = () => {
   const { cacheLoaded, LoadGuard } = useLoadGuard();
@@ -30,6 +30,8 @@ export const LoadGuardRouter = () => {
     }
     greetFreshlySignedInUser();
   }, [cacheLoaded]);
+
+  const backgroundColor = useColorModeValue("#fff", "#283142");
 
   return (
     <div style={{ zIndex: 2, width: "100%", flexDirection: "column" }}>
@@ -51,7 +53,12 @@ export const LoadGuardRouter = () => {
 
                   <Flex direction="row" flexGrow="1">
                     <LeftSidebar />
-                    <Box flexGrow="1">
+                    <Box
+                      // flexGrow="1"
+                      width="100%"
+                      borderTopLeftRadius={"1rem"}
+                      backgroundColor={backgroundColor}
+                    >
                       <Routes>
                         <Route path="/" element={<GettingStarted />} />
                         <Route
@@ -81,7 +88,7 @@ export const LoadGuardRouter = () => {
                         />
                       </Routes>
                     </Box>
-                    <RightSidebar />
+                    {/* <RightSidebar /> */}
                   </Flex>
                 </Flex>
               </Router>

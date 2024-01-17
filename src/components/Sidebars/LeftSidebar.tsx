@@ -1,19 +1,25 @@
-import { Box, Stack } from "@chakra-ui/react";
+import { Box, Stack, useColorModeValue } from "@chakra-ui/react";
 import { RoutingButton } from "../RoutingButton";
 import { useColorModeImages } from "../../hooks/useColorModeImages";
+import "./LeftSidebar.css";
+import theme from "../../theme";
 
 export const LeftSidebar = () => {
   const { compass, packageImage, puzzlePiece } = useColorModeImages();
 
+  const backgroundColor = useColorModeValue(
+    theme.colors.lightModeBackground,
+    theme.colors.darkModeBackground,
+  );
+
   return (
     <Box
-      w={{ base: "0", md: "20%" }}
-      borderRightWidth="thin"
-      borderColor="#e3e3e3"
-      p={3}
-      pl={6}
+      className="reverse-corner"
+      backgroundColor={backgroundColor}
+      w={{ base: "0", md: "330px" }}
+      paddingY="1rem"
+      paddingX={{ base: "1rem", md: "2rem" }}
       overflowY="auto"
-      flex="0 0 20%"
       display={{ base: "none", md: "flex" }}
     >
       <Stack spacing={4}>

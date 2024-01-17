@@ -11,6 +11,7 @@ import {
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import "./Navbar.css";
 import { useColorModeImages } from "../../hooks/useColorModeImages";
+import theme from "../../theme";
 
 export const Navbar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -20,23 +21,29 @@ export const Navbar = () => {
 
   const { starphishLogo } = useColorModeImages();
 
+  const backgroundColor = useColorModeValue(
+    theme.colors.lightModeBackground,
+    theme.colors.darkModeBackground,
+  );
+
   return (
     <Flex
       as="nav"
       align="center"
       justify="space-between"
       wrap={{ base: "wrap", md: "nowrap" }}
-      padding="1.5rem"
-      bg="transparent"
-      borderBottomWidth="thin"
-      borderColor={"#e3e3e3"}
+      paddingY="1rem"
+      paddingX={{ base: "1rem", md: "2rem" }}
+      bg={backgroundColor}
+      // borderBottomWidth="thin"
+      // borderColor={"#e3e3e3"}
     >
       {/* Logo on the far left, with text immediately after */}
       <Flex align="center" mr={5}>
         <img
           style={{
-            height: "60px",
-            width: "60px",
+            height: "50px",
+            width: "50px",
             objectFit: "contain",
           }}
           src={starphishLogo}
@@ -44,7 +51,7 @@ export const Navbar = () => {
         />
         <Box ml={{ base: 2, md: 5 }}>
           <Text
-            fontSize={{ base: "24px", md: "35px" }}
+            fontSize={{ base: "20px", md: "30px" }}
             color={starphishColor}
             fontWeight="extrabold"
           >
@@ -52,8 +59,8 @@ export const Navbar = () => {
             <Text
               as="span"
               position="relative"
-              top={{ base: "-15px", md: "-20px" }}
-              fontSize={{ base: "14px", md: "22px" }}
+              top={{ base: "-14px", md: "-18px" }}
+              fontSize={{ base: "12px", md: "20px" }}
               color="tertiary"
             >
               app
