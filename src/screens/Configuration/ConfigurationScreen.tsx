@@ -1,4 +1,12 @@
-import { Box, Flex, useColorModeValue, useTheme } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Card,
+  CardBody,
+  Flex,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import React, { ReactNode, useCallback, useEffect } from "react";
 import { useConfigurations } from "../../hooks/useConfigurations";
@@ -19,15 +27,12 @@ import {
 import { PageContent } from "../../components/Utils/PageContent";
 
 export const ConfigurationScreen = () => {
-  const { loginImage, pin02, eyeOff } = useColorModeImages();
+  const toast = useToast();
+  const { info, pin02, eyeOff, folderPlus } = useColorModeImages();
   const { userId, loginPath } = useAuth();
   const { list } = useConfigurations();
   const { setActions } = useActions();
   const navigate = useNavigate();
-
-  const loginTextColor = useColorModeValue("secondary", "gray.400");
-  const theme = useTheme();
-  const loginAnchorTextColor = theme.colors.primary;
 
   const [inUseSystemComponents, setInUseSystemComponents] = React.useState<
     ReactNode[]
@@ -98,6 +103,56 @@ export const ConfigurationScreen = () => {
     );
   }, [setActions, userId, navigate, loginPath]);
 
+  useEffect(() => {
+    if (!userId) {
+      toast({
+        title: "You can use the configurations if you log in!",
+        status: "info",
+        duration: 15000,
+        isClosable: true,
+        variant: "top-accent",
+        // make it so that click on the toast takes you to the login page
+        render: () => (
+          <Card>
+            <CardBody>
+              <Flex
+                flexDirection={"row"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
+                gap={"1rem"}
+              >
+                <img src={info} alt="info" />
+                <Text
+                  style={{
+                    fontWeight: 600,
+                  }}
+                >
+                  You can use the configurations if you{" "}
+                  <a
+                    href={loginPath}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: "#3182ce",
+                      textDecoration: "underline",
+                    }}
+                  >
+                    log in
+                  </a>
+                  !
+                </Text>
+              </Flex>
+            </CardBody>
+          </Card>
+        ),
+      });
+    }
+
+    return () => {
+      toast.closeAll();
+    };
+  }, [userId]);
+
   return (
     <PageContent>
       <Flex flexDirection={"column"} gap={"3rem"}>
@@ -119,28 +174,17 @@ export const ConfigurationScreen = () => {
               inUseComponents={inUsePrivateComponents}
               inactiveComponents={inactivePrivateComponents}
             />
+
+            <Button
+              mt={10}
+              leftIcon={<img src={folderPlus} alt="plus" />}
+              onClick={() => navigate(`/configurations/new`)}
+            >
+              New Configuration
+            </Button>
           </Box>
         )}
       </Flex>
-      {/* If userId is undefined, display a component to let user know he can see more configs if he logs in */}
-      {!userId && (
-        <Box className={"loginPopup"}>
-          <Box className={"loginPopupContent"}>
-            <img src={loginImage} alt="Login" />
-            <Box id={"loginFirstMessage"} color={loginTextColor}>
-              You can use the configurations if you&nbsp;
-              <a
-                href={loginPath}
-                style={{
-                  color: loginAnchorTextColor,
-                }}
-              >
-                log in!
-              </a>
-            </Box>
-          </Box>
-        </Box>
-      )}
     </PageContent>
   );
 };

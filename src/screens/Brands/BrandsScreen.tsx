@@ -2,7 +2,14 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { fetchPublicBrandsAction } from "../../store/Brands/actions";
 import { selectPublicBrands } from "../../store/Brands/selectors";
-import { Box, Flex, Input, Text, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Input,
+  Text,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { IBrand } from "@hmdlr/types";
 import BrandCard from "../../components/Brands/BrandCard";
 import { useActions } from "../../hooks/useActions";
@@ -13,11 +20,13 @@ import { useColorModeImages } from "../../hooks/useColorModeImages";
 import { Headline } from "../../components/Headline/Headline";
 import PrivateBrandsContainer from "../../components/Brands/PrivateBrandsContainer";
 import { PageContent } from "../../components/Utils/PageContent";
+import { useAuth } from "../../hooks/useAuth";
 
 export const BrandsScreen = () => {
   const dispatch = useAppDispatch();
   const { setActions } = useActions();
   const navigate = useNavigate();
+  const { userId } = useAuth();
 
   const icons = useColorModeImages();
 
@@ -96,6 +105,15 @@ export const BrandsScreen = () => {
       </Box>
       <PrivateBrandsContainer onClick={onBrandClick} />
       <BrandEditor brand={selectedBrand} onClose={closeBrandDetailModal} />
+      {userId && (
+        <Button
+          mt={10}
+          leftIcon={<img src={icons.filePLus} alt="plus" />}
+          onClick={() => navigate("/rules/new")}
+        >
+          New Brand
+        </Button>
+      )}
     </PageContent>
   );
 };
