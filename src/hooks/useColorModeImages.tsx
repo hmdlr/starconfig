@@ -150,6 +150,16 @@ function useProvideColorModeImages() {
     "/images/dark/file-minus.svg",
   );
 
+  const download = useColorModeValue(
+    "/images/light/download-cloud.svg",
+    "/images/dark/download-cloud.svg",
+  );
+
+  const info = useColorModeValue(
+    "/images/light/info-circle.svg",
+    "/images/dark/info-circle.svg",
+  );
+
   return {
     starphishLogo,
     loginImage,
@@ -180,5 +190,7 @@ function useProvideColorModeImages() {
     minusSquare,
     filePLus,
     fileMinus,
+    download,
+    info,
   };
 }

@@ -3,9 +3,10 @@ import { RoutingButton } from "../RoutingButton";
 import { useColorModeImages } from "../../hooks/useColorModeImages";
 import "./LeftSidebar.css";
 import theme from "../../theme";
+import env from "../../env";
 
 export const LeftSidebar = () => {
-  const { compass, packageImage, puzzlePiece } = useColorModeImages();
+  const { compass, packageImage, puzzlePiece, download } = useColorModeImages();
 
   const backgroundColor = useColorModeValue(
     theme.colors.lightModeBackground,
@@ -25,6 +26,12 @@ export const LeftSidebar = () => {
       <Stack spacing={4}>
         <RoutingButton icon={<img src={compass} alt="start" />} to={"/"}>
           Getting started
+        </RoutingButton>
+        <RoutingButton
+          icon={<img src={download} alt="download" />}
+          to={env.chromeStoreUrl}
+        >
+          Download
         </RoutingButton>
         <RoutingButton
           icon={<img src={packageImage} alt="configs" />}
