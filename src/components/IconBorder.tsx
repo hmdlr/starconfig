@@ -9,11 +9,11 @@ export const IconBorder = (props: {
 }) => {
   return (
     <Box
-      width={props.width ?? "2.5625rem"}
+      // width={props.width ?? "2.5625rem"}
       height={props.height ?? "2.5625rem"}
       padding={props.padding ?? "unset"}
       borderRadius="10px"
-      border="1px solid #E3E3E3"
+      // border="1px solid #E3E3E3"
       display="flex"
       alignItems="center"
       justifyContent="center"
@@ -21,5 +21,5 @@ export const IconBorder = (props: {
     >
       {props.node}
     </Box>
-  )
-}
+  );
+};

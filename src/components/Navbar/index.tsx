@@ -17,6 +17,10 @@ export const Navbar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const starphishColor = useColorModeValue("secondary", "gray.300");
 
+  const { grayColor } = useColorModeValue(
+    theme.colors.grayActive1,
+    theme.colors.grayActive2,
+  );
   // const { userId, loginPath, registerPath } = useAuth();
 
   const { starphishLogo } = useColorModeImages();
@@ -42,8 +46,8 @@ export const Navbar = () => {
       <Flex align="center" mr={5}>
         <img
           style={{
-            height: "50px",
-            width: "50px",
+            height: "45px",
+            width: "45px",
             objectFit: "contain",
           }}
           src={starphishLogo}
@@ -51,7 +55,7 @@ export const Navbar = () => {
         />
         <Box ml={{ base: 2, md: 5 }}>
           <Text
-            fontSize={{ base: "20px", md: "30px" }}
+            fontSize={{ base: "20px", md: "25px" }}
             color={starphishColor}
             fontWeight="extrabold"
           >
@@ -60,10 +64,20 @@ export const Navbar = () => {
               as="span"
               position="relative"
               top={{ base: "-14px", md: "-18px" }}
-              fontSize={{ base: "12px", md: "20px" }}
+              fontSize={{ base: "12px", md: "16px" }}
               color="tertiary"
             >
               app
+            </Text>
+            <Text
+              as="span"
+              position="relative"
+              fontSize={{ base: "16px", md: "22px" }}
+              fontWeight="bold"
+              color={grayColor}
+              ml={{ base: "0px", md: "5px" }}
+            >
+              Cloud Workspace
             </Text>
           </Text>
         </Box>

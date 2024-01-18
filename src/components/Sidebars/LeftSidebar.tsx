@@ -17,7 +17,7 @@ export const LeftSidebar = () => {
     <Box
       className="reverse-corner"
       backgroundColor={backgroundColor}
-      w={{ base: "0", md: "330px" }}
+      w={{ base: "0", md: "230px" }}
       paddingY="1rem"
       paddingX={{ base: "1rem", md: "2rem" }}
       overflowY="auto"
