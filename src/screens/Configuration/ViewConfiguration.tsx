@@ -82,8 +82,8 @@ export const ViewConfiguration = () => {
         <Flex alignItems={"center"} gap={"0.5rem"}>
           <Text>In Use:</Text>
           <Switch
-            isDisabled={isTogglingActive}
-            isChecked={config?.active}
+            isDisabled={isTogglingActive && !config?.official}
+            isChecked={config?.active || config?.official}
             onChange={toggleActive}
           />
         </Flex>
