@@ -1,4 +1,4 @@
-import { Box, Flex, Switch, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Switch, Text } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -12,6 +12,7 @@ import {
   setConfigurationActiveAction,
 } from "../../store/Configurations/actions";
 import { PageContent } from "../../components/Utils/PageContent";
+import { authphishApiClient } from "../../hooks/useClient";
 
 export const ViewConfiguration = () => {
   const navigate = useNavigate();
@@ -25,6 +26,8 @@ export const ViewConfiguration = () => {
   const configId = useMemo(() => pathname.split("/").pop(), [pathname]);
 
   const config = useAppSelector(selectConfigurationById(configId));
+
+  const [hasEditAccess, setHasEditAccess] = React.useState(false);
 
   const renderBrand = useCallback((brand: IBrand) => {
     return <BrandCard brand={brand} key={brand.id} />;
@@ -60,6 +63,15 @@ export const ViewConfiguration = () => {
   useEffect(() => {
     if (configId) {
       dispatch(fetchConfigurationByIdAction(configId));
+
+      authphishApiClient
+        .hasEditAccess(configId)
+        .then((hasAccess) => {
+          setHasEditAccess(hasAccess);
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     }
   }, [configId, dispatch]);
 
@@ -79,6 +91,14 @@ export const ViewConfiguration = () => {
       <Box display={"flex"} flexWrap={"wrap"} gap={"1rem"} marginTop={"2rem"}>
         {config?.brands.map(renderBrand)}
       </Box>
+      {hasEditAccess && (
+        <Button
+          marginTop={"2rem"}
+          onClick={() => navigate(`/configurations/${configId}/edit`)}
+        >
+          Edit
+        </Button>
+      )}
     </PageContent>
   );
 };
