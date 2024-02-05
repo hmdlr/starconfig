@@ -1,6 +1,8 @@
-import { RootState } from "../store";
 import { createSelector } from "@reduxjs/toolkit";
+
 import { IBrand } from "@hmdlr/types";
+
+import { RootState } from "../store";
 
 export const selectBrandSlice = (state: RootState) => state.brands;
 

@@ -1,9 +1,12 @@
-import { IBrand } from "@hmdlr/types";
 import React, { FC, useCallback } from "react";
+
 import { Box, Button, HStack } from "@chakra-ui/react";
-import BrandCard from "./BrandCard";
+
+import { IBrand } from "@hmdlr/types";
+
 import { useColorModeImages } from "../../hooks/useColorModeImages";
 import { Headline } from "../Headline/Headline";
+import BrandCard from "./BrandCard";
 
 interface BrandsContainerProps {
   title: string;

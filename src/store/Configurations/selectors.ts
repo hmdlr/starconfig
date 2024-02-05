@@ -1,6 +1,8 @@
-import { RootState } from "../store";
 import { createSelector } from "@reduxjs/toolkit";
+
 import { IConfig } from "@hmdlr/types";
+
+import { RootState } from "../store";
 
 export const selectConfigurationsState = (state: RootState) =>
   state.configurations;

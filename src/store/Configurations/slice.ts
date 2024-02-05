@@ -1,5 +1,5 @@
-import { ConfigurationsState } from "./types";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+
 import { ConfigModel } from "../../models/ConfigModel";
 import {
   addBrandToConfigurationAction,
@@ -8,6 +8,7 @@ import {
   setConfigurationActiveAction,
   updateConfigurationNameAction,
 } from "./actions";
+import { ConfigurationsState } from "./types";
 
 const initialState: ConfigurationsState = {
   configurations: [],

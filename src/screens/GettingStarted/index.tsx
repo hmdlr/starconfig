@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { Link } from "react-router-dom";
+
+import { Button, Heading, Tag, useColorModeValue } from "@chakra-ui/react";
+
+import { PageContent } from "../../components/Utils/PageContent";
+import env from "../../env";
 // @ts-ignore
 import gettingStartedMarkdown from "../../getting-started-markdown.md";
-import { Button, Heading, Tag, useColorModeValue } from "@chakra-ui/react";
 import { useActions } from "../../hooks/useActions";
-import env from "../../env";
-import { Link } from "react-router-dom";
-import { PageContent } from "../../components/Utils/PageContent";
 
 export const GettingStarted = () => {
   const { setActions } = useActions();

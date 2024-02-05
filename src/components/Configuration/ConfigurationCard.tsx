@@ -1,5 +1,7 @@
 import React, { FC, useCallback, useMemo } from "react";
+
 import { Box, Text, useColorModeValue } from "@chakra-ui/react";
+
 import { useColorModeImages } from "../../hooks/useColorModeImages";
 import { ConfigModel } from "../../models/ConfigModel";
 

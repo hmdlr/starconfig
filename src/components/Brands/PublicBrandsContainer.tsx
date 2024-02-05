@@ -1,10 +1,12 @@
-import { IBrand } from "@hmdlr/types";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { FC, useEffect } from "react";
-import { selectPublicBrands } from "../../store/Brands/selectors";
-import BrandsContainer from "./BrandsContainer";
-import { fetchPublicBrandsAction } from "../../store/Brands/actions";
+
+import { IBrand } from "@hmdlr/types";
+
 import { useColorModeImages } from "../../hooks/useColorModeImages";
+import { fetchPublicBrandsAction } from "../../store/Brands/actions";
+import { selectPublicBrands } from "../../store/Brands/selectors";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import BrandsContainer from "./BrandsContainer";
 
 interface PublicBrandsContainerProps {
   onClick?: (brand: IBrand) => void;

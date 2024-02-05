@@ -1,9 +1,11 @@
 import React, { FC, useCallback } from "react";
+
 import { Box, Button, HStack } from "@chakra-ui/react";
+
 import { useColorModeImages } from "../../hooks/useColorModeImages";
+import { ConfigModel } from "../../models/ConfigModel";
 import { Headline } from "../Headline/Headline";
 import ConfigurationCard from "./ConfigurationCard";
-import { ConfigModel } from "../../models/ConfigModel";
 
 interface BrandsContainerProps {
   title?: string;

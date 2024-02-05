@@ -1,9 +1,10 @@
 import { Box, Stack, useColorModeValue } from "@chakra-ui/react";
-import { RoutingButton } from "../RoutingButton";
-import { useColorModeImages } from "../../hooks/useColorModeImages";
-import "./LeftSidebar.css";
-import theme from "../../theme";
+
 import env from "../../env";
+import { useColorModeImages } from "../../hooks/useColorModeImages";
+import theme from "../../theme";
+import { RoutingButton } from "../RoutingButton";
+import "./LeftSidebar.css";
 
 export const LeftSidebar = () => {
   const { compass, packageImage, puzzlePiece, download } = useColorModeImages();

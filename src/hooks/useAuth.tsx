@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect } from "react";
-import { useStorage } from "./useStorage";
+
+import { FrontPaths } from "@hmdlr/sdk";
 import { IGroup } from "@hmdlr/types";
+
 import { useClient } from "./useClient";
 import { useModal } from "./useModal";
-import { FrontPaths } from "@hmdlr/sdk";
+import { useStorage } from "./useStorage";
 
 const authContext = React.createContext<{
   /**

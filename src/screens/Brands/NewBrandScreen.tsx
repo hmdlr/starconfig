@@ -1,7 +1,7 @@
-import { useActions } from "../../hooks/useActions";
 import { useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+
 import {
   Box,
   Button,
@@ -12,9 +12,11 @@ import {
   Input,
   VStack,
 } from "@chakra-ui/react";
-import { useCreateBrand } from "../../hooks/Brands/useCreateBrand";
+
 import BrandCard from "../../components/Brands/BrandCard";
 import { PageContent } from "../../components/Utils/PageContent";
+import { useCreateBrand } from "../../hooks/Brands/useCreateBrand";
+import { useActions } from "../../hooks/useActions";
 
 type FormData = {
   ruleName: string;

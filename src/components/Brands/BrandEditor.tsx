@@ -1,4 +1,6 @@
-import { IBrand } from "@hmdlr/types";
+import { useCallback, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+
 import {
   Button,
   Flex,
@@ -10,15 +12,16 @@ import {
   ModalFooter,
   ModalOverlay,
 } from "@chakra-ui/react";
-import BrandCard from "./BrandCard";
-import ControlledInput from "../Utils/ControlledInput";
-import { useForm } from "react-hook-form";
-import { useCallback, useEffect, useState } from "react";
-import BrandEditorRow from "./BrandEditorRow";
-import { useUpdateBrand } from "../../hooks/Brands/useUpdateBrand";
-import { useColorModeImages } from "../../hooks/useColorModeImages";
-import { authphishApiClient } from "../../hooks/useClient";
+
+import { IBrand } from "@hmdlr/types";
+
 import { useDeleteBrand } from "../../hooks/Brands/useDeleteBrand";
+import { useUpdateBrand } from "../../hooks/Brands/useUpdateBrand";
+import { authphishApiClient } from "../../hooks/useClient";
+import { useColorModeImages } from "../../hooks/useColorModeImages";
+import ControlledInput from "../Utils/ControlledInput";
+import BrandCard from "./BrandCard";
+import BrandEditorRow from "./BrandEditorRow";
 
 interface BrandEditorProps {
   brand?: IBrand;

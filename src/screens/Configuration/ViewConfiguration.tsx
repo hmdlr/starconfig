@@ -1,18 +1,21 @@
-import { Box, Button, Flex, Switch, Text } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { selectConfigurationById } from "../../store/Configurations/selectors";
+
+import { Box, Button, Flex, Switch, Text } from "@chakra-ui/react";
+
 import { IBrand } from "@hmdlr/types";
+
 import BrandCard from "../../components/Brands/BrandCard";
-import { useActions } from "../../hooks/useActions";
 import ConfigurationBreadcrumb from "../../components/Configuration/ConfigurationBreadcrumb";
+import { PageContent } from "../../components/Utils/PageContent";
+import { useActions } from "../../hooks/useActions";
+import { authphishApiClient } from "../../hooks/useClient";
 import {
   fetchConfigurationByIdAction,
   setConfigurationActiveAction,
 } from "../../store/Configurations/actions";
-import { PageContent } from "../../components/Utils/PageContent";
-import { authphishApiClient } from "../../hooks/useClient";
+import { selectConfigurationById } from "../../store/Configurations/selectors";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 export const ViewConfiguration = () => {
   const navigate = useNavigate();

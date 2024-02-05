@@ -1,14 +1,15 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import theme from "./theme";
-import "./app.css";
-import { ProvideStorage } from "./hooks/useStorage";
-import { ProvideClient } from "./hooks/useClient";
-import { ProvideAuth } from "./hooks/useAuth";
-import { ProvideLoadGuard } from "./hooks/useLoadGuard";
+
 import { LoadGuardRouter } from "./LoadGuardRouter";
+import "./app.css";
+import { ProvideAuth } from "./hooks/useAuth";
+import { ProvideClient } from "./hooks/useClient";
 import { ProvideColorModeImages } from "./hooks/useColorModeImages";
+import { ProvideLoadGuard } from "./hooks/useLoadGuard";
 import { ProvideModal } from "./hooks/useModal";
+import { ProvideStorage } from "./hooks/useStorage";
 import StoreProvider from "./store/StoreProvider";
+import theme from "./theme";
 
 export const App = () => (
   <StoreProvider>

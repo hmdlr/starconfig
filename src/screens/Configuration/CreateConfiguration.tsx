@@ -1,3 +1,7 @@
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+
 import {
   Box,
   Button,
@@ -7,14 +11,12 @@ import {
   Heading,
   Input,
 } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { useConfigurations } from "../../hooks/useConfigurations";
-import { useActions } from "../../hooks/useActions";
-import { useEffect } from "react";
+
 import { Headline } from "../../components/Headline/Headline";
-import { useColorModeImages } from "../../hooks/useColorModeImages";
 import { PageContent } from "../../components/Utils/PageContent";
+import { useActions } from "../../hooks/useActions";
+import { useColorModeImages } from "../../hooks/useColorModeImages";
+import { useConfigurations } from "../../hooks/useConfigurations";
 
 type CreateConfigurationFormData = {
   configurationName: string;

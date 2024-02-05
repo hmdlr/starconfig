@@ -10,12 +10,11 @@
     "@emotion/styled": "^11.11.0",
     "@hmdlr/sdk": "^0.0.8",
     "@hmdlr/types": "^3.0.2",
-    "@mui/icons-material": "^5.11.16",
-    "@mui/material": "^5.13.6",
     "@reduxjs/toolkit": "^1.9.7",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/jest": "^28.1.8",
     "@types/node": "^12.20.55",
     "@types/react": "^18.2.13",
@@ -57,10 +56,11 @@
     "zlib": "npm:browserify-zlib@^0.2.0"
   },
   "scripts": {
-    "start": "PORT=3001 REACT_APP_NODE_ENV=development REACT_APP_AUTHPHISH_PORT=$AUTHPHISH_PORT REACT_APP_SCANPHISH_PORT=$SCANPHISH_PORT craco start",
+    "start": "PORT=443 REACT_APP_NODE_ENV=development REACT_APP_AUTHPHISH_PORT=$AUTHPHISH_PORT REACT_APP_SCANPHISH_PORT=$SCANPHISH_PORT craco start",
     "build": "NODE_ENV=production REACT_APP_NODE_ENV=production craco build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prettify": "prettier --write 'src/**/*.{js,jsx,ts,tsx}'"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -2,12 +2,14 @@
  * Generic class to store the components of a system and private components.
  * Can be used for either configurations or rules
  */
-export class SplitSystemPrivateComponents<T extends {
-  id: string;
-  active: boolean;
-  official: boolean;
-  belongingGroupId: string;
-}> {
+export class SplitSystemPrivateComponents<
+  T extends {
+    id: string;
+    active: boolean;
+    official: boolean;
+    belongingGroupId: string;
+  },
+> {
   inUseSystemComponents: T[];
   inactiveSystemComponents: T[];
   inUsePrivateComponents: T[];
@@ -17,7 +19,7 @@ export class SplitSystemPrivateComponents<T extends {
     inUseSystemComponents?: T[],
     inactiveSystemComponents?: T[],
     inUsePrivateComponents?: T[],
-    inactivePrivateComponents?: T[]
+    inactivePrivateComponents?: T[],
   ) {
     this.inUseSystemComponents = inUseSystemComponents || [];
     this.inactiveSystemComponents = inactiveSystemComponents || [];
@@ -29,10 +31,12 @@ export class SplitSystemPrivateComponents<T extends {
    * Returns true if there are any components in any of the lists
    */
   public hasComponents(): boolean {
-    return this.inUseSystemComponents.length > 0
-      || this.inactiveSystemComponents.length > 0
-      || this.inUsePrivateComponents.length > 0
-      || this.inactivePrivateComponents.length > 0;
+    return (
+      this.inUseSystemComponents.length > 0 ||
+      this.inactiveSystemComponents.length > 0 ||
+      this.inUsePrivateComponents.length > 0 ||
+      this.inactivePrivateComponents.length > 0
+    );
   }
 
   /**
@@ -40,10 +44,12 @@ export class SplitSystemPrivateComponents<T extends {
    * @param id
    */
   public findById(id: string): T | undefined {
-    return this.inUseSystemComponents.find(c => c.id === id)
-      || this.inactiveSystemComponents.find(c => c.id === id)
-      || this.inUsePrivateComponents.find(c => c.id === id)
-      || this.inactivePrivateComponents.find(c => c.id === id);
+    return (
+      this.inUseSystemComponents.find((c) => c.id === id) ||
+      this.inactiveSystemComponents.find((c) => c.id === id) ||
+      this.inUsePrivateComponents.find((c) => c.id === id) ||
+      this.inactivePrivateComponents.find((c) => c.id === id)
+    );
   }
 
   /**
@@ -51,18 +57,26 @@ export class SplitSystemPrivateComponents<T extends {
    * @param groupId
    */
   public listFromGroup(groupId: string): {
-    inUse: T[],
-    inactive: T[]
+    inUse: T[];
+    inactive: T[];
   } {
     return {
       inUse: [
-        ...this.inUseSystemComponents.filter(c => c.belongingGroupId === groupId),
-        ...this.inUsePrivateComponents.filter(c => c.belongingGroupId === groupId)
+        ...this.inUseSystemComponents.filter(
+          (c) => c.belongingGroupId === groupId,
+        ),
+        ...this.inUsePrivateComponents.filter(
+          (c) => c.belongingGroupId === groupId,
+        ),
       ],
       inactive: [
-        ...this.inactiveSystemComponents.filter(c => c.belongingGroupId === groupId),
-        ...this.inactivePrivateComponents.filter(c => c.belongingGroupId === groupId)
-      ]
+        ...this.inactiveSystemComponents.filter(
+          (c) => c.belongingGroupId === groupId,
+        ),
+        ...this.inactivePrivateComponents.filter(
+          (c) => c.belongingGroupId === groupId,
+        ),
+      ],
     };
   }
 

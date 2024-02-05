@@ -1,7 +1,9 @@
-import { Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
 import { ReactElement } from "react";
 import { Link } from "react-router-dom";
+
+import { Flex, Text, useColorModeValue } from "@chakra-ui/react";
+
 import { IconBorder } from "../IconBorder";
 
 interface RoutingButtonProps {

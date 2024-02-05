@@ -1,31 +1,34 @@
-import { Button } from "@chakra-ui/react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useActions } from "../../hooks/useActions";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { Button } from "@chakra-ui/react";
+
 import { IBrand } from "@hmdlr/types";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { selectConfigurationById } from "../../store/Configurations/selectors";
+
+import BrandsContainer from "../../components/Brands/BrandsContainer";
+import ConfigurationBreadcrumb from "../../components/Configuration/ConfigurationBreadcrumb";
+import ControlledInput from "../../components/Utils/ControlledInput";
+import { PageContent } from "../../components/Utils/PageContent";
+import { useActions } from "../../hooks/useActions";
+import { useColorModeImages } from "../../hooks/useColorModeImages";
+import {
+  fetchPrivateBrandsAction,
+  fetchPublicBrandsAction,
+} from "../../store/Brands/actions";
 import {
   selectCanLoadMorePrivateBrands,
   selectPrivateBrands,
   selectPublicBrands,
 } from "../../store/Brands/selectors";
-import { useColorModeImages } from "../../hooks/useColorModeImages";
-import ControlledInput from "../../components/Utils/ControlledInput";
-import { useForm } from "react-hook-form";
-import ConfigurationBreadcrumb from "../../components/Configuration/ConfigurationBreadcrumb";
 import {
   addBrandToConfigurationAction,
   fetchConfigurationByIdAction,
   removeBrandFromConfigurationAction,
   updateConfigurationNameAction,
 } from "../../store/Configurations/actions";
-import { PageContent } from "../../components/Utils/PageContent";
-import BrandsContainer from "../../components/Brands/BrandsContainer";
-import {
-  fetchPrivateBrandsAction,
-  fetchPublicBrandsAction,
-} from "../../store/Brands/actions";
+import { selectConfigurationById } from "../../store/Configurations/selectors";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 const EditConfiguration = () => {
   const navigate = useNavigate();

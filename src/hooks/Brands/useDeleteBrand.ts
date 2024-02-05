@@ -1,8 +1,10 @@
 import { useCallback, useMemo, useState } from "react";
+
 import { IBrand } from "@hmdlr/types";
+
+import { deleteBrandAction } from "../../store/Brands/actions";
 import { useAppDispatch } from "../../store/hooks";
 import { useModal } from "../useModal";
-import { deleteBrandAction } from "../../store/Brands/actions";
 
 export const useDeleteBrand = () => {
   const dispatch = useAppDispatch();

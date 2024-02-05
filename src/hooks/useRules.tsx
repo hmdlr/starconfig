@@ -1,5 +1,7 @@
-import { IBrand, IBrandCreatePayload } from "@hmdlr/types";
 import React, { useCallback } from "react";
+
+import { IBrand, IBrandCreatePayload } from "@hmdlr/types";
+
 import { useClient } from "./useClient";
 
 export const rulesContext = React.createContext<{
@@ -31,7 +33,9 @@ export const rulesContext = React.createContext<{
 
 export const ProvideRules = ({ children }: { children: any }) => {
   const rules = useProvideRules();
-  return <rulesContext.Provider value={rules}>{children}</rulesContext.Provider>;
+  return (
+    <rulesContext.Provider value={rules}>{children}</rulesContext.Provider>
+  );
 };
 
 export const useRules = () => {
@@ -48,9 +52,15 @@ function useProvideRules() {
     setRules(items);
   }, []);
 
-  const saveRulesToConfig = useCallback(async (rules: IBrand[], configId: string) => {
-    await scanphish.addRulesetsToConfig(configId, rules.map((r) => r.id));
-  }, []);
+  const saveRulesToConfig = useCallback(
+    async (rules: IBrand[], configId: string) => {
+      await scanphish.addRulesetsToConfig(
+        configId,
+        rules.map((r) => r.id),
+      );
+    },
+    [],
+  );
 
   const create = useCallback(async (config: IBrandCreatePayload) => {
     const { brand } = await scanphish.createBrand(config);
@@ -67,6 +77,6 @@ function useProvideRules() {
     saveRulesToConfig,
     create,
     enhance,
-    rules
+    rules,
   };
 }

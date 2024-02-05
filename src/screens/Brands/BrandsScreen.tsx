@@ -1,26 +1,18 @@
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { fetchPublicBrandsAction } from "../../store/Brands/actions";
-import { selectPublicBrands } from "../../store/Brands/selectors";
-import {
-  Box,
-  Button,
-  Flex,
-  Input,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import { IBrand } from "@hmdlr/types";
-import BrandCard from "../../components/Brands/BrandCard";
-import { useActions } from "../../hooks/useActions";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { Button, Flex, Input, Text, useColorModeValue } from "@chakra-ui/react";
+
+import { IBrand } from "@hmdlr/types";
+
 import BrandEditor from "../../components/Brands/BrandEditor";
-import Fuse from "fuse.js";
-import { useColorModeImages } from "../../hooks/useColorModeImages";
-import { Headline } from "../../components/Headline/Headline";
 import PrivateBrandsContainer from "../../components/Brands/PrivateBrandsContainer";
 import { PageContent } from "../../components/Utils/PageContent";
+import { useActions } from "../../hooks/useActions";
 import { useAuth } from "../../hooks/useAuth";
+import { useColorModeImages } from "../../hooks/useColorModeImages";
+import { fetchPublicBrandsAction } from "../../store/Brands/actions";
+import { useAppDispatch } from "../../store/hooks";
 
 export const BrandsScreen = () => {
   const dispatch = useAppDispatch();
@@ -30,33 +22,33 @@ export const BrandsScreen = () => {
 
   const icons = useColorModeImages();
 
-  const publicBrands = useAppSelector(selectPublicBrands);
+  // const publicBrands = useAppSelector(selectPublicBrands);
 
   const [selectedBrand, setSelectedBrand] = useState<IBrand>();
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const publicBrandsFuse = useMemo(() => {
-    return new Fuse(publicBrands, { keys: ["name", "title"] });
-  }, [publicBrands]);
+  // const publicBrandsFuse = useMemo(() => {
+  //   return new Fuse(publicBrands, { keys: ["name", "title"] });
+  // }, [publicBrands]);
 
-  const filteredPublicBrands = useMemo(() => {
-    if (!searchTerm) {
-      return publicBrands;
-    }
-
-    return publicBrandsFuse.search(searchTerm).map(({ item }) => item);
-  }, [publicBrands, publicBrandsFuse, searchTerm]);
+  // const filteredPublicBrands = useMemo(() => {
+  //   if (!searchTerm) {
+  //     return publicBrands;
+  //   }
+  //
+  //   return publicBrandsFuse.search(searchTerm).map(({ item }) => item);
+  // }, [publicBrands, publicBrandsFuse, searchTerm]);
 
   const onBrandClick = useCallback((brand: IBrand) => {
     setSelectedBrand(brand);
   }, []);
 
-  const renderBrand = useCallback(
-    (brand: IBrand) => {
-      return <BrandCard brand={brand} key={brand.id} onClick={onBrandClick} />;
-    },
-    [onBrandClick],
-  );
+  // const renderBrand = useCallback(
+  //   (brand: IBrand) => {
+  //     return <BrandCard brand={brand} key={brand.id} onClick={onBrandClick} />;
+  //   },
+  //   [onBrandClick],
+  // );
 
   const closeBrandDetailModal = useCallback(() => {
     setSelectedBrand(undefined);
@@ -99,11 +91,11 @@ export const BrandsScreen = () => {
           Search
         </Text>
       </Flex>
-      <Headline imgSrc={icons.pin02} headline={"System Provided Brands"} />
-      <Box display={"flex"} flexWrap={"wrap"} gap={"1rem"} marginTop={"2rem"}>
-        {filteredPublicBrands.map(renderBrand)}
-      </Box>
-      <PrivateBrandsContainer onClick={onBrandClick} />
+      {/*<Headline imgSrc={icons.pin02} headline={"System Provided Brands"} />*/}
+      {/*<Box display={"flex"} flexWrap={"wrap"} gap={"1rem"} marginTop={"2rem"}>*/}
+      {/*  {filteredPublicBrands.map(renderBrand)}*/}
+      {/*</Box>*/}
+      <PrivateBrandsContainer search={searchTerm} onClick={onBrandClick} />
       <BrandEditor brand={selectedBrand} onClose={closeBrandDetailModal} />
       {userId && (
         <Button

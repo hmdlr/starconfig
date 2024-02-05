@@ -1,6 +1,9 @@
-import { IBrand } from "@hmdlr/types";
 import React, { FC, useCallback, useMemo } from "react";
+
 import { Box, Text, useColorModeValue } from "@chakra-ui/react";
+
+import { IBrand } from "@hmdlr/types";
+
 import { useColorModeImages } from "../../hooks/useColorModeImages";
 
 interface BrandCardProps {

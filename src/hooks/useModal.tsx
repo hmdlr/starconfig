@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+
+import { ButtonProps } from "@chakra-ui/button/dist/button";
 import {
   Button,
   Modal,
@@ -10,7 +12,6 @@ import {
   ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/react";
-import { ButtonProps } from "@chakra-ui/button/dist/button";
 
 type ModalButton = ButtonProps;
 

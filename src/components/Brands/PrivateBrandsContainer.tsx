@@ -1,19 +1,25 @@
-import { IBrand } from "@hmdlr/types";
 import { FC, useCallback, useEffect } from "react";
-import BrandsContainer from "./BrandsContainer";
+
+import { IBrand } from "@hmdlr/types";
+
+import { useColorModeImages } from "../../hooks/useColorModeImages";
+import { fetchPrivateBrandsAction } from "../../store/Brands/actions";
 import {
   selectCanLoadMorePrivateBrands,
   selectPrivateBrands,
 } from "../../store/Brands/selectors";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { fetchPrivateBrandsAction } from "../../store/Brands/actions";
-import { useColorModeImages } from "../../hooks/useColorModeImages";
+import BrandsContainer from "./BrandsContainer";
+
+const SEARCH_TIMEOUT = 500;
 
 interface PrivateBrandsContainerProps {
+  search?: string;
   onClick?: (brand: IBrand) => void;
 }
 
 const PrivateBrandsContainer: FC<PrivateBrandsContainerProps> = ({
+  search,
   onClick,
 }) => {
   const dispatch = useAppDispatch();
@@ -30,11 +36,12 @@ const PrivateBrandsContainer: FC<PrivateBrandsContainerProps> = ({
   }, [dispatch]);
 
   useEffect(() => {
-    if (!privateBrands.length) {
-      dispatch(fetchPrivateBrandsAction({}));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+    const timeout = setTimeout(() => {
+      dispatch(fetchPrivateBrandsAction({ search }));
+    }, SEARCH_TIMEOUT);
+
+    return () => clearTimeout(timeout);
+  }, [dispatch, search]);
 
   return (
     <BrandsContainer

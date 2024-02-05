@@ -7,12 +7,12 @@
  * @returns {(T | undefined)} an object-representation of the token
  * or undefined if parsing failed
  */
-export function getParsedJwt<T extends object = { [k: string]: string | number }>(
-    token: string,
-): T | undefined {
+export function getParsedJwt<
+  T extends object = { [k: string]: string | number },
+>(token: string): T | undefined {
   try {
-    return JSON.parse(atob(token.split('.')[1]))
+    return JSON.parse(atob(token.split(".")[1]));
   } catch {
-    return undefined
+    return undefined;
   }
 }

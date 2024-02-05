@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+
 import { brandsSlice } from "./Brands/slice";
 import { configurationsSlice } from "./Configurations/slice";
 

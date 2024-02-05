@@ -1,15 +1,17 @@
 import React, { useCallback, useEffect } from "react";
+
+import { DeployedPaths } from "@hmdlr/sdk";
+import { Microservice } from "@hmdlr/sdk/dist/Microservice";
 import { IConfig, IConfigCreatePayload, UUID } from "@hmdlr/types";
+
 import {
   ConfigModel,
   isDiffBetweenIConfigAndConfigModel,
   toConfigModel,
 } from "../models/ConfigModel";
-import { useClient } from "./useClient";
-import { useAuth } from "./useAuth";
 import { SplitSystemPrivateComponents } from "../models/SplitSystemPrivateComponents";
-import { DeployedPaths } from "@hmdlr/sdk";
-import { Microservice } from "@hmdlr/sdk/dist/Microservice";
+import { useAuth } from "./useAuth";
+import { useClient } from "./useClient";
 
 export const configurationsContext = React.createContext<{
   /**

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { BrandsState } from "./types";
+
 import {
   createBrandAction,
   deleteBrandAction,
@@ -7,6 +7,7 @@ import {
   fetchPublicBrandsAction,
   updateBrandAction,
 } from "./actions";
+import { BrandsState } from "./types";
 
 const initialState: BrandsState = {
   publicBrands: [],

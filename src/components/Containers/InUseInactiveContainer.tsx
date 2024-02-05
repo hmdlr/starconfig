@@ -1,7 +1,8 @@
 import React from "react";
+
 import { Flex, useColorModeValue } from "@chakra-ui/react";
+
 import { useColorModeImages } from "../../hooks/useColorModeImages";
-// css
 import "./InUseInactiveContainer.css";
 
 interface InUseInactiveContainerProps {
@@ -40,24 +41,26 @@ export const InUseInactivePackageContainer = (
         </Flex>
       </Flex>
       {/* ========= Inactive ========= */}
-      <Flex flexDirection={"column"} gap={"0.6rem"}>
-        <Flex gap={"0.5rem"} alignItems={"center"}>
-          <img src={packageImageX} alt="✖" />
-          <span className={"miniHeadline"} color={miniHeadlineColor}>
-            Inactive
-          </span>
-        </Flex>
+      {inactiveComponents.length > 0 && (
+        <Flex flexDirection={"column"} gap={"0.6rem"}>
+          <Flex gap={"0.5rem"} alignItems={"center"}>
+            <img src={packageImageX} alt="✖" />
+            <span className={"miniHeadline"} color={miniHeadlineColor}>
+              Inactive
+            </span>
+          </Flex>
 
-        <Flex paddingX={"2rem"} gap={"1rem"}>
-          {inactiveComponents.length === 0 ? (
-            <NotPresentComponents inUse={false} />
-          ) : (
-            inactiveComponents.map((component, index) => (
-              <div key={index}>{component}</div>
-            ))
-          )}
+          <Flex paddingX={"2rem"} gap={"1rem"}>
+            {inactiveComponents.length === 0 ? (
+              <NotPresentComponents inUse={false} />
+            ) : (
+              inactiveComponents.map((component, index) => (
+                <div key={index}>{component}</div>
+              ))
+            )}
+          </Flex>
         </Flex>
-      </Flex>
+      )}
     </Flex>
   );
 };

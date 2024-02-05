@@ -1,21 +1,23 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+
 import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
-import { LeftSidebar } from "./components/Sidebars/LeftSidebar";
-import { GettingStarted } from "./screens/GettingStarted";
-import { ConfigurationScreen } from "./screens/Configuration/ConfigurationScreen";
-import { useLoadGuard } from "./hooks/useLoadGuard";
+
 import { Navbar } from "./components/Navbar";
-import { ProvideConfigurations } from "./hooks/useConfigurations";
+import { LeftSidebar } from "./components/Sidebars/LeftSidebar";
 import { ProvideActions } from "./hooks/useActions";
-import CreateConfiguration from "./screens/Configuration/CreateConfiguration";
+import { useAuth } from "./hooks/useAuth";
+import { ProvideConfigurations } from "./hooks/useConfigurations";
+import { useLoadGuard } from "./hooks/useLoadGuard";
+import { useModal } from "./hooks/useModal";
 import { ProvideRules } from "./hooks/useRules";
 import { BrandsScreen } from "./screens/Brands/BrandsScreen";
 import { NewBrandScreen } from "./screens/Brands/NewBrandScreen";
-import { useModal } from "./hooks/useModal";
-import { useAuth } from "./hooks/useAuth";
-import { ViewConfiguration } from "./screens/Configuration/ViewConfiguration";
+import { ConfigurationScreen } from "./screens/Configuration/ConfigurationScreen";
+import CreateConfiguration from "./screens/Configuration/CreateConfiguration";
 import EditConfiguration from "./screens/Configuration/EditConfiguration";
+import { ViewConfiguration } from "./screens/Configuration/ViewConfiguration";
+import { GettingStarted } from "./screens/GettingStarted";
 import theme from "./theme";
 
 export const LoadGuardRouter = () => {

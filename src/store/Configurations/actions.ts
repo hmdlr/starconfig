@@ -1,6 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { scanphishApiClient } from "../../hooks/useClient";
+
 import { IBrand, IConfig, IConfigUpdatePayload } from "@hmdlr/types";
+
+import { scanphishApiClient } from "../../hooks/useClient";
 import { toConfigModel } from "../../models/ConfigModel";
 
 export const fetchConfigurationByIdAction = createAsyncThunk(
@@ -11,6 +13,7 @@ export const fetchConfigurationByIdAction = createAsyncThunk(
 
       const presets = await scanphishApiClient.listPresets();
 
+      // TODO: pass the belongingGroupId from the response
       return toConfigModel(config, presets);
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data);

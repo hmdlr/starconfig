@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { authphishApiClient, scanphishApiClient } from "../../hooks/useClient";
+
 import {
   IBrand,
   IBrandCreatePayload,
@@ -7,7 +7,9 @@ import {
   UUID,
 } from "@hmdlr/types";
 
-const PAGE_SIZE = 5;
+import { authphishApiClient, scanphishApiClient } from "../../hooks/useClient";
+
+const PAGE_SIZE = 10;
 
 export const fetchPublicBrandsAction = createAsyncThunk(
   "brands/fetchPublicBrands",
@@ -24,7 +26,10 @@ export const fetchPublicBrandsAction = createAsyncThunk(
 
 export const fetchPrivateBrandsAction = createAsyncThunk(
   "brands/fetchPrivateBrands",
-  async ({ loadMore = false }: { loadMore?: boolean }, thunkAPI) => {
+  async (
+    { loadMore = false, search }: { loadMore?: boolean; search?: string },
+    thunkAPI,
+  ) => {
     try {
       const groupsResponse = await authphishApiClient.listGroups({});
 
@@ -41,6 +46,14 @@ export const fetchPrivateBrandsAction = createAsyncThunk(
 
       const result = await Promise.all(
         privateGroupsIds.map(async (privateGroupId) => {
+          if (!!search) {
+            return scanphishApiClient.searchBrands(
+              { pageSize: PAGE_SIZE, pageNumber },
+              search,
+              privateGroupId,
+            );
+          }
+
           return scanphishApiClient.listBrands(
             { pageSize: PAGE_SIZE, pageNumber },
             privateGroupId,

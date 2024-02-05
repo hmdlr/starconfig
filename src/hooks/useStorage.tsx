@@ -7,7 +7,11 @@ export const storageContext = React.createContext<{
 
 export const ProvideStorage = ({ children }: { children: any }) => {
   const storage = useProvideStorage();
-  return <storageContext.Provider value={storage}>{children}</storageContext.Provider>;
+  return (
+    <storageContext.Provider value={storage}>
+      {children}
+    </storageContext.Provider>
+  );
 };
 
 export const useStorage = () => {
@@ -16,17 +20,23 @@ export const useStorage = () => {
 
 function useProvideStorage() {
   const getUserId = (): string | undefined => {
-    return splitDocument().find(row => row.startsWith('user-id'))?.split('=')[1];
+    return splitDocument()
+      .find((row) => row.startsWith("user-id"))
+      ?.split("=")[1];
   };
 
   const getUsername = (): string | null => {
-    return splitDocument().find(row => row.startsWith('username'))?.split('=')[1] || null;
+    return (
+      splitDocument()
+        .find((row) => row.startsWith("username"))
+        ?.split("=")[1] || null
+    );
   };
 
-  const splitDocument = () => document.cookie.split(';').map(c => c.trim());
+  const splitDocument = () => document.cookie.split(";").map((c) => c.trim());
 
   return {
     getUserId,
-    getUsername
+    getUsername,
   };
 }

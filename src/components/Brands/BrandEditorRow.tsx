@@ -1,5 +1,6 @@
 import { FC, ReactElement } from "react";
-import { Flex, Text, useColorModeValue, VStack } from "@chakra-ui/react";
+
+import { Flex, Text, VStack, useColorModeValue } from "@chakra-ui/react";
 
 interface BrandEditorProps {
   title: string;

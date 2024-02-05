@@ -1,38 +1,50 @@
+import React, { ReactNode, useCallback, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
-  Box,
   Button,
   Card,
   CardBody,
   Flex,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-import React, { ReactNode, useCallback, useEffect } from "react";
-import { useConfigurations } from "../../hooks/useConfigurations";
+
 import { Configuration } from "../../components/Configuration";
+import { InUseInactivePackageContainer } from "../../components/Containers/InUseInactiveContainer";
+import { PageContent } from "../../components/Utils/PageContent";
 import { useActions } from "../../hooks/useActions";
 import { useAuth } from "../../hooks/useAuth";
 import { useColorModeImages } from "../../hooks/useColorModeImages";
-import { Headline } from "../../components/Headline/Headline";
-import { InUseInactivePackageContainer } from "../../components/Containers/InUseInactiveContainer";
+import { useConfigurations } from "../../hooks/useConfigurations";
 import { ConfigModel } from "../../models/ConfigModel";
-import "./ConfigurationScreen.css";
-import { useAppDispatch } from "../../store/hooks";
-import { configurationsSlice } from "../../store/Configurations/slice";
 import {
   fetchPrivateBrandsAction,
   fetchPublicBrandsAction,
 } from "../../store/Brands/actions";
-import { PageContent } from "../../components/Utils/PageContent";
+import { configurationsSlice } from "../../store/Configurations/slice";
+import { useAppDispatch } from "../../store/hooks";
+import "./ConfigurationScreen.css";
+
+const TABS_ORDER = ["#system", "#private"];
 
 export const ConfigurationScreen = () => {
   const toast = useToast();
-  const { info, pin02, eyeOff, folderPlus } = useColorModeImages();
+  const { info, folderPlus } = useColorModeImages();
   const { userId, loginPath } = useAuth();
   const { list } = useConfigurations();
   const { setActions } = useActions();
   const navigate = useNavigate();
+
+  const activeTab = useMemo(
+    () => (!userId ? 0 : Math.max(TABS_ORDER.indexOf(window.location.hash), 0)),
+    [userId],
+  );
 
   const [inUseSystemComponents, setInUseSystemComponents] = React.useState<
     ReactNode[]
@@ -153,28 +165,29 @@ export const ConfigurationScreen = () => {
     };
   }, [userId]);
 
+  const onTabChange = useCallback((index: number) => {
+    window.location.hash = TABS_ORDER[index] ?? "";
+  }, []);
+
   return (
     <PageContent>
-      <Flex flexDirection={"column"} gap={"3rem"}>
-        <Box>
-          <Headline
-            imgSrc={pin02}
-            headline={"System Provided Configurations"}
-          />
-          <InUseInactivePackageContainer
-            inUseComponents={inUseSystemComponents}
-            inactiveComponents={inactiveSystemComponents}
-          />
-        </Box>
-
-        {userId && (
-          <Box>
-            <Headline imgSrc={eyeOff} headline={"Private Configurations"} />
+      <Tabs defaultIndex={activeTab} onChange={onTabChange}>
+        <TabList>
+          <Tab>System Provided Configurations</Tab>
+          {userId && <Tab>Private Configurations</Tab>}
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <InUseInactivePackageContainer
+              inUseComponents={inUseSystemComponents}
+              inactiveComponents={inactiveSystemComponents}
+            />
+          </TabPanel>
+          <TabPanel>
             <InUseInactivePackageContainer
               inUseComponents={inUsePrivateComponents}
               inactiveComponents={inactivePrivateComponents}
             />
-
             <Button
               mt={10}
               leftIcon={<img src={folderPlus} alt="plus" />}
@@ -182,9 +195,9 @@ export const ConfigurationScreen = () => {
             >
               New Configuration
             </Button>
-          </Box>
-        )}
-      </Flex>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </PageContent>
   );
 };

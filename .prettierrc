@@ -4,5 +4,17 @@
   "jsxSingleQuote": false,
   "trailingComma": "all",
   "bracketSpacing": true,
-  "jsxBracketSameLine": false
+  "jsxBracketSameLine": false,
+  "importOrder": [
+    "^react(.*)$",
+    "<THIRD_PARTY_MODULES>",
+    "@chakra-ui/(.*)$",
+    "@hmdlr/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "plugins": [
+    "@trivago/prettier-plugin-sort-imports"
+  ]
 }

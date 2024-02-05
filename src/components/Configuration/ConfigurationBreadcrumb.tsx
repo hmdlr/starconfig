@@ -1,8 +1,10 @@
 import React, { FC } from "react";
+import { Link } from "react-router-dom";
+
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
+
 import { useColorModeImages } from "../../hooks/useColorModeImages";
 import { ConfigModel } from "../../models/ConfigModel";
-import { Link } from "react-router-dom";
 
 type ConfigurationBreadcrumbProps = {
   config?: ConfigModel;

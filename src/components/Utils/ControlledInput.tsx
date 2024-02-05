@@ -1,8 +1,9 @@
 import { useCallback } from "react";
-import { Input, InputProps } from "@chakra-ui/react";
 import { Controller, FieldValues, UseControllerProps } from "react-hook-form";
 import { FieldPath } from "react-hook-form/dist/types";
 import { ControllerProps } from "react-hook-form/dist/types/controller";
+
+import { Input, InputProps } from "@chakra-ui/react";
 
 interface ControlledInputProps<TFieldValues extends FieldValues>
   extends InputProps {

@@ -1,7 +1,8 @@
-import { ConfigModel } from "../../models/ConfigModel";
-import ConfigurationCard from "./ConfigurationCard";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { ConfigModel } from "../../models/ConfigModel";
+import ConfigurationCard from "./ConfigurationCard";
 
 export const Configuration = ({ config }: { config: ConfigModel }) => {
   // const {
