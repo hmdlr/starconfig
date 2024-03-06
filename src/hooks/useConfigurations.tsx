@@ -11,7 +11,7 @@ import {
 } from "../models/ConfigModel";
 import { SplitSystemPrivateComponents } from "../models/SplitSystemPrivateComponents";
 import { useAuth } from "./useAuth";
-import { useClient } from "./useClient";
+import { scanphishApiClient, useClient } from "./useClient";
 
 export const configurationsContext = React.createContext<{
   /**
@@ -188,7 +188,7 @@ function useProvideConfigurations() {
     return splitSystemPrivateComponents;
   };
 
-  const createConfig = (
+  const createConfig = async (
     config: IConfigCreatePayload,
   ): Promise<{ config: IConfig }> => {
     const formData = new FormData();
@@ -197,17 +197,23 @@ function useProvideConfigurations() {
       formData.append("logo", config.logo.buffer, "logo");
     }
 
-    return client
-      .post<{ config: IConfig }>(
-        `${DeployedPaths[Microservice.Scanphish]
-          .replace("http://", "https://")
-          .replace(".localhost", "")}/api/config`,
-        formData,
-        {
-          withCredentials: true,
-        },
-      )
-      .then((res: { data: any }) => res.data);
+    return {
+      config: await scanphishApiClient.createConfig({
+        name: formData.get("name") as string,
+      }),
+    };
+    //
+    // return client
+    //   .post<{ config: IConfig }>(
+    //     `${DeployedPaths[Microservice.Scanphish]
+    //       .replace("http://", "https://")
+    //       .replace(".localhost", "")}/api/config`,
+    //     formData,
+    //     {
+    //       withCredentials: true,
+    //     },
+    //   )
+    //   .then((res: { data: any }) => res.data);
   };
 
   return {

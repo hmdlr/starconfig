@@ -69,8 +69,8 @@ function useProvideColorModeImages() {
     "/images/dark/check-verified-01.svg",
   );
   const starphishLogo = useColorModeValue(
-    "/images/light/logo.svg",
-    "/images/dark/logo.svg",
+    "/logo.png",
+    "/logo.png",
   );
   const chevronRight = useColorModeValue(
     "/images/light/chevron-right.svg",
