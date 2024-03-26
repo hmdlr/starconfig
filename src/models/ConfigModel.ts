@@ -16,8 +16,6 @@ export const toConfigModel = (
   presets: IConfig[] = [],
   belongingGroupId: string = UUID.NIL,
 ): ConfigModel => {
-  const preset = presets.find((p) => p.id === config.id);
-
   return {
     ...config,
     active: presets.some((preset) => preset.id === config.id),

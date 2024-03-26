@@ -66,7 +66,6 @@ export const ViewConfiguration = () => {
   useEffect(() => {
     if (configId) {
       dispatch(fetchConfigurationByIdAction(configId));
-
       authphishApiClient
         .hasEditAccess(configId)
         .then((hasAccess) => {
@@ -92,7 +91,7 @@ export const ViewConfiguration = () => {
         </Flex>
       </Flex>
       <Box display={"flex"} flexWrap={"wrap"} gap={"1rem"} marginTop={"2rem"}>
-        {config?.brands.map(renderBrand)}
+        {config?.brands?.map(renderBrand)}
       </Box>
       {hasEditAccess && (
         <Button

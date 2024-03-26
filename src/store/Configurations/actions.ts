@@ -13,8 +13,8 @@ export const fetchConfigurationByIdAction = createAsyncThunk(
 
       const presets = await scanphishApiClient.listPresets();
 
-      // TODO: pass the belongingGroupId from the response
-      return toConfigModel(config, presets);
+      // @ts-ignore
+      return toConfigModel(config, presets, config.belongingGroupId ?? "");
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data);
     }
